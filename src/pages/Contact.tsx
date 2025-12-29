@@ -19,7 +19,7 @@ const Contact = () => {
     email: "",
     phone: "",
     service: "",
-    message: "",
+    message: "",  
   });
 
   const [isSending, setIsSending] = useState(false);
