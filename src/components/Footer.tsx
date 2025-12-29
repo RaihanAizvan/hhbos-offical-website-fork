@@ -20,9 +20,9 @@ const Footer = () => {
   return (
     <footer className="bg-secondary text-foreground">
       <div className="container-custom py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {/* Company Info */}
-          <div className="space-y-4 lg:col-span-2">
+          <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
               <img className="h-14 w-14" src={"/images/logo.png"} />
             </Link>
@@ -35,22 +35,7 @@ const Footer = () => {
             <div className="flex items-center gap-2 text-sm">
               <Award className="h-5 w-5 text-primary" />
               <span className="font-medium">ISO 27001 Certified</span>
-            </div>
-
-            {/* Mini Contact Form */}
-            <div className="pt-2">
-              <h4 className="font-semibold mb-2 text-sm">Quick Contact</h4>
-              <form onSubmit={handleNewsletterSubmit} className="space-y-2">
-                <Input
-                  type="email"
-                  placeholder="Your email"
-                  className="h-9 text-sm"
-                />
-                <Button size="sm" className="w-full">
-                  Get in Touch
-                </Button>
-              </form>
-            </div>
+            </div>      
           </div>
 
           {/* Quick Links */}
@@ -87,45 +72,6 @@ const Footer = () => {
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold">Our Services</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  to="/services"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Revenue Cycle Management
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Finance & Accounts
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Database Administration
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/services"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Healthcare Solutions
                 </Link>
               </li>
             </ul>
