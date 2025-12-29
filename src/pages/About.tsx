@@ -28,7 +28,7 @@ const About = () => {
     {
       icon: Heart,
       title: "Customer-Centric Approach",
-      description: "Your success is our priority in everything we do.",
+      description: "Your succes is our priority in everything we do.",
     },
   ];
 
