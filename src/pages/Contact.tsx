@@ -55,6 +55,7 @@ const Contact = () => {
         toast({
           title: "Message Sent!",
           description: "We'll get back to you shortly.",
+          className: "bg-green-600 text-white border-none",
         });
 
         setFormData({
