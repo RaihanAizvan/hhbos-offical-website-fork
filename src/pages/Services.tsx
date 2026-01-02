@@ -13,8 +13,14 @@ import {
   ShieldCheck,
   TrendingUp,
   Globe,
+  Atom,
+  DatabaseIcon,
+  LeafyGreen,
+  PanelTop,
+  Eclipse,
 } from "lucide-react";
 import { motion, Variants } from "framer-motion";
+import LogoLoop from "@/components/LogoLoop";
 
 const Services = () => {
   const [expandedService, setExpandedService] = useState<number | null>(0);
@@ -107,7 +113,7 @@ const Services = () => {
   const industries = [
     { name: "Healthcare", icon: "🏥" },
     { name: "Finance & Banking", icon: "🏦" },
-    { name: "Retail & E-commerce", icon: "🛒" },
+    { name: "E-commerce", icon: "🛒" },
     { name: "IT & Software", icon: "💻" },
     { name: "Manufacturing", icon: "🏭" },
     { name: "Real Estate", icon: "🏢" },
@@ -146,6 +152,21 @@ const Services = () => {
     },
   ];
 
+  const techLogos = [
+    { node: <Atom />, title: "React", href: "https://react.dev" },
+    { node: <LeafyGreen />, title: "MongoDb", href: "https://nextjs.org" },
+    {
+      node: <PanelTop />,
+      title: "TypeScript",
+      href: "https://www.typescriptlang.org",
+    },
+    {
+      node: <Eclipse />,
+      title: "Tailwind CSS",
+      href: "https://tailwindcss.com",
+    },
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Header */}
@@ -164,9 +185,7 @@ const Services = () => {
               <CardHeader
                 className="cursor-pointer"
                 onClick={() =>
-                  setExpandedService(
-                    expandedService === index ? null : index
-                  )
+                  setExpandedService(expandedService === index ? null : index)
                 }
               >
                 <div className="flex justify-between items-center">
@@ -233,6 +252,18 @@ const Services = () => {
 
       {/* Industries */}
       <section className="section-padding gradient-subtle">
+        <LogoLoop
+          logos={techLogos}
+          speed={120}
+          direction="left"
+          logoHeight={48}
+          gap={40}
+          hoverSpeed={0}
+          scaleOnHover
+          fadeOut
+          fadeOutColor="#ffffff"
+          ariaLabel="Technology partners"
+        />
         <motion.div
           className="container-custom grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
           variants={containerVariants}

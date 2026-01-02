@@ -1,4 +1,4 @@
-import AutoCounter from "@/components/AutoCounter";
+import CountUp from "@/components/CountUp";
 import { Card, CardContent } from "@/components/ui/card";
 import { Target, Eye, Heart, CheckCircle } from "lucide-react";
 import { useLayoutEffect } from "react";
@@ -161,7 +161,14 @@ const About = () => {
 
             <div>
               <div className="text-4xl md:text-5xl flex justify-center items-center gap-2 font-bold text-primary-foreground mb-2">
-                <AutoCounter maxValue={100} duration={2.5} />
+                <CountUp
+                  from={0}
+                  to={100}
+                  separator=","
+                  direction="up"
+                  duration={0.6}
+                  className="count-up-text"
+                />
                 <span className="mb-3">+</span>
               </div>
               <div className="text-primary-foreground/90">Clients Served</div>
@@ -169,7 +176,14 @@ const About = () => {
 
             <div>
               <div className="text-4xl md:text-5xl font-bold text-primary-foreground mb-2">
-                <AutoCounter maxValue={3} duration={1.5} />
+                <CountUp
+                  from={0}
+                  to={3}
+                  separator=","
+                  direction="up"
+                  duration={0.6}
+                  className="count-up-text"
+                />
               </div>
               <div className="text-primary-foreground/90">Core Services</div>
             </div>

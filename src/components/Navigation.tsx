@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import GlareHover from "./GlareHover";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +22,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="p-4 border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-background/95">
+    <nav className="px-4 py-3 border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-background/95">
       <div className="container-custom">
         <div className="flex items-center justify-between">
           <Link
@@ -45,9 +46,19 @@ const Navigation = () => {
                 {link.name}
               </Link>
             ))}
-            <Button asChild size="sm" className="gradient-hero">
+
+            <GlareHover
+              height="5"
+              width="5"
+              borderRadius="6px"
+              glareOpacity={0.4}
+              glareColor="#ffff"
+              borderColor="#ffff"
+              background="#FF6D1F"
+              className="p-2 text-white"
+            >
               <Link to="/contact">Get Started</Link>
-            </Button>
+            </GlareHover>
           </div>
 
           {/* Mobile Menu Button */}

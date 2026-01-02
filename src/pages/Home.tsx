@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import SplitText from "@/components/SplitText";
+
 import {
   DollarSign,
   Calculator,
@@ -18,7 +20,7 @@ import {
   Globe,
   Lock,
   ArrowRight,
-   Activity,
+  Activity,
   Briefcase,
   Stethoscope,
   Receipt,
@@ -44,8 +46,21 @@ import serviceDatabase from "@/assets/service-database.jpg";
 import teamFounder from "@/assets/team-founder.jpg";
 import teamRcm from "@/assets/team-rcm.jpg";
 import teamDatabase from "@/assets/team-database.jpg";
+import { container } from "@/lib/animate";
+import { useLayoutEffect } from "react";
+import AnimatedContent from "@/components/AnimatedContent";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const Home = () => {
+  useLayoutEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
+  const handleAnimationComplete = () => {
+    console.log("All letters have animated!");
+  };
+
   const carouselSlides = [
     {
       image: carouselRcm,
@@ -133,90 +148,89 @@ const Home = () => {
     },
   ];
 
-  
-const caseStudies = [
-  {
-    title: "Healthcare RCM",
-    icon: Activity,
-    metrics: [
-      "Reduced AR days across key payer groups",
-      "Improved claim approval rate to 96% total",
-      "Automated claim routing and workflows",
-    ],
-  },
-  {
-    title: "Finance Outsourcing",
-    icon: Briefcase,
-    metrics: [
-      "Reduced operational cost by nearly 40%",
-      "Delivered monthly closings error-free",
-      "Improved audit readiness and timelines",
-    ],
-  },
-  {
-    title: "Database Management",
-    icon: Database,
-    metrics: [
-      "Achieved stable uptime SLA of 99.9%",
-      "Optimized SQL queries for faster loads",
-      "Migrated production data to cloud",
-    ],
-  },
-  {
-    title: "Medical Billing Services",
-    icon: Stethoscope,
-    metrics: [
-      "Improved clean claim submissions to 92%",
-      "Reduced billing rework by close to 34%",
-      "Centralized dashboard for visibility",
-    ],
-  },
-  {
-    title: "Finance & Accounts",
-    icon: Calculator,
-    metrics: [
-      "Delivered monthly reports fully on time",
-      "Reduced manual entries by nearly 48%",
-      "Improved year-end close cycle by 7 days",
-    ],
-  },
-  {
-    title: "Scanning & Indexing",
-    icon: FileArchive,
-    metrics: [
-      "Digitized 500K+ records with 98% accuracy",
-      "Reduced search and access time for data",
-      "Implemented secure search-ready archive",
-    ],
-  },
-  {
-    title: "Medical Coding",
-    icon: FileCode,
-    metrics: [
-      "Improved coding accuracy to nearly 97%",
-      "Reduced coding denials by almost 41%",
-      "Provided ICD-10 & CPT compliance support",
-    ],
-  },
-  {
-    title: "A/R Follow-up",
-    icon: ClipboardList,
-    metrics: [
-      "Recovered outstanding payments worth $2.1M",
-      "Accelerated follow-up cycle by 55% total",
-      "Improved denial appeal success to 83%",
-    ],
-  },
-  {
-    title: "Payment Posting",
-    icon: CircleDollarSign,
-    metrics: [
-      "Automated posting using EOB and ERA files",
-      "Reduced manual posting time by 62% total",
-      "Improved reconciliation speed by 50%",
-    ],
-  },
-];
+  const caseStudies = [
+    {
+      title: "Healthcare RCM",
+      icon: Activity,
+      metrics: [
+        "Reduced AR days across key payer groups",
+        "Improved claim approval rate to 96% total",
+        "Automated claim routing and workflows",
+      ],
+    },
+    {
+      title: "Finance Outsourcing",
+      icon: Briefcase,
+      metrics: [
+        "Reduced operational cost by nearly 40%",
+        "Delivered monthly closings error-free",
+        "Improved audit readiness and timelines",
+      ],
+    },
+    {
+      title: "Database Management",
+      icon: Database,
+      metrics: [
+        "Achieved stable uptime SLA of 99.9%",
+        "Optimized SQL queries for faster loads",
+        "Migrated production data to cloud",
+      ],
+    },
+    {
+      title: "Medical Billing Services",
+      icon: Stethoscope,
+      metrics: [
+        "Improved clean claim submissions to 92%",
+        "Reduced billing rework by close to 34%",
+        "Centralized dashboard for visibility",
+      ],
+    },
+    {
+      title: "Finance & Accounts",
+      icon: Calculator,
+      metrics: [
+        "Delivered monthly reports fully on time",
+        "Reduced manual entries by nearly 48%",
+        "Improved year-end close cycle by 7 days",
+      ],
+    },
+    {
+      title: "Scanning & Indexing",
+      icon: FileArchive,
+      metrics: [
+        "Digitized 500K+ records with 98% accuracy",
+        "Reduced search and access time for data",
+        "Implemented secure search-ready archive",
+      ],
+    },
+    {
+      title: "Medical Coding",
+      icon: FileCode,
+      metrics: [
+        "Improved coding accuracy to nearly 97%",
+        "Reduced coding denials by almost 41%",
+        "Provided ICD-10 & CPT compliance support",
+      ],
+    },
+    {
+      title: "A/R Follow-up",
+      icon: ClipboardList,
+      metrics: [
+        "Recovered outstanding payments worth $2.1M",
+        "Accelerated follow-up cycle by 55% total",
+        "Improved denial appeal success to 83%",
+      ],
+    },
+    {
+      title: "Payment Posting",
+      icon: CircleDollarSign,
+      metrics: [
+        "Automated posting using EOB and ERA files",
+        "Reduced manual posting time by 62% total",
+        "Improved reconciliation speed by 50%",
+      ],
+    },
+  ];
 
   const teamMembers = [
     {
@@ -291,7 +305,7 @@ const caseStudies = [
 
   return (
     <div className="min-h-screen">
-      {/* Hero Carousel */}
+      {/* Main Carousel */}
       <section className="relative w-full">
         <Carousel className="w-full" opts={{ loop: true }}>
           <CarouselContent>
@@ -314,9 +328,8 @@ const caseStudies = [
                           {slide.subtext}
                         </p>
                         <motion.div
-                          whileHover={{ scale: 1.1 }}
+                          whileHover={{ scale: 1.1, opacity: 1 }}
                           whileTap={{ scale: 0.95 }}
-                          onHoverStart={() => console.log("hover started!")}
                           className="inline-block"
                         >
                           <Button
@@ -346,25 +359,26 @@ const caseStudies = [
 
         <div className="container-custom section-padding relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <motion.h1
-                initial={{ x: -100, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{
-                  type: "tween",
-                  stiffness: 100,
-                  delay: 0.2,
-                }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight"
-                aria-label="Empowering Businesses with Precision, Efficiency, and Data Intelligence"
-              >
-                Empowering Businesses with Precision, Efficiency, and Data
-                Intelligence
-              </motion.h1>
+            <div className="space-y-4">
+              <SplitText
+                text="Empowering Businesses with Precision, Efficiency, and Data Intelligence"
+                className="py-2 text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight"
+                delay={70}
+                duration={0.8}
+                ease="power3.out"
+                splitType="words"
+                from={{ opacity: 0, y: 40 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="-100px"
+                textAlign="left"
+                onLetterAnimationComplete={handleAnimationComplete}
+              />
 
               <motion.p
-                initial={{ x: -100, opacity: 0 }}
+                initial={{ x: -30, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
                 transition={{
                   type: "tween",
                   stiffness: 100,
@@ -376,11 +390,11 @@ const caseStudies = [
                 Management, and Database Administration solutions that
                 streamline your operations and drive measurable growth.
               </motion.p>
-
               <motion.div
                 className="flex flex-col sm:flex-row gap-4 pt-4"
-                initial={{ x: -100, opacity: 0 }}
+                initial={{ x: -30, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
                 transition={{
                   type: "tween",
                   stiffness: 100,
@@ -398,12 +412,14 @@ const caseStudies = [
             </div>
 
             <motion.div
-              initial={{ y: 100, opacity: 0, scale: 0.95 }}
+              initial={{ y: 40, opacity: 0, scale: 0.96 }}
               whileInView={{ y: 0, opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
               transition={{
                 type: "spring",
                 delay: 0.3,
-                stiffness: 80,
+                stiffness: 70,
+                damping: 16,
               }}
               className="relative rounded-2xl overflow-hidden shadow-2xl"
             >
@@ -412,30 +428,42 @@ const caseStudies = [
                 alt="Team of finance and IT professionals collaborating in modern office"
                 className="w-full h-auto object-cover"
                 loading="lazy"
-                width={1200}
-                height={800}
+                width={1440}
+                height={900}
               />
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Feature Cards Section */}
+      {/* Why work with us Section */}
       <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="text-center mb-12">
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{
+                type: "spring",
+                stiffness: 80,
+                damping: 18,
+              }}
               className="text-3xl md:text-4xl font-bold text-foreground mb-4"
             >
               Why Work With Us
             </motion.h2>
+
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{
+                type: "spring",
+                stiffness: 80,
+                damping: 18,
+                delay: 0.1,
+              }}
               className="text-lg text-muted-foreground max-w-2xl mx-auto"
             >
               Experience the advantages of partnering with a trusted outsourcing
@@ -447,36 +475,50 @@ const caseStudies = [
             {featureCards.map((card, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.8, y: 50 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
                 transition={{
                   type: "spring",
-                  stiffness: 100,
-                  damping: 15,
-                  delay: index * 0.1,
+                  stiffness: 70,
+                  damping: 16,
+                  delay: index * 0.08,
                 }}
                 whileHover={{
-                  y: -10,
-                  transition: { type: "spring", stiffness: 400 },
+                  y: -8,
+                  scale: 1.02,
+                  transition: { type: "spring", stiffness: 300, damping: 20 },
                 }}
               >
-                <Card className="border-2 hover:border-primary transition-all duration-300 hover-scale group overflow-hidden">
+                <Card className="border border-border hover:border-primary transition-all duration-300 overflow-hidden group bg-card">
                   <CardContent className="p-6 space-y-4 relative">
-                    {/* Optional background gradient effect on hover */}
+                    {/* Hover Glow */}
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      initial={false}
+                      className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100"
+                      transition={{ duration: 0.5, ease: "easeOut" }}
                     />
 
-                    {/* Icon animation */}
-                    <motion.div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors relative z-10">
+                    {/* Icon */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 120,
+                        damping: 12,
+                        delay: index * 0.05,
+                      }}
+                      className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors relative z-10"
+                    >
                       <card.icon className="h-6 w-6 text-primary" />
                     </motion.div>
 
-                    <h3 className="text-xl font-bold text-foreground relative z-10">
+                    <h3 className="text-xl font-semibold text-foreground relative z-10">
                       {card.title}
                     </h3>
-                    <p className="text-muted-foreground relative z-10">
+
+                    <p className="text-muted-foreground leading-relaxed relative z-10">
                       {card.description}
                     </p>
                   </CardContent>
@@ -491,69 +533,126 @@ const caseStudies = [
       <section className="section-padding gradient-subtle">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ type: "spring", stiffness: 80, damping: 18 }}
+              className="text-3xl md:text-4xl font-bold text-foreground mb-4"
+            >
               Our Service Excellence
-            </h2>
-            <p className="text-lg text-muted-foreground">
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{
+                type: "spring",
+                stiffness: 80,
+                damping: 18,
+                delay: 0.1,
+              }}
+              className="text-lg text-muted-foreground"
+            >
               Real solutions delivering measurable results
-            </p>
+            </motion.p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {imageServiceCards.map((card, index) => (
-              <Card
+              <motion.div
                 key={index}
-                className="overflow-hidden border-none shadow-lg hover:shadow-2xl transition-shadow duration-500 animate-fade-in group cursor-pointer"
-                style={{ animationDelay: `${index * 0.15}s` }}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{
+                  type: "spring",
+                  stiffness: 70,
+                  damping: 16,
+                  delay: index * 0.1,
+                }}
+                whileHover={{
+                  y: -10,
+                  scale: 1.03,
+                  transition: { type: "spring", stiffness: 300, damping: 20 },
+                }}
               >
-                <div className="relative h-64 overflow-hidden">
-                  {/* Parallax container */}
-                  <div className="group-hover:scale-125 transition-transform duration-700 ease-out">
-                    <img
-                      src={card.image}
-                      alt={card.title}
-                      className="w-full h-full object-cover"
+                <Card className="overflow-hidden border-none shadow-lg hover:shadow-2xl transition-shadow duration-500 group cursor-pointer">
+                  <div className="relative h-64 overflow-hidden">
+                    {/* Image Parallax */}
+                    <motion.div
+                      whileHover={{ scale: 1.15 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 120,
+                        damping: 15,
+                      }}
+                      className="h-full w-full"
+                    >
+                      <img
+                        src={card.image}
+                        alt={card.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </motion.div>
+
+                    {/* Gradient overlay */}
+                    <motion.div
+                      initial={{ opacity: 0.85 }}
+                      whileHover={{ opacity: 0.95 }}
+                      transition={{ duration: 0.5 }}
+                      className="absolute inset-0 bg-gradient-to-t from-primary/95 to-transparent"
                     />
-                  </div>
 
-                  {/* Animated gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/95 to-transparent opacity-90 group-hover:opacity-95 transition-opacity duration-500">
-                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500" />
-                  </div>
+                    {/* Content */}
+                    <div className="absolute inset-0 p-6 text-white flex flex-col justify-end">
+                      <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 80,
+                          damping: 18,
+                          delay: index * 0.05,
+                        }}
+                      >
+                        <h3 className="text-2xl font-bold mb-2 relative">
+                          {card.title}
+                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-500"></span>
+                        </h3>
 
-                  {/* Content with glow effect */}
-                  <div className="absolute inset-0 p-6 text-white flex flex-col justify-end">
-                    <div className="transform transition-all duration-500 group-hover:translate-y-0 translate-y-0">
-                      {/* Title with underline animation */}
-                      <h3 className="text-2xl font-bold mb-2 relative">
-                        {card.title}
-                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-500"></span>
-                      </h3>
+                        <p className="text-white/90 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                          {card.description}
+                        </p>
 
-                      {/* Description that expands */}
-                      <p className="text-white/90 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
-                        {card.description}
-                      </p>
-
-                      {/* Stats or features that appear */}
-                      <div className="mt-4 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-300">
-                        <div className="text-center">
-                          <div className="text-lg font-bold">98%</div>
-                          <div className="text-xs text-white/80">Accuracy</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-lg font-bold">24/7</div>
-                          <div className="text-xs text-white/80">Support</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-lg font-bold">100+</div>
-                          <div className="text-xs text-white/80">Clients</div>
-                        </div>
-                      </div>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          whileHover={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="mt-4 flex gap-3"
+                        >
+                          <div className="text-center">
+                            <div className="text-lg font-bold">98%</div>
+                            <div className="text-xs text-white/80">
+                              Accuracy
+                            </div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-lg font-bold">24/7</div>
+                            <div className="text-xs text-white/80">Support</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-lg font-bold">100+</div>
+                            <div className="text-xs text-white/80">Clients</div>
+                          </div>
+                        </motion.div>
+                      </motion.div>
                     </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -639,7 +738,6 @@ const caseStudies = [
           </div>
         </div>
       </section>
-      
 
       {/* Team Section */}
       <section className="section-padding gradient-subtle">
