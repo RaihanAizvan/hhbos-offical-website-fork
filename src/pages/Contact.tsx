@@ -89,14 +89,20 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Call Us",
-      value: "+91 0484-2917200",
+      value: "0484-2917200",
       link: "tel:+914842917200",
     },
     {
       icon: MapPin,
-      title: "Visit Us",
-      value: "Carnival Infopark, Kochi, India",
-      link: "#",
+      title: "Kochi Office",
+      value: "Phase-2 Floor-2, Carnival Infopark, Kakkanad, Kochi - 682042, Kerala, India",
+      link: "#kochi",
+    },
+    {
+      icon: MapPin,
+      title: "Coimbatore Office",
+      value: "Dc 44 & 45, 4th Floor, Tidel Park, Aerodrome Po, Coimbatore - 641014, Tamilnadu, India",
+      link: "#coimbatore",
     },
   ];
 
@@ -144,14 +150,14 @@ const Contact = () => {
             </div>
 
             <h1 className="contact-hero-text text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
-              Let's Start a{" "}
+              Get in{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
-                Conversation
+                Touch
               </span>
             </h1>
 
             <p className="contact-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              Ready to transform your business operations? We're here to help.
+              We'd love to discuss how we can help your business grow.
             </p>
           </div>
         </div>
@@ -168,8 +174,7 @@ const Contact = () => {
                   Contact Information
                 </h2>
                 <p className="text-white/60 leading-relaxed">
-                  Have a question or ready to start a project? Reach out to us
-                  through any of these channels.
+                  Have a question or ready to start a project? Contact us via email, phone, or visit our offices in Kochi or Coimbatore.
                 </p>
               </div>
 
