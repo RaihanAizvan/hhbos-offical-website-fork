@@ -26,11 +26,10 @@ const StickyVideoHero = () => {
               EMPOWERING
               <br />
               <span className="inline-flex flex-wrap items-center gap-2">
-                YOUR
+                BUSINESSES
                 <svg viewBox="0 0 40 40" className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 inline-block flex-shrink-0" fill="none">
                   <path d="M8 8L20 20M20 20L32 8M20 20V32" stroke="#FF6D1F" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
-                BUSINESS
               </span>
             </h1>
 
