@@ -2,7 +2,8 @@ import { useInView, useMotionValue, useSpring } from 'motion/react';
 import { useCallback, useEffect, useRef } from 'react';
 
 interface CountUpProps {
-  to: number;
+  to?: number;
+  end?: number; // Alias for 'to'
   from?: number;
   direction?: 'up' | 'down';
   delay?: number;
@@ -10,12 +11,14 @@ interface CountUpProps {
   className?: string;
   startWhen?: boolean;
   separator?: string;
+  suffix?: string;
   onStart?: () => void;
   onEnd?: () => void;
 }
 
 export default function CountUp({
-  to,
+  to: toProp,
+  end: endProp,
   from = 0,
   direction = 'up',
   delay = 0,
@@ -23,9 +26,13 @@ export default function CountUp({
   className = '',
   startWhen = true,
   separator = '',
+  suffix = '',
   onStart,
   onEnd
 }: CountUpProps) {
+  // Support both 'to' and 'end' props
+  const to = toProp ?? endProp ?? 0;
+  
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === 'down' ? to : from);
 
@@ -63,10 +70,11 @@ export default function CountUp({
       };
 
       const formattedNumber = Intl.NumberFormat('en-US', options).format(latest);
-
-      return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
+      const formatted = separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
+      
+      return formatted + suffix;
     },
-    [maxDecimals, separator]
+    [maxDecimals, separator, suffix]
   );
 
   useEffect(() => {
