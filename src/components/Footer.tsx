@@ -121,21 +121,41 @@ const Footer = () => {
                   Empowering Your Business
                 </h3>
                 <p className="text-white/60 text-sm leading-relaxed max-w-md">
-                  Precision, efficiency, and data intelligence through world-class outsourcing solutions. Trusted by 250+ global clients.
+                  We provide end-to-end Finance & Accounts, Revenue Cycle Management, and Database Administration solutions that streamline your operations and drive measurable growth.
                 </p>
               </div>
 
               {/* Contact */}
-              <div className="space-y-3">
-                <div className="text-sm text-white/80">
-                  <a href="mailto:info@hhbos.com" className="hover:text-primary transition-colors">
-                    info@hhbos.com
-                  </a>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="text-sm text-white/80">
+                    <a href="mailto:info@hhbos.com" className="hover:text-primary transition-colors">
+                      info@hhbos.com
+                    </a>
+                  </div>
+                  <div className="text-sm text-white/80">
+                    <a href="tel:+914842917200" className="hover:text-primary transition-colors">
+                      0484-2917200
+                    </a>
+                  </div>
                 </div>
-                <div className="text-sm text-white/80">
-                  <a href="tel:+914842917200" className="hover:text-primary transition-colors">
-                    +91 0484-2917200
-                  </a>
+                
+                <div className="space-y-3 pt-2">
+                  <div className="text-xs text-white/60">
+                    <div className="font-semibold text-white/80 mb-1">Kochi Office</div>
+                    <p className="leading-relaxed">
+                      Phase-2 Floor-2, Carnival Infopark,<br />
+                      Kakkanad, Kochi - 682042, Kerala, India
+                    </p>
+                  </div>
+                  <div className="text-xs text-white/60">
+                    <div className="font-semibold text-white/80 mb-1">Coimbatore Office</div>
+                    <p className="leading-relaxed">
+                      Dc 44 & 45, 4th Floor, Tidel Park,<br />
+                      Aerodrome Po, Coimbatore - 641014,<br />
+                      Tamilnadu, India
+                    </p>
+                  </div>
                 </div>
               </div>
 
