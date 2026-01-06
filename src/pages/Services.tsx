@@ -1,295 +1,323 @@
-import { useState, useLayoutEffect } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useLayoutEffect, useEffect, useRef } from "react";
+import { motion } from "motion/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Card, CardContent } from "@/components/ui/card";
 import {
+  HeartPulse,
   DollarSign,
-  Calculator,
   Database,
-  ChevronDown,
-  ChevronUp,
   CheckCircle,
-  Users,
-  Cpu,
-  ShieldCheck,
   TrendingUp,
-  Globe,
-  Atom,
-  DatabaseIcon,
-  LeafyGreen,
-  PanelTop,
-  Eclipse,
+  Shield,
+  Clock,
+  Users,
 } from "lucide-react";
-import { motion, Variants } from "framer-motion";
-import LogoLoop from "@/components/LogoLoop";
+import serviceHealthcare from "@/assets/service-healthcare.jpg";
+import serviceFinance from "@/assets/service-finance.jpg";
+import serviceDatabase from "@/assets/service-database.jpg";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Services = () => {
-  const [expandedService, setExpandedService] = useState<number | null>(0);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, []);
 
-  /* ---------------- Animations ---------------- */
-  const containerVariants: Variants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.08,
-      },
-    },
-  };
+  useEffect(() => {
+    if (!heroRef.current) return;
 
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 30, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".services-hero-text",
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+        }
+      );
 
-  /* ---------------- Data ---------------- */
+      if (servicesRef.current) {
+        const cards = servicesRef.current.querySelectorAll(".service-card");
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 80, scale: 0.9 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: servicesRef.current,
+              start: "top 70%",
+            },
+          }
+        );
+      }
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const services = [
     {
-      icon: DollarSign,
-      title: "Revenue Cycle Management (RCM)",
+      icon: HeartPulse,
+      title: "Revenue Cycle Management",
       description:
-        "End-to-end RCM solutions that optimize healthcare financial performance.",
-      services: [
-        "Patient Registration & Eligibility Verification",
-        "Medical Coding & Billing",
-        "Claims Submission & Follow-up",
-        "Payment Posting & Denial Management",
-        "AR Analysis & Reporting",
+        "End-to-end RCM solutions for healthcare providers. From patient registration to final payment, we optimize every step.",
+      image: serviceHealthcare,
+      features: [
+        "Medical Billing & Coding",
+        "Claims Processing",
+        "Denial Management",
+        "Payment Posting",
+        "AR Follow-up",
+        "Credentialing",
       ],
-      benefits: [
-        "Faster reimbursements",
-        "Minimized denials",
-        "Enhanced revenue transparency",
-      ],
+      stats: { value: "40%", label: "Revenue Increase" },
     },
     {
-      icon: Calculator,
-      title: "Finance & Accounts Services",
+      icon: DollarSign,
+      title: "Finance & Accounts",
       description:
-        "Streamline your financial processes with our end-to-end accounting solutions.",
-      services: [
-        "Bookkeeping & General Ledger Maintenance",
-        "Accounts Payable & Receivable",
+        "Comprehensive bookkeeping and financial management services. We handle your finances so you can focus on growth.",
+      image: serviceFinance,
+      features: [
+        "Accounts Payable/Receivable",
         "Payroll Processing",
-        "Financial Planning & Analysis",
-        "Tax Compliance & Audit Support",
+        "Financial Reporting",
+        "Tax Preparation",
         "Budgeting & Forecasting",
+        "Audit Support",
       ],
-      benefits: [
-        "Reduced operational cost",
-        "Real-time financial insights",
-        "Compliance with accounting standards",
-      ],
+      stats: { value: "98%", label: "Accuracy Rate" },
     },
     {
       icon: Database,
-      title: "Database Administration & Management",
+      title: "Database Administration",
       description:
-        "Secure, scalable, and efficient data solutions for business continuity and analytics.",
-      services: [
-        "Database Setup & Configuration (SQL, Oracle, MySQL)",
-        "Performance Tuning & Optimization",
-        "Backup & Recovery Management",
-        "Data Migration & Integration",
-        "Security & Access Control",
-        "24/7 Monitoring & Support",
+        "Expert database management and optimization. We ensure your data is secure, accessible, and performing at peak efficiency.",
+      image: serviceDatabase,
+      features: [
+        "Database Design & Setup",
+        "Performance Optimization",
+        "Backup & Recovery",
+        "Security Management",
+        "24/7 Monitoring",
+        "Migration Services",
       ],
-      benefits: [
-        "Improved data reliability",
-        "Minimized downtime",
-        "Enhanced decision-making through analytics",
-      ],
+      stats: { value: "99.9%", label: "Uptime" },
     },
   ];
 
-  const industries = [
-    { name: "Healthcare", icon: "🏥" },
-    { name: "Finance & Banking", icon: "🏦" },
-    { name: "E-commerce", icon: "🛒" },
-    { name: "IT & Software", icon: "💻" },
-    { name: "Manufacturing", icon: "🏭" },
-    { name: "Real Estate", icon: "🏢" },
-  ];
-
-  const whyChooseUs = [
-    {
-      icon: Users,
-      title: "Expert Professionals",
-      description:
-        "Skilled accountants, RCM specialists, and database administrators with real-world experience.",
-    },
-    {
-      icon: Cpu,
-      title: "Technology Driven",
-      description:
-        "Powered by the latest software tools, automation, and analytics for efficiency and accuracy.",
-    },
-    {
-      icon: ShieldCheck,
-      title: "Data Security",
-      description:
-        "ISO 27001–aligned data protection policies ensuring confidentiality and compliance.",
-    },
+  const benefits = [
     {
       icon: TrendingUp,
-      title: "Proven Results",
-      description:
-        "Demonstrated ROI, improved cash flow, and measurable efficiency gains for clients.",
+      title: "Increased Efficiency",
+      description: "Streamlined processes and faster turnaround times",
     },
     {
-      icon: Globe,
-      title: "Global Delivery Model",
-      description:
-        "Seamless global support with flexible engagement models for clients worldwide.",
-    },
-  ];
-
-  const techLogos = [
-    { node: <Atom />, title: "React", href: "https://react.dev" },
-    { node: <LeafyGreen />, title: "MongoDb", href: "https://nextjs.org" },
-    {
-      node: <PanelTop />,
-      title: "TypeScript",
-      href: "https://www.typescriptlang.org",
+      icon: Shield,
+      title: "Data Security",
+      description: "ISO 27001 certified with enterprise-grade encryption",
     },
     {
-      node: <Eclipse />,
-      title: "Tailwind CSS",
-      href: "https://tailwindcss.com",
+      icon: Clock,
+      title: "24/7 Support",
+      description: "Round-the-clock monitoring and assistance",
+    },
+    {
+      icon: Users,
+      title: "Expert Team",
+      description: "Certified professionals with industry expertise",
     },
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <section className="gradient-subtle section-padding text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h1>
-        <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          Comprehensive solutions designed to transform your business operations
-        </p>
-      </section>
+    <div className="min-h-screen bg-black">
+      {/* Hero Section */}
+      <section
+        ref={heroRef}
+        className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black"
+      >
+        <div className="absolute inset-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-30"
+          >
+            <source src="/video/background.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-black/60" />
+          {/* Bottom fade gradient mask */}
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
+        </div>
 
-      {/* Services Accordion */}
-      <section className="section-padding bg-background">
-        <div className="container-custom space-y-6">
-          {services.map((service, index) => (
-            <Card key={index} className="border-2">
-              <CardHeader
-                className="cursor-pointer"
-                onClick={() =>
-                  setExpandedService(expandedService === index ? null : index)
-                }
-              >
-                <div className="flex justify-between items-center">
-                  <div className="flex gap-4">
-                    <service.icon className="h-6 w-6 text-primary" />
-                    <div>
-                      <h3 className="font-bold">{service.title}</h3>
-                      <p className="text-muted-foreground">
-                        {service.description}
-                      </p>
-                    </div>
-                  </div>
-                  {expandedService === index ? <ChevronUp /> : <ChevronDown />}
-                </div>
-              </CardHeader>
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,107,31,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.2) 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
+        </div>
 
-              {expandedService === index && (
-                <CardContent className="grid md:grid-cols-2 gap-8">
-                  <ul>
-                    {service.services.map((s, i) => (
-                      <li key={i} className="flex gap-2">
-                        <CheckCircle className="h-4 w-4 text-primary" />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                  <ul>
-                    {service.benefits.map((b, i) => (
-                      <li key={i} className="flex gap-2">
-                        <CheckCircle className="h-4 w-4 text-primary" />
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              )}
-            </Card>
-          ))}
+        <div className="relative z-10 container-custom text-center px-6">
+          <div className="space-y-6 max-w-4xl mx-auto">
+            <div className="services-hero-text flex items-center justify-center gap-4 mb-6">
+              <div className="h-px w-16 bg-primary" />
+              <span className="text-primary text-sm uppercase tracking-[0.3em]">
+                Our Services
+              </span>
+              <div className="h-px w-16 bg-primary" />
+            </div>
+
+            <h1 className="services-hero-text text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+              Comprehensive{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
+                Outsourcing Solutions
+              </span>
+            </h1>
+
+            <p className="services-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+              Expert services in RCM, Finance, and Database Administration tailored to your business needs
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="section-padding bg-background">
-        <motion.div
-          className="container-custom grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {whyChooseUs.map((item, i) => (
-            <motion.div key={i} variants={cardVariants}>
-              <Card className="border-2 text-center p-6">
-                <item.icon className="h-8 w-8 mx-auto text-primary mb-4" />
-                <h3 className="font-semibold mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {item.description}
-                </p>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
+      {/* Main Services Section */}
+      <section ref={servicesRef} className="section-padding bg-black">
+        <div className="container-custom space-y-20">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            const isReverse = index % 2 !== 0;
+
+            return (
+              <div
+                key={index}
+                className={`service-card grid lg:grid-cols-2 gap-12 items-center ${
+                  isReverse ? "lg:flex-row-reverse" : ""
+                }`}
+              >
+                {/* Image Side */}
+                <div className={`${isReverse ? "lg:order-2" : ""}`}>
+                  <div className="relative group overflow-hidden rounded-2xl">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                    
+                    {/* Stats Overlay */}
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <div className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+                        <div className="text-4xl font-bold text-primary mb-1">
+                          {service.stats.value}
+                        </div>
+                        <div className="text-white/60 text-sm uppercase tracking-wider">
+                          {service.stats.label}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content Side */}
+                <div className={`space-y-6 ${isReverse ? "lg:order-1" : ""}`}>
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Icon className="w-8 h-8 text-primary" />
+                  </div>
+
+                  <h2 className="text-4xl md:text-5xl font-bold text-white">
+                    {service.title}
+                  </h2>
+
+                  <p className="text-white/70 text-lg leading-relaxed">
+                    {service.description}
+                  </p>
+
+                  {/* Features Grid */}
+                  <div className="grid grid-cols-2 gap-3 pt-4">
+                    {service.features.map((feature, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2 text-white/80 text-sm"
+                      >
+                        <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
-      {/* Industries */}
-      <section className="section-padding gradient-subtle">
-        <LogoLoop
-          logos={techLogos}
-          speed={120}
-          direction="left"
-          logoHeight={48}
-          gap={40}
-          hoverSpeed={0}
-          scaleOnHover
-          fadeOut
-          fadeOutColor="#ffffff"
-          ariaLabel="Technology partners"
-        />
-        <motion.div
-          className="container-custom grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {industries.map((industry, i) => (
-            <motion.div key={i} variants={cardVariants}>
-              <Card className="border-2 text-center p-6">
-                <div className="text-4xl mb-2">{industry.icon}</div>
-                <p className="font-semibold">{industry.name}</p>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
+      {/* Benefits Section */}
+      <section className="section-padding bg-zinc-950 relative overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-[100px]" />
 
-      {/* CTA */}
-      <section className="section-padding gradient-hero text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-          Let’s Discuss Your Business Needs
-        </h2>
-        <Button size="lg" variant="secondary" asChild>
-          <a href="/contact">Schedule a Free Consultation</a>
-        </Button>
+        <div className="relative container-custom">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Why Choose{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
+                Our Services
+              </span>
+            </h2>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">
+              Experience the advantages of partnering with industry experts
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {benefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group"
+                >
+                  <Card className="h-full bg-black/50 backdrop-blur-sm border-white/10 hover:border-primary/50 transition-all duration-300">
+                    <CardContent className="p-6 space-y-4">
+                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                        <Icon className="w-7 h-7 text-primary" />
+                      </div>
+                      <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-300">
+                        {benefit.title}
+                      </h3>
+                      <p className="text-white/60 text-sm leading-relaxed">
+                        {benefit.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
       </section>
     </div>
   );
