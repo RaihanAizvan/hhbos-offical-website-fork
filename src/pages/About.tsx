@@ -66,23 +66,23 @@ const About = () => {
   const values = [
     {
       icon: Target,
-      title: "Precision",
-      description: "Meticulous attention to detail in every transaction and process",
+      title: "Integrity & Transparency",
+      description: "Open communication and honest practices in every interaction",
     },
     {
       icon: Eye,
-      title: "Transparency",
-      description: "Open communication and clear reporting at every step",
+      title: "Accuracy & Timeliness",
+      description: "Delivering precise results on schedule, every time",
     },
     {
       icon: Heart,
-      title: "Commitment",
-      description: "Dedicated to your success with unwavering support",
+      title: "Innovation & Growth",
+      description: "Continuous improvement and forward-thinking solutions",
     },
     {
       icon: CheckCircle,
-      title: "Excellence",
-      description: "Continuous improvement and industry-leading standards",
+      title: "Customer-Centric Approach",
+      description: "Your success is our priority—tailored solutions that work",
     },
   ];
 
@@ -124,11 +124,11 @@ const About = () => {
             </div>
             
             <h1 className="about-hero-text text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
-              Your Trusted Partner in <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">Financial Excellence</span>
+              Your Trusted Partner in <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">Financial and Data Solutions</span>
             </h1>
             
             <p className="about-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              Specializing in Revenue Cycle Management, Finance & Accounts, and Database Administration since 2020
+              HH Back Office Services Pvt Ltd is a professional outsourcing firm specializing in Revenue Cycle Management, Finance & Accounts, and Database Administration.
             </p>
           </div>
         </div>
@@ -182,10 +182,13 @@ const About = () => {
                 Our <span className="text-primary">Story</span>
               </h2>
               <p className="text-white/70 leading-relaxed">
-                Founded in 2020, HH Back Office Services Pvt Ltd emerged from a vision to transform how businesses manage their critical operations. We recognized the growing need for reliable, precise, and scalable outsourcing solutions.
+                With a team of experienced professionals and industry-standard technology, we ensure accuracy, compliance, and efficiency in every service we deliver.
               </p>
               <p className="text-white/70 leading-relaxed">
-                Today, we serve over 250 clients globally, delivering excellence in Revenue Cycle Management, Finance & Accounts, and Database Administration. Our commitment to precision and innovation has made us a trusted partner for businesses of all sizes.
+                <strong className="text-white">Mission:</strong> To empower businesses with reliable, data-driven solutions that enhance productivity and profitability.
+              </p>
+              <p className="text-white/70 leading-relaxed">
+                <strong className="text-white">Vision:</strong> To become a globally recognized outsourcing partner for financial and data management excellence.
               </p>
             </motion.div>
             
