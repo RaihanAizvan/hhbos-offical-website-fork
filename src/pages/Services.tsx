@@ -71,49 +71,63 @@ const Services = () => {
   const services = [
     {
       icon: HeartPulse,
-      title: "Revenue Cycle Management",
+      title: "Revenue Cycle Management (RCM)",
       description:
-        "End-to-end RCM solutions for healthcare providers. From patient registration to final payment, we optimize every step.",
+        "End-to-end RCM solutions that optimize healthcare financial performance.",
       image: serviceHealthcare,
       features: [
-        "Medical Billing & Coding",
-        "Claims Processing",
-        "Denial Management",
-        "Payment Posting",
-        "AR Follow-up",
-        "Credentialing",
+        "Patient Registration & Eligibility Verification",
+        "Medical Coding & Billing",
+        "Claims Submission & Follow-up",
+        "Payment Posting & Denial Management",
+        "AR Analysis & Reporting",
+      ],
+      benefits: [
+        "Faster reimbursements",
+        "Minimized denials",
+        "Enhanced revenue transparency",
       ],
       stats: { value: "40%", label: "Revenue Increase" },
     },
     {
       icon: DollarSign,
-      title: "Finance & Accounts",
+      title: "Finance & Accounts Services",
       description:
-        "Comprehensive bookkeeping and financial management services. We handle your finances so you can focus on growth.",
+        "Streamline your financial processes with our end-to-end accounting solutions.",
       image: serviceFinance,
       features: [
-        "Accounts Payable/Receivable",
+        "Bookkeeping & General Ledger Maintenance",
+        "Accounts Payable & Receivable",
         "Payroll Processing",
-        "Financial Reporting",
-        "Tax Preparation",
+        "Financial Planning & Analysis",
+        "Tax Compliance & Audit Support",
         "Budgeting & Forecasting",
-        "Audit Support",
+      ],
+      benefits: [
+        "Reduced operational cost",
+        "Real-time financial insights",
+        "Compliance with accounting standards",
       ],
       stats: { value: "98%", label: "Accuracy Rate" },
     },
     {
       icon: Database,
-      title: "Database Administration",
+      title: "Database Administration & Management",
       description:
-        "Expert database management and optimization. We ensure your data is secure, accessible, and performing at peak efficiency.",
+        "Secure, scalable, and efficient data solutions for business continuity and analytics.",
       image: serviceDatabase,
       features: [
-        "Database Design & Setup",
-        "Performance Optimization",
-        "Backup & Recovery",
-        "Security Management",
-        "24/7 Monitoring",
-        "Migration Services",
+        "Database Setup & Configuration (SQL, Oracle, MySQL)",
+        "Performance Tuning & Optimization",
+        "Backup & Recovery Management",
+        "Data Migration & Integration",
+        "Security & Access Control",
+        "24/7 Monitoring & Support",
+      ],
+      benefits: [
+        "Improved data reliability",
+        "Minimized downtime",
+        "Enhanced decision-making through analytics",
       ],
       stats: { value: "99.9%", label: "Uptime" },
     },
@@ -252,17 +266,34 @@ const Services = () => {
                   </p>
 
                   {/* Features Grid */}
-                  <div className="grid grid-cols-2 gap-3 pt-4">
+                  <div className="space-y-3 pt-4">
+                    <h3 className="text-sm font-semibold text-white/90 uppercase tracking-wider">Our Expertise Includes:</h3>
                     {service.features.map((feature, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-2 text-white/80 text-sm"
+                        className="flex items-start gap-2 text-white/80 text-sm"
                       >
-                        <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                         <span>{feature}</span>
                       </div>
                     ))}
                   </div>
+
+                  {/* Benefits */}
+                  {"benefits" in service && (
+                    <div className="space-y-3 pt-4 border-t border-white/10">
+                      <h3 className="text-sm font-semibold text-white/90 uppercase tracking-wider">Benefits:</h3>
+                      {service.benefits.map((benefit, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-2 text-primary/90 text-sm font-medium"
+                        >
+                          <span>•</span>
+                          <span>{benefit}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             );
