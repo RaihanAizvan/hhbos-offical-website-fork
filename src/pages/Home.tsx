@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import SplitText from "@/components/SplitText";
@@ -37,6 +37,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import heroImage from "@/assets/hero-image.jpg";
+import StickyVideoHero from "@/components/StickyVideoHero";
+import LeadershipSection from "@/components/LeadershipSection";
+import InsightsSection from "@/components/InsightsSection";
+import PortalCTA from "@/components/PortalCTA";
+import StatsShowcase from "@/components/StatsShowcase";
 import carouselRcm from "@/assets/carousel-rcm.jpg";
 import carouselFinance from "@/assets/carousel-finance.jpg";
 import carouselDatabase from "@/assets/carousel-database.jpg";
@@ -303,360 +308,146 @@ const Home = () => {
     { icon: Award, text: "Global Delivery Model" },
   ];
 
+  const { scrollY } = useScroll();
+  // Video moves upward slower (60% speed) - negative values for upward movement
+  const videoY = useTransform(scrollY, [0, 2000], [0, -1200]);
+
   return (
-    <div className="min-h-screen">
-      {/* Main Carousel */}
-      <section className="relative w-full">
-        <Carousel className="w-full" opts={{ loop: true }}>
-          <CarouselContent>
-            {carouselSlides.map((slide, index) => (
-              <CarouselItem key={index}>
-                <div className="relative h-[500px] md:h-[600px] w-full">
-                  <img
-                    src={slide.image}
-                    alt={slide.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-background/60" />
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="container-custom">
-                      <div className="max-w-2xl space-y-6 text-white">
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-                          {slide.title}
-                        </h2>
-                        <p className="text-lg md:text-xl text-white/90">
-                          {slide.subtext}
-                        </p>
-                        <motion.div
-                          whileHover={{ scale: 1.1, opacity: 1 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="inline-block"
-                        >
-                          <Button
-                            asChild
-                            size="lg"
-                            variant="secondary"
-                            className="hover-scale"
-                          >
-                            <Link to={slide.link}>{slide.cta}</Link>
-                          </Button>
-                        </motion.div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-4" />
-          <CarouselNext className="right-4" />
-        </Carousel>
-      </section>
+    <div className="min-h-[100svh] relative">
+      {/* Global Video Background - Parallax Effect */}
+      <motion.div
+        className="fixed inset-0 -z-50 w-screen h-[100svh] overflow-hidden"
+        style={{ y: videoY }}
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover object-bottom"
+        >
+          <source src="/video/background.mp4" type="video/mp4" />
+        </video>
+      </motion.div>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden gradient-subtle">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent" />
+      {/* Sticky Video Hero with Parallax */}
+      <StickyVideoHero />
 
-        <div className="container-custom section-padding relative">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-4">
-              <SplitText
-                text="Empowering Businesses with Precision, Efficiency, and Data Intelligence"
-                className="py-2 text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight"
-                delay={70}
-                duration={0.8}
-                ease="power3.out"
-                splitType="words"
-                from={{ opacity: 0, y: 40 }}
-                to={{ opacity: 1, y: 0 }}
-                threshold={0.1}
-                rootMargin="-100px"
-                textAlign="left"
-                onLetterAnimationComplete={handleAnimationComplete}
-              />
+      {/* Services Showcase - Tall Cards */}
+      <section className="section-padding relative bg-transparent -mt-32">
+        <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Our Core Services
+            </h2>
+            <p className="text-lg text-white/70">
+              Comprehensive solutions tailored to your business needs
+            </p>
+          </div>
 
-              <motion.p
-                initial={{ x: -30, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                  type: "tween",
-                  stiffness: 100,
-                  delay: 0.3,
-                }}
-                className="text-lg text-muted-foreground"
-              >
-                We provide end-to-end Finance & Accounts, Revenue Cycle
-                Management, and Database Administration solutions that
-                streamline your operations and drive measurable growth.
-              </motion.p>
-              <motion.div
-                className="flex flex-col sm:flex-row gap-4 pt-4"
-                initial={{ x: -30, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                  type: "tween",
-                  stiffness: 100,
-                  delay: 0.4,
-                }}
-              >
-                <Button
-                  asChild
-                  size="lg"
-                  className="gradient-hero hover-scale focus:ring-2 focus:ring-offset-2"
-                >
-                  <Link to="/contact">Get a Free Consultation</Link>
-                </Button>
-              </motion.div>
-            </div>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {/* Card 1 - RCM */}
             <motion.div
-              initial={{ y: 40, opacity: 0, scale: 0.96 }}
-              whileInView={{ y: 0, opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{
-                type: "spring",
-                delay: 0.3,
-                stiffness: 70,
-                damping: 16,
-              }}
-              className="relative rounded-2xl overflow-hidden shadow-2xl"
+              transition={{ duration: 0.6, delay: 0 }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="relative overflow-hidden rounded-lg bg-zinc-900 min-h-[500px] flex flex-col cursor-pointer group"
             >
-              <img
-                src={heroImage}
-                alt="Team of finance and IT professionals collaborating in modern office"
-                className="w-full h-auto object-cover"
-                loading="lazy"
-                width={1440}
-                height={900}
-              />
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src={serviceHealthcare}
+                  alt="Revenue Cycle Management"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-8 flex flex-col flex-1">
+                <div className="text-xs uppercase tracking-wider text-primary mb-3">HEALTHCARE</div>
+                <h3 className="text-2xl font-bold text-white leading-tight mb-4">
+                  Revenue Cycle Management
+                </h3>
+                <p className="text-white/70 mb-6 flex-1">
+                  Supporting healthcare providers with revenue-optimized billing life cycles. End-to-end RCM operations for maximum efficiency.
+                </p>
+                <Link to="/services" className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all">
+                  <span>Learn more</span>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 4L16 12L8 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Card 2 - Finance */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="relative overflow-hidden rounded-lg bg-zinc-900 min-h-[500px] flex flex-col cursor-pointer group"
+            >
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src={serviceFinance}
+                  alt="Finance & Accounts"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-8 flex flex-col flex-1">
+                <div className="text-xs uppercase tracking-wider text-primary mb-3">FINANCE</div>
+                <h3 className="text-2xl font-bold text-white leading-tight mb-4">
+                  Finance & Accounts Outsourcing
+                </h3>
+                <p className="text-white/70 mb-6 flex-1">
+                  Maintain compliance, streamline finance, and reduce operational overhead with expert bookkeeping and financial management.
+                </p>
+                <Link to="/services" className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all">
+                  <span>Learn more</span>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 4L16 12L8 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Card 3 - Database */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="relative overflow-hidden rounded-lg bg-zinc-900/50 backdrop-blur-sm min-h-[500px] flex flex-col cursor-pointer group"
+            >
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src={serviceDatabase}
+                  alt="Database Administration"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-8 flex flex-col flex-1">
+                <div className="text-xs uppercase tracking-wider text-primary mb-3">TECHNOLOGY</div>
+                <h3 className="text-2xl font-bold text-white leading-tight mb-4">
+                  Database Administration
+                </h3>
+                <p className="text-white/70 mb-6 flex-1">
+                  Ensure secure data handling with 24/7 monitoring and disaster recovery support. Scalable and performance-optimized solutions.
+                </p>
+                <Link to="/services" className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all">
+                  <span>Learn more</span>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 4L16 12L8 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </Link>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Why work with us Section */}
-      <section className="section-padding bg-background">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{
-                type: "spring",
-                stiffness: 80,
-                damping: 18,
-              }}
-              className="text-3xl md:text-4xl font-bold text-foreground mb-4"
-            >
-              Why Work With Us
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{
-                type: "spring",
-                stiffness: 80,
-                damping: 18,
-                delay: 0.1,
-              }}
-              className="text-lg text-muted-foreground max-w-2xl mx-auto"
-            >
-              Experience the advantages of partnering with a trusted outsourcing
-              leader
-            </motion.p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featureCards.map((card, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 70,
-                  damping: 16,
-                  delay: index * 0.08,
-                }}
-                whileHover={{
-                  y: -8,
-                  scale: 1.02,
-                  transition: { type: "spring", stiffness: 300, damping: 20 },
-                }}
-              >
-                <Card className="border border-border hover:border-primary transition-all duration-300 overflow-hidden group bg-card">
-                  <CardContent className="p-6 space-y-4 relative">
-                    {/* Hover Glow */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100"
-                      transition={{ duration: 0.5, ease: "easeOut" }}
-                    />
-
-                    {/* Icon */}
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 120,
-                        damping: 12,
-                        delay: index * 0.05,
-                      }}
-                      className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors relative z-10"
-                    >
-                      <card.icon className="h-6 w-6 text-primary" />
-                    </motion.div>
-
-                    <h3 className="text-xl font-semibold text-foreground relative z-10">
-                      {card.title}
-                    </h3>
-
-                    <p className="text-muted-foreground leading-relaxed relative z-10">
-                      {card.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Image Service Cards Section */}
-      <section className="section-padding gradient-subtle">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ type: "spring", stiffness: 80, damping: 18 }}
-              className="text-3xl md:text-4xl font-bold text-foreground mb-4"
-            >
-              Our Service Excellence
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{
-                type: "spring",
-                stiffness: 80,
-                damping: 18,
-                delay: 0.1,
-              }}
-              className="text-lg text-muted-foreground"
-            >
-              Real solutions delivering measurable results
-            </motion.p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {imageServiceCards.map((card, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 70,
-                  damping: 16,
-                  delay: index * 0.1,
-                }}
-                whileHover={{
-                  y: -10,
-                  scale: 1.03,
-                  transition: { type: "spring", stiffness: 300, damping: 20 },
-                }}
-              >
-                <Card className="overflow-hidden border-none shadow-lg hover:shadow-2xl transition-shadow duration-500 group cursor-pointer">
-                  <div className="relative h-64 overflow-hidden">
-                    {/* Image Parallax */}
-                    <motion.div
-                      whileHover={{ scale: 1.15 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 120,
-                        damping: 15,
-                      }}
-                      className="h-full w-full"
-                    >
-                      <img
-                        src={card.image}
-                        alt={card.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </motion.div>
-
-                    {/* Gradient overlay */}
-                    <motion.div
-                      initial={{ opacity: 0.85 }}
-                      whileHover={{ opacity: 0.95 }}
-                      transition={{ duration: 0.5 }}
-                      className="absolute inset-0 bg-gradient-to-t from-primary/95 to-transparent"
-                    />
-
-                    {/* Content */}
-                    <div className="absolute inset-0 p-6 text-white flex flex-col justify-end">
-                      <motion.div
-                        initial={{ y: 20, opacity: 0 }}
-                        whileInView={{ y: 0, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 80,
-                          damping: 18,
-                          delay: index * 0.05,
-                        }}
-                      >
-                        <h3 className="text-2xl font-bold mb-2 relative">
-                          {card.title}
-                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-500"></span>
-                        </h3>
-
-                        <p className="text-white/90 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
-                          {card.description}
-                        </p>
-
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          whileHover={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4 }}
-                          className="mt-4 flex gap-3"
-                        >
-                          <div className="text-center">
-                            <div className="text-lg font-bold">98%</div>
-                            <div className="text-xs text-white/80">
-                              Accuracy
-                            </div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-lg font-bold">24/7</div>
-                            <div className="text-xs text-white/80">Support</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-lg font-bold">100+</div>
-                            <div className="text-xs text-white/80">Clients</div>
-                          </div>
-                        </motion.div>
-                      </motion.div>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Our Core Service */}
       <section className="section-padding bg-background">
@@ -739,124 +530,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="section-padding gradient-subtle">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Our Leadership Team
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Experienced professionals driving excellence
-            </p>
-          </div>
+      {/* GSAP Leadership Section */}
+      <LeadershipSection />
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                whileHover={{
-                  y: -10,
-                  transition: { type: "spring", stiffness: 400 },
-                }}
-              >
-                <Card
-                  key={index}
-                  className="h-full text-center border-2 hover:border-primary transition-all duration-300 hover-scale animate-fade-in"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CardContent className="h-full p-6 space-y-4 min-h-full">
-                    <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-primary/20">
-                      <img
-                        src={member.image}
-                        alt={member.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-foreground">
-                        {member.name}
-                      </h3>
-                      <p className="text-primary font-medium">{member.title}</p>
-                    </div>
-                    <p className="text-muted-foreground text-sm">
-                      {member.bio}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Blog Section */}
-      <section className="section-padding bg-background">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Insights & Resources
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Stay informed with our latest articles and industry insights
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => {
-              // animation rules
-              const fromLeft = index === 0;
-              const fromBottom = index === 1;
-              const fromRight = index === 2;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{
-                    opacity: 0,
-                    x: fromLeft ? -120 : fromRight ? 120 : 0,
-                    y: fromBottom ? 120 : 0,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    x: 0,
-                    y: 0,
-                  }}
-                  transition={{
-                    duration: 0.6,
-                    delay: index * 0.15,
-                    ease: "easeOut",
-                  }}
-                  viewport={{ once: true }}
-                >
-                  <Card className="h-full border-2 hover:border-primary transition-all duration-300 hover-scale group">
-                    <CardContent className="h-full flex flex-col p-6 space-y-4">
-                      {/* Top metadata */}
-                      <div className="text-sm text-primary font-medium">
-                        {post.date}
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                        {post.title}
-                      </h3>
-
-                      {/* Excerpt */}
-                      <p className="text-muted-foreground flex-1">
-                        {post.excerpt}
-                      </p>
-
-                      {/* Sticky footer area */}
-                      <div className="flex items-center text-primary font-medium mt-auto">
-                        <span>Read more</span>
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      {/* Portal CTA Section */}
+      <PortalCTA />
 
       {/* Testimonial Section */}
       <section className="section-padding gradient-subtle">
@@ -873,21 +551,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="section-padding gradient-hero">
-        <div className="container-custom text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-lg text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-            Let's discuss how we can help streamline your operations and drive
-            growth.
-          </p>
-          <Button asChild size="lg" variant="secondary" className="hover-scale">
-            <Link to="/contact">Schedule a Free Consultation</Link>
-          </Button>
-        </div>
-      </section>
+      {/* GSAP Insights Section */}
+      <InsightsSection />
+
+      {/* Stats Showcase Section */}
+      <StatsShowcase />
     </div>
   );
 };
