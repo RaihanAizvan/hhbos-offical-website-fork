@@ -69,25 +69,25 @@ const Home = () => {
   const carouselSlides = [
     {
       image: carouselRcm,
-      title: "Revenue Cycle Management",
+      title: "💰 RCM Services",
       subtext:
-        "Increase reimbursement efficiency and reduce claim denials with our structured RCM workflows.",
+        "Optimize your revenue and billing processes.",
       cta: "Explore RCM Services",
       link: "/services",
     },
     {
       image: carouselFinance,
-      title: "Finance & Accounts Outsourcing",
+      title: "💼 Finance & Accounts Outsourcing",
       subtext:
-        "End-to-end accounting support designed for accuracy and compliance.",
+        "Simplify your financial operations.",
       cta: "View Finance Services",
       link: "/services",
     },
     {
       image: carouselDatabase,
-      title: "Database Administration",
+      title: "🖥️ Database Management",
       subtext:
-        "Secure, scalable, and performance-optimized database solutions.",
+        "Ensure your data is secure, scalable, and efficient.",
       cta: "Learn More",
       link: "/services",
     },
@@ -542,8 +542,8 @@ const Home = () => {
           <Card className="bg-secondary border-none">
             <CardContent className="p-8 md:p-12 text-center">
               <p className="text-xl md:text-2xl text-foreground italic mb-6">
-                "Partnering with HH Back Office Services Pvt Ltd helped us
-                achieve 30% faster financial reporting."
+                "Partnering with HH Back Office Services Pvt Ltd. helped us achieve 30% faster
+                financial reporting."
               </p>
               <p className="text-muted-foreground font-medium">— Client, CFO</p>
             </CardContent>
