@@ -2,7 +2,6 @@ import { useLayoutEffect, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import CountUp from "@/components/CountUp";
 import { Target, Eye, Heart, CheckCircle } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -56,13 +55,6 @@ const About = () => {
     return () => ctx.revert();
   }, []);
 
-  const stats = [
-    { value: 15, suffix: "+", label: "Years of Excellence" },
-    { value: 250, suffix: "+", label: "Global Clients" },
-    { value: 500, suffix: "+", label: "Projects Completed" },
-    { value: 98, suffix: "%", label: "Accuracy Rate" },
-  ];
-
   const values = [
     {
       icon: Target,
@@ -87,12 +79,11 @@ const About = () => {
   ];
 
   const whyChooseUs = [
-    "ISO 27001 Certified for data security",
-    "24/7 operational support",
-    "Scalable solutions that grow with you",
-    "Industry-specific expertise",
-    "Cost-effective outsourcing",
-    "Compliance with global standards",
+    "Expert professionals across Finance, RCM, and Database Administration",
+    "Technology-driven workflows and automation",
+    "ISO 27001-aligned data protection policies",
+    "Proven results through efficiency-focused delivery",
+    "Global delivery model with seamless support",
   ];
 
   return (
@@ -130,39 +121,6 @@ const About = () => {
             <p className="about-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
               HH Back Office Services Pvt Ltd is a professional outsourcing firm specializing in Revenue Cycle Management, Finance & Accounts, and Database Administration.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="section-padding bg-black relative">
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)',
-            backgroundSize: '50px 50px'
-          }} />
-        </div>
-        
-        <div className="relative container-custom">
-          <div className="grid md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center group"
-              >
-                <div className="relative inline-block">
-                  <div className="text-5xl md:text-6xl font-bold text-primary mb-2 transition-all duration-300 group-hover:scale-110">
-                    <CountUp end={stat.value} suffix={stat.suffix} />
-                  </div>
-                  <div className="absolute inset-0 bg-primary/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
-                <p className="text-white/60 text-sm uppercase tracking-wider">{stat.label}</p>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
