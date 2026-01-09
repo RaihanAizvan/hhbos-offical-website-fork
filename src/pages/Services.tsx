@@ -10,8 +10,9 @@ import {
   CheckCircle,
   TrendingUp,
   Shield,
-  Clock,
   Users,
+  Globe,
+  Settings,
 } from "lucide-react";
 import serviceHealthcare from "@/assets/service-healthcare.jpg";
 import serviceFinance from "@/assets/service-finance.jpg";
@@ -87,7 +88,6 @@ const Services = () => {
         "Minimized denials",
         "Enhanced revenue transparency",
       ],
-      stats: { value: "40%", label: "Revenue Increase" },
     },
     {
       icon: DollarSign,
@@ -108,7 +108,6 @@ const Services = () => {
         "Real-time financial insights",
         "Compliance with accounting standards",
       ],
-      stats: { value: "98%", label: "Accuracy Rate" },
     },
     {
       icon: Database,
@@ -129,30 +128,34 @@ const Services = () => {
         "Minimized downtime",
         "Enhanced decision-making through analytics",
       ],
-      stats: { value: "99.9%", label: "Uptime" },
     },
   ];
 
   const benefits = [
     {
+      icon: Users,
+      title: "Expert Professionals",
+      description: "Skilled accountants, RCM specialists, and DBAs",
+    },
+    {
       icon: TrendingUp,
-      title: "Increased Efficiency",
-      description: "Streamlined processes and faster turnaround times",
+      title: "Proven Results",
+      description: "Demonstrated ROI and efficiency gains",
     },
     {
       icon: Shield,
       title: "Data Security",
-      description: "ISO 27001 certified with enterprise-grade encryption",
+      description: "ISO 27001-aligned data protection policies",
     },
     {
-      icon: Clock,
-      title: "24/7 Support",
-      description: "Round-the-clock monitoring and assistance",
+      icon: Globe,
+      title: "Global Delivery Model",
+      description: "Seamless support for clients worldwide",
     },
     {
-      icon: Users,
-      title: "Expert Team",
-      description: "Certified professionals with industry expertise",
+      icon: Settings,
+      title: "Technology Driven",
+      description: "Latest software tools and automation",
     },
   ];
 
@@ -236,18 +239,6 @@ const Services = () => {
                       className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-                    
-                    {/* Stats Overlay */}
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="bg-black/80 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-                        <div className="text-4xl font-bold text-primary mb-1">
-                          {service.stats.value}
-                        </div>
-                        <div className="text-white/60 text-sm uppercase tracking-wider">
-                          {service.stats.label}
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
