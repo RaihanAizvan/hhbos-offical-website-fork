@@ -1,257 +1,311 @@
-import { useState, useLayoutEffect } from "react";
+import { useLayoutEffect, useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
-  useLayoutEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
-  const { toast } = useToast();
-
+  const heroRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    service: "",
-    message: "",  
+    company: "",
+    message: "",
   });
 
-  const [isSending, setIsSending] = useState(false);
+  useLayoutEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (!heroRef.current) return;
 
-    if (isSending) return;
-    setIsSending(true);
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".contact-hero-text",
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+        }
+      );
 
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          preferred_service: formData.service,
-          message: formData.message,
-          subject: "New Contact Form Submission",
-          botcheck: "",
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        toast({
-          title: "Message Sent!",
-          description: "We'll get back to you shortly.",
-          className: "bg-green-600 text-white border-none",
-        });
-
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          service: "",
-          message: "",
-        });
-      } else {
-        throw new Error("Submission failed");
+      if (formRef.current) {
+        const fields = formRef.current.querySelectorAll(".form-field");
+        gsap.fromTo(
+          fields,
+          { opacity: 0, x: -30 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: formRef.current,
+              start: "top 70%",
+            },
+          }
+        );
       }
-    } catch {
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSending(false);
-    }
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted:", formData);
+    // Add your form submission logic here
   };
 
-  const offices = [
-    {
-      city: "Kochi, Kerala",
-      address:
-        "Phase-2, Floor-2, Carnival Infopark, Kakkanad, Kochi – 682042, Kerala, India",
-    },
-    {
-      city: "Coimbatore, Tamil Nadu",
-      address:
-        "DC 44 & 45, 4th Floor, Tidel Park, Aerodrome PO, Coimbatore – 641014, Tamil Nadu, India",
-    },
-  ];
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const services = [
-    "Revenue Cycle Management (RCM)",
-    "Finance & Accounts Services",
-    "Database Administration",
-    "IT & Software Services",
-    "Consultation",
-    "Other",
+  const contactInfo = [
+    {
+      icon: Mail,
+      title: "Email Us",
+      value: "info@hhbos.com",
+      link: "mailto:info@hhbos.com",
+    },
+    {
+      icon: Phone,
+      title: "Call Us",
+      value: "0484-2917200",
+      link: "tel:+914842917200",
+    },
+    {
+      icon: MapPin,
+      title: "Kochi Office",
+      value: "Phase-2 Floor-2, Carnival Infopark, Kakkanad, Kochi - 682042, Kerala, India",
+      link: "#kochi",
+    },
+    {
+      icon: MapPin,
+      title: "Coimbatore Office",
+      value: "Dc 44 & 45, 4th Floor, Tidel Park, Aerodrome Po, Coimbatore - 641014, Tamilnadu, India",
+      link: "#coimbatore",
+    },
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <section className="gradient-subtle section-padding">
-        <div className="container-custom text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Contact Us
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            We'd love to discuss how we can help your business grow
-          </p>
+    <div className="min-h-screen bg-black">
+      {/* Hero Section */}
+      <section
+        ref={heroRef}
+        className="relative min-h-[60svh] flex items-center justify-center overflow-hidden bg-black"
+      >
+        <div className="absolute inset-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-30"
+          >
+            <source src="/video/background.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-black/60" />
+          {/* Bottom fade gradient mask */}
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
+        </div>
+
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,107,31,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.2) 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 container-custom text-center px-6">
+          <div className="space-y-6 max-w-4xl mx-auto">
+            <div className="contact-hero-text flex items-center justify-center gap-4 mb-6">
+              <div className="h-px w-16 bg-primary" />
+              <span className="text-primary text-sm uppercase tracking-[0.3em]">
+                Get In Touch
+              </span>
+              <div className="h-px w-16 bg-primary" />
+            </div>
+
+            <h1 className="contact-hero-text text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+              Get in{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
+                Touch
+              </span>
+            </h1>
+
+            <p className="contact-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+              We'd love to discuss how we can help your business grow.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Contact Form */}
-      <section className="section-padding bg-background">
+      {/* Contact Section */}
+      <section className="section-padding bg-black">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12">
-            <Card className="border-2">
-              <CardContent className="p-8">
-                <h2 className="text-2xl font-bold text-foreground mb-6">
-                  Send Us a Message
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+            {/* Left: Contact Info */}
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Contact Information
                 </h2>
+                <p className="text-white/60 leading-relaxed">
+                  We’d love to discuss how we can help your business grow.
+                </p>
+              </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name */}
-                  <div>
-                    <Label>Name</Label>
-                    <Input
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                      required
-                      className="mt-2"
-                    />
-                  </div>
-
-                  {/* Email */}
-                  <div>
-                    <Label>Email</Label>
-                    <Input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
-                      required
-                      className="mt-2"
-                    />
-                  </div>
-
-                  {/* Phone */}
-                  <div>
-                    <Label>Phone Number</Label>
-                    <Input
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, phone: e.target.value })
-                      }
-                      placeholder="+91 XXXXX XXXXX"
-                      required
-                      className="mt-2"
-                    />
-                  </div>
-
-                  {/* Preferred Service */}
-                  <div>
-                    <Label>Preferred Service</Label>
-                    <select
-                      value={formData.service}
-                      onChange={(e) =>
-                        setFormData({ ...formData, service: e.target.value })
-                      }
-                      required
-                      className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              <div className="space-y-6">
+                {contactInfo.map((info, index) => {
+                  const Icon = info.icon;
+                  return (
+                    <motion.a
+                      key={index}
+                      href={info.link}
+                      initial={{ opacity: 0, x: -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      className="flex items-start gap-4 p-6 bg-zinc-950 border border-white/10 rounded-xl hover:border-primary/50 transition-all duration-300 group"
                     >
-                      <option value="">Select a service</option>
-                      {services.map((service, index) => (
-                        <option key={index} value={service}>
-                          {service}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+                        <Icon className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-semibold mb-1">
+                          {info.title}
+                        </h3>
+                        <p className="text-white/70">{info.value}</p>
+                      </div>
+                    </motion.a>
+                  );
+                })}
+              </div>
 
-                  {/* Message */}
-                  <div>
-                    <Label>Message</Label>
-                    <Textarea
-                      rows={5}
-                      value={formData.message}
-                      onChange={(e) =>
-                        setFormData({ ...formData, message: e.target.value })
-                      }
-                      required
-                      className="mt-2"
-                    />
-                  </div>
+              {/* Google Maps Embed - Carnival Infopark */}
+              <div className="relative h-[300px] bg-zinc-950 border border-white/10 rounded-xl overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.4820892641896!2d76.34782607501686!3d10.017394990090048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d1b4f3d1e17%3A0x7c2e3d0f9c8b5a6d!2sCarnival%20Infopark!5e0!3m2!1sen!2sin!4v1704470400000!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(95%) contrast(85%)' }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="HH Back Office Services - Carnival Infopark Location"
+                />
+                {/* Dark overlay to match theme */}
+                <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+              </div>
+            </div>
 
+            {/* Right: Contact Form */}
+            <div>
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit}
+                className="space-y-6 bg-zinc-950 border border-white/10 rounded-2xl p-8"
+              >
+                <div className="form-field">
+                  <label className="block text-white mb-2 text-sm font-medium">
+                    Your Name *
+                  </label>
+                  <Input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="bg-black border-white/10 text-white focus:border-primary/50"
+                    placeholder="John Doe"
+                  />
+                </div>
+
+                <div className="form-field">
+                  <label className="block text-white mb-2 text-sm font-medium">
+                    Email Address *
+                  </label>
+                  <Input
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="bg-black border-white/10 text-white focus:border-primary/50"
+                    placeholder="john@example.com"
+                  />
+                </div>
+
+                <div className="form-field">
+                  <label className="block text-white mb-2 text-sm font-medium">
+                    Message *
+                  </label>
+                  <Textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={5}
+                    className="bg-black border-white/10 text-white focus:border-primary/50 resize-none"
+                    placeholder="Tell us about your project..."
+                  />
+                </div>
+
+                <div className="form-field">
                   <Button
                     type="submit"
-                    className="w-full gradient-hero"
-                    disabled={isSending}
+                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2"
                   >
-                    {isSending ? "Sending..." : "Submit"}
+                    <Send className="w-5 h-5" />
+                    Send Message
                   </Button>
-                </form>
-              </CardContent>
-            </Card>
+                </div>
 
-            {/* Contact Info */}
-            <div className="space-y-6">
-              <Card className="border-2">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4">
-                    Contact Information
-                  </h3>
-
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <Mail className="h-5 w-5 text-primary mt-1" />
-                      <a href="mailto:info@hhbos.com">info@hhbos.com</a>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <Phone className="h-5 w-5 text-primary mt-1" />
-                      <a href="tel:+914842917200">+91 0484-2917200</a>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4">Our Offices</h3>
-                  {offices.map((office, i) => (
-                    <div key={i} className="flex gap-3 mb-4">
-                      <MapPin className="h-5 w-5 text-primary mt-1" />
-                      <div>
-                        <p className="font-medium">{office.city}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {office.address}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+              </form>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="section-padding bg-zinc-950 relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
+        
+        <div className="relative container-custom text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to Get Started?
+          </h2>
+          <p className="text-white/60 text-lg max-w-2xl mx-auto mb-8">
+            Schedule a Free Consultation to discuss how we can help your business grow.
+          </p>
+          <Button
+            asChild
+            className="bg-primary hover:bg-primary/90 text-white font-bold px-8 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
+          >
+            <a href="mailto:info@hhbos.com">Schedule a Free Consultation</a>
+          </Button>
         </div>
       </section>
     </div>

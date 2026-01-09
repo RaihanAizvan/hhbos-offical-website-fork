@@ -1,100 +1,93 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-import GlareHover from "./GlareHover";
+import { Search, ChevronDown } from "lucide-react";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "About Us", path: "/about" },
-    { name: "Services", path: "/services" },
-    { name: "Contact", path: "/contact" },
+    { name: "Home", path: "/", hasDropdown: false },
+    { name: "About Us", path: "/about", hasDropdown: false },
+    { name: "Services", path: "/services", hasDropdown: false },
+    { name: "Contact", path: "/contact", hasDropdown: false },
   ];
 
   const isActive = (path: string) => location.pathname === path;
 
-  const handleClick = () => {
-    window.scrollTo(0, 0);
-  };
-
   return (
-    <nav className="px-4 py-3 border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-background/95">
-      <div className="container-custom">
+    <nav className="px-6 lg:px-12 py-4 sticky top-0 z-50 border-b border-white/10 backdrop-blur-md glass">
+      <div className="max-w-[1600px] mx-auto">
         <div className="flex items-center justify-between">
+          {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-2"
-            onClick={handleClick}
+            className="flex items-center"
           >
-            <img className="h-12 lg:h-14" src={"/images/logo.png"} />
+            <img className="h-12 lg:h-14" src={"/images/logo.png"} alt="HH Back Office Services" />
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive(link.path) ? "text-primary" : "text-muted-foreground"
+                className={`text-sm font-normal transition-colors hover:text-white flex items-center gap-1 ${
+                  isActive(link.path) ? "text-white" : "text-white/80"
                 }`}
               >
                 {link.name}
+                {link.hasDropdown && <ChevronDown className="w-4 h-4" />}
               </Link>
             ))}
+          </div>
 
-            <GlareHover
-              height="5"
-              width="5"
-              borderRadius="6px"
-              glareOpacity={0.4}
-              glareColor="#ffff"
-              borderColor="#ffff"
-              background="#FF6D1F"
-              className="p-2 text-white"
-            >
-              <Link to="/contact">Get Started</Link>
-            </GlareHover>
+          {/* Right side - Search & Location */}
+          <div className="hidden lg:flex items-center gap-6">
+            <button className="text-white/80 hover:text-white transition-colors">
+              <Search className="w-5 h-5" />
+            </button>
+            <button className="text-sm text-white/80 hover:text-white transition-colors flex items-center gap-1">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              India
+              <ChevronDown className="w-4 h-4" />
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2"
+            className="lg:hidden text-white"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? (
-              <X className="h-6 w-6 text-foreground" />
-            ) : (
-              <Menu className="h-6 w-6 text-foreground" />
-            )}
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {isOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 animate-fade-in">
+          <div className="lg:hidden py-6 animate-fade-in border-t border-white/10 mt-4">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`py-2 block text-sm font-medium rounded transition-colors hover:bg-primary/20 hover:text-primary ${
-                  isActive(link.path) ? "text-primary" : "text-muted-foreground"
+                className={`py-3 block text-base font-normal transition-colors hover:text-white ${
+                  isActive(link.path) ? "text-white" : "text-white/80"
                 }`}
               >
                 {link.name}
               </Link>
             ))}
-            <Button asChild size="sm" className="w-full gradient-hero">
-              <Link to="/contact" onClick={() => setIsOpen(false)}>
-                Get Started
-              </Link>
-            </Button>
           </div>
         )}
       </div>
