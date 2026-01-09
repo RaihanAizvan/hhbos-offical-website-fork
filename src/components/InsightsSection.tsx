@@ -13,59 +13,54 @@ const InsightsSection = () => {
   const insights = [
     {
       id: 1,
-      category: "Case Study",
-      title: "40% Revenue Increase",
-      subtitle: "Healthcare Provider Transformation",
-      metric: "+40%",
-      metricLabel: "Revenue Growth",
-      description: "How we streamlined RCM operations for a 500-bed hospital",
-      tags: ["Healthcare", "RCM", "Analytics"],
-      size: "medium-wide" // 2x1
+      category: "RCM Services",
+      title: "Revenue Cycle Management",
+      subtitle: "End-to-end RCM support",
+      description:
+        "Patient registration, eligibility verification, medical coding & billing, claims submission & follow-up, denial management, and AR reporting.",
+      tags: ["Healthcare", "Billing", "AR"],
+      size: "medium-wide", // 2x1
     },
     {
       id: 2,
-      category: "Whitepaper",
-      title: "AI in Finance",
-      subtitle: "Automation Strategies 2024",
-      metric: "98%",
-      metricLabel: "Accuracy Rate",
-      description: "Leveraging machine learning for accounts reconciliation",
-      tags: ["AI", "Finance", "Automation"],
-      size: "medium" // 1x2
+      category: "Finance & Accounts",
+      title: "Accounting Outsourcing",
+      subtitle: "Streamline your financial operations",
+      description:
+        "Bookkeeping, AP/AR, payroll processing, budgeting & forecasting, tax compliance, audit support, and financial analysis.",
+      tags: ["Bookkeeping", "AP/AR", "Payroll"],
+      size: "medium", // 1x2
     },
     {
       id: 3,
-      category: "Guide",
-      title: "Database Security",
-      subtitle: "Enterprise Best Practices",
-      metric: "24/7",
-      metricLabel: "Monitoring",
-      description: "Comprehensive guide to protecting critical data assets",
-      tags: ["Security", "Database", "Cloud"],
-      size: "small" // 1x1
+      category: "Database Management",
+      title: "Database Administration",
+      subtitle: "Secure, scalable data solutions",
+      description:
+        "Setup & configuration (SQL, Oracle, MySQL), tuning & optimization, backup & recovery, migration & integration, and access control.",
+      tags: ["SQL", "Oracle", "MySQL"],
+      size: "small", // 1x1
     },
     {
       id: 4,
-      category: "Report",
-      title: "Industry Trends",
-      subtitle: "Outsourcing in 2024",
-      metric: "250+",
-      metricLabel: "Companies Surveyed",
-      description: "Annual report on back-office outsourcing landscape",
-      tags: ["Research", "Trends", "Industry"],
-      size: "small" // 1x1
+      category: "Industries We Serve",
+      title: "Specialized Support",
+      subtitle: "Across key industries",
+      description:
+        "Healthcare, Finance & Banking, Retail & E-commerce, IT & Software, Manufacturing, and Real Estate.",
+      tags: ["Healthcare", "Finance", "IT"],
+      size: "small", // 1x1
     },
     {
       id: 5,
-      category: "Tutorial",
-      title: "Cloud Migration",
-      subtitle: "Step-by-Step Process",
-      metric: "5 Steps",
-      metricLabel: "To Success",
-      description: "Complete guide for seamless cloud infrastructure transition",
-      tags: ["Cloud", "Migration", "DevOps"],
-      size: "medium" // 2x1
-    }
+      category: "Why Choose Us",
+      title: "Reliable Delivery",
+      subtitle: "Accuracy, security, and efficiency",
+      description:
+        "Expert professionals, technology-driven workflows, ISO 27001-aligned data protection policies, proven results, and a global delivery model.",
+      tags: ["Security", "Automation", "Global"],
+      size: "medium", // 2x1
+    },
   ];
 
   useEffect(() => {
@@ -90,40 +85,23 @@ const InsightsSection = () => {
         }
       });
 
-      // Create a timeline for sophisticated card entry
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: gridRef.current,
-          start: "top 75%",
-          end: "top 25%",
-          scrub: 1,
-        }
-      });
-
-      // Animate each card with unique entry style
+      // Simple, professional reveal (no scrub/rotation)
       cards?.forEach((card, index) => {
-        const direction = index % 3 === 0 ? -100 : index % 3 === 1 ? 100 : 0;
-        const rotation = index % 2 === 0 ? -5 : 5;
-        
-        tl.fromTo(
+        gsap.fromTo(
           card,
-          {
-            opacity: 0,
-            x: direction,
-            y: index % 2 === 0 ? 80 : 60,
-            scale: 0.8,
-            rotateZ: rotation,
-          },
+          { opacity: 0, y: 24 },
           {
             opacity: 1,
-            x: 0,
             y: 0,
-            scale: 1,
-            rotateZ: 0,
-            duration: 1,
+            duration: 0.8,
             ease: "power3.out",
-          },
-          index * 0.08 // Stagger by index
+            delay: index * 0.06,
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+          }
         );
       });
     }, sectionRef);
@@ -156,16 +134,16 @@ const InsightsSection = () => {
         <div className="mb-20 header-content">
           <div className="flex items-center gap-4 mb-6 opacity-0">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            <span className="text-white/40 text-sm uppercase tracking-[0.3em]">Resources</span>
+            <span className="text-white/40 text-sm uppercase tracking-[0.3em]">Overview</span>
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           </div>
           
           <h2 className="text-5xl md:text-7xl font-bold text-white text-center mb-6 tracking-tight opacity-0">
-            Knowledge <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">Hub</span>
+            What We Do
           </h2>
           
           <p className="text-white/50 text-center text-lg max-w-2xl mx-auto opacity-0">
-            Insights, case studies, and resources to transform your operations
+            A quick overview of our services, industries, and delivery approach
           </p>
         </div>
 
@@ -216,18 +194,6 @@ const InsightsSection = () => {
                         {insight.subtitle}
                       </p>
                     </div>
-
-                    {/* Metric - Only show on larger cards */}
-                    {insight.size !== 'small' && (
-                      <div className="mb-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                        <div className="text-4xl font-bold text-primary mb-1">
-                          {insight.metric}
-                        </div>
-                        <div className="text-white/40 text-xs uppercase tracking-wider">
-                          {insight.metricLabel}
-                        </div>
-                      </div>
-                    )}
 
                     {/* Description */}
                     <p className="text-white/40 text-sm leading-relaxed mb-4">
