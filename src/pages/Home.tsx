@@ -9,10 +9,7 @@ import {
   Calculator,
   Database,
   TrendingUp,
-  Shield,
   Users,
-  Zap,
-  Award,
   Settings,
   BarChart3,
   Handshake,
@@ -36,12 +33,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import heroImage from "@/assets/hero-image.jpg";
 import StickyVideoHero from "@/components/StickyVideoHero";
 import LeadershipSection from "@/components/LeadershipSection";
-import InsightsSection from "@/components/InsightsSection";
 import PortalCTA from "@/components/PortalCTA";
-import StatsShowcase from "@/components/StatsShowcase";
+import InsightsSection from "@/components/InsightsSection";
 import carouselRcm from "@/assets/carousel-rcm.jpg";
 import carouselFinance from "@/assets/carousel-finance.jpg";
 import carouselDatabase from "@/assets/carousel-database.jpg";
@@ -301,11 +296,31 @@ const Home = () => {
   ];
 
   const whyChooseUs = [
-    { icon: Users, text: "Expert Professionals" },
-    { icon: Zap, text: "Technology Driven" },
-    { icon: Shield, text: "ISO-aligned Data Security" },
-    { icon: TrendingUp, text: "Proven Results" },
-    { icon: Award, text: "Global Delivery Model" },
+    {
+      icon: Users,
+      text: "Expert Professionals",
+      subtext: "Skilled accountants, RCM specialists, and DBAs",
+    },
+    {
+      icon: Settings,
+      text: "Technology Driven",
+      subtext: "Latest software tools and automation",
+    },
+    {
+      icon: Lock,
+      text: "Data Security",
+      subtext: "ISO 27001-aligned data protection policies",
+    },
+    {
+      icon: TrendingUp,
+      text: "Proven Results",
+      subtext: "Demonstrated ROI and efficiency gains",
+    },
+    {
+      icon: Globe,
+      text: "Global Delivery Model",
+      subtext: "Seamless support for clients worldwide",
+    },
   ];
 
   const { scrollY } = useScroll();
@@ -524,17 +539,55 @@ const Home = () => {
                   <item.icon className="h-8 w-8 text-primary" />
                 </motion.div>
                 <p className="font-semibold text-foreground">{item.text}</p>
+                {item.subtext && (
+                  <p className="text-sm text-muted-foreground">{item.subtext}</p>
+                )}
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* GSAP Leadership Section */}
+      {/* Industries We Serve */}
+      <section className="section-padding bg-background">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Industries We Serve
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Specialized outsourcing support across key industries
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            {[
+              "Healthcare",
+              "Finance & Banking",
+              "Retail & E-commerce",
+              "IT & Software",
+              "Manufacturing",
+              "Real Estate",
+            ].map((industry) => (
+              <div
+                key={industry}
+                className="rounded-xl border border-border bg-card px-6 py-5 text-center"
+              >
+                <p className="font-semibold text-foreground">{industry}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership Section */}
       <LeadershipSection />
 
       {/* Portal CTA Section */}
       <PortalCTA />
+
+      {/* Insights Tiles Section */}
+      <InsightsSection />
 
       {/* Testimonial Section */}
       <section className="section-padding gradient-subtle">
@@ -551,11 +604,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* GSAP Insights Section */}
-      <InsightsSection />
-
-      {/* Stats Showcase Section */}
-      <StatsShowcase />
     </div>
   );
 };
