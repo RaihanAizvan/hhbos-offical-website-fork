@@ -174,7 +174,7 @@ const Contact = () => {
                   Contact Information
                 </h2>
                 <p className="text-white/60 leading-relaxed">
-                  Have a question or ready to start a project? Contact us via email, phone, or visit our offices in Kochi or Coimbatore.
+                  We’d love to discuss how we can help your business grow.
                 </p>
               </div>
 
@@ -260,33 +260,6 @@ const Contact = () => {
 
                 <div className="form-field">
                   <label className="block text-white mb-2 text-sm font-medium">
-                    Phone Number
-                  </label>
-                  <Input
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="bg-black border-white/10 text-white focus:border-primary/50"
-                    placeholder="+1 (555) 123-4567"
-                  />
-                </div>
-
-                <div className="form-field">
-                  <label className="block text-white mb-2 text-sm font-medium">
-                    Company Name
-                  </label>
-                  <Input
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="bg-black border-white/10 text-white focus:border-primary/50"
-                    placeholder="Your Company"
-                  />
-                </div>
-
-                <div className="form-field">
-                  <label className="block text-white mb-2 text-sm font-medium">
                     Message *
                   </label>
                   <Textarea
@@ -310,9 +283,6 @@ const Contact = () => {
                   </Button>
                 </div>
 
-                <p className="text-white/40 text-xs text-center">
-                  By submitting this form, you agree to our privacy policy and terms of service.
-                </p>
               </form>
             </div>
           </div>
@@ -328,13 +298,13 @@ const Contact = () => {
             Ready to Get Started?
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto mb-8">
-            Schedule a free consultation to discuss how we can help transform your business operations.
+            Schedule a Free Consultation to discuss how we can help your business grow.
           </p>
           <Button
             asChild
             className="bg-primary hover:bg-primary/90 text-white font-bold px-8 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
           >
-            <a href="mailto:info@hhbos.com">Schedule a Consultation</a>
+            <a href="mailto:info@hhbos.com">Schedule a Free Consultation</a>
           </Button>
         </div>
       </section>
