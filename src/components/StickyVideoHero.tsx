@@ -13,33 +13,33 @@ const StickyVideoHero = () => {
   return (
     <div ref={containerRef} className="relative min-h-screen overflow-hidden">
       {/* Hero Content - Front Layer (near) - scrolls normally */}
-      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-12 min-h-screen flex items-center">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full py-20">
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-10 min-h-screen flex items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start w-full py-20">
           {/* Left: Bold Typography */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="space-y-8"
+            className="space-y-8 min-w-0"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.1] tracking-tight break-words">
-              EMPOWERING
-              <br />
+            <h1
+              className="text-6xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.05] tracking-tight break-normal"
+            >
+              <span className="block whitespace-nowrap text-[0.90em]">EMPOWERING</span>
               <span className="inline-flex flex-wrap items-center gap-2">
-                BUSINESSES
+                <span
+                  className="text-[1.28em]"
+                  style={{ fontWeight: 800 }}
+                >
+                  BUSINESSES
+                </span>
                 <svg viewBox="0 0 40 40" className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 inline-block flex-shrink-0" fill="none">
                   <path d="M8 8L20 20M20 20L32 8M20 20V32" stroke="#FF6D1F" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
               </span>
             </h1>
 
-            {/* Pause button */}
-            <button className="w-12 h-12 flex items-center justify-center text-white/80 hover:text-white transition-colors">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <rect x="6" y="4" width="4" height="16" />
-                <rect x="14" y="4" width="4" height="16" />
-              </svg>
-            </button>
+            
           </motion.div>
 
           {/* Right: Tagline Panel */}
@@ -47,7 +47,7 @@ const StickyVideoHero = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="space-y-6 lg:pl-12"
+            className="space-y-6 lg:pl-12  min-w-0"
           >
             {/* Orange accent bar */}
             <div className="w-16 h-1 bg-primary" />
