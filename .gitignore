@@ -24,3 +24,6 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Rovo Dev temporary artifacts
+public/tmp_rovodev_refs/
