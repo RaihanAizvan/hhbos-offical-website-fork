@@ -48,7 +48,7 @@ const InsightsSection = () => {
       subtitle: "Across key industries",
       description:
         "Healthcare, Finance & Banking, Retail & E-commerce, IT & Software, Manufacturing, and Real Estate.",
-      tags: ["Healthcare", "Finance", "IT"],
+      tags: ["Healthcare", "Finance", "IT & Software"],
       size: "small", // 1x1
     },
     {

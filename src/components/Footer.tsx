@@ -14,7 +14,6 @@ const Footer = () => {
       { label: "Revenue Cycle Management", path: "/services" },
       { label: "Finance & Accounts", path: "/services" },
       { label: "Database Administration", path: "/services" },
-      { label: "Consulting", path: "/contact" },
     ],
     resources: [
       { label: "Knowledge Hub", path: "/contact" },
@@ -97,11 +96,14 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="inline-flex items-baseline gap-2">
-              <span className="text-lg font-bold text-white">HH</span>
-              <span className="text-sm text-white/60">Back Office Services Pvt Ltd</span>
+              <span className="text-lg font-bold text-orange-500">HH</span>
+              <span className="text-sm text-white/60">
+                Back Office Services Pvt Ltd
+              </span>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed">
-              Empowering Businesses with Precision, Efficiency, and Data Intelligence.
+              Empowering Businesses with Precision, Efficiency, and Data
+              Intelligence.
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
@@ -155,10 +157,12 @@ const Footer = () => {
                 </p>
               </div>
               <div>
-                <div className="font-semibold text-white/80">Coimbatore Office</div>
+                <div className="font-semibold text-white/80">
+                  Coimbatore Office
+                </div>
                 <p className="leading-relaxed">
-                  Dc 44 & 45, 4th Floor, Tidel Park, Aerodrome Po,
-                  Coimbatore - 641014, Tamilnadu, India
+                  Dc 44 & 45, 4th Floor, Tidel Park, Aerodrome Po, Coimbatore -
+                  641014, Tamilnadu, India
                 </p>
               </div>
             </div>
@@ -203,7 +207,8 @@ const Footer = () => {
                 </ul>
               </div>
 
-              <div>
+              {/* Resources */}
+              {/* <div>
                 <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
                   Resources
                 </h3>
@@ -219,9 +224,10 @@ const Footer = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
 
-              <div>
+              {/* Legal */}
+              {/* <div>
                 <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
                   Legal
                 </h3>
@@ -237,7 +243,8 @@ const Footer = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
+            
             </div>
           </div>
         </div>
@@ -251,14 +258,7 @@ const Footer = () => {
               © {currentYear} HH Back Office Services Pvt Ltd. All rights
               reserved.
             </p>
-            <div className="flex items-center gap-6">
-              <Link
-                to="/contact"
-                className="hover:text-white/60 transition-colors"
-              >
-                Contact
-              </Link>
-            </div>
+            <p>Designed and Developed by HHBOS Pvt Ltd</p>
           </div>
         </div>
       </div>
