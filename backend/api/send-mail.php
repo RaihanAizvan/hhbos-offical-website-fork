@@ -4,10 +4,12 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Content-Type: application/json");
 
+// Handle preflight request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
+
 
 require __DIR__ . "/../vendor/autoload.php";
 
@@ -15,34 +17,56 @@ use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv::createImmutable(__DIR__ . "/..");
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
+// --------------------
+// READ REQUEST BODY
+// --------------------
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!$data) {
+if (
+    !$data ||
+    empty($data["name"]) ||
+    empty($data["email"]) ||
+    empty($data["phone"]) ||
+    empty($data["message"])
+) {
     http_response_code(400);
-    echo json_encode(["success" => false, "message" => "Invalid JSON"]);
+    echo json_encode([
+        "success" => false,
+        "message" => "Invalid request data"
+    ]);
     exit;
 }
 
+// --------------------
+// SEND EMAIL
+// --------------------
 $mail = new PHPMailer(true);
 
 try {
+    // SMTP CONFIG
     $mail->isSMTP();
-    $mail->Host = $_ENV["SMTP_HOST"];
-    $mail->SMTPAuth = true;
-    $mail->Username = $_ENV["SMTP_EMAIL"];
-    $mail->Password = $_ENV["SMTP_PASSWORD"];
+    $mail->Host       = $_ENV["SMTP_HOST"];
+    $mail->SMTPAuth   = true;
+    $mail->Username   = $_ENV["SMTP_EMAIL"];
+    $mail->Password   = $_ENV["SMTP_PASSWORD"];
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = (int) $_ENV["SMTP_PORT"];
+    $mail->Port       = (int) $_ENV["SMTP_PORT"];
 
+    // FROM / TO
     $mail->setFrom($_ENV["SMTP_EMAIL"], $_ENV["MAIL_FROM_NAME"]);
     $mail->addAddress($_ENV["MAIL_TO"]);
     $mail->addReplyTo($data["email"], $data["name"]);
 
+    // SUBJECT
     $mail->isHTML(true);
-    $mail->Subject = "New Business Inquiry Received via HHBOS Website";
+    $mail->Subject = "New Website Inquiry HH Back Office Services";
+
+    // --------------------
+    // EMAIL BODY (HTML)
+    // --------------------
     $mail->Body = '
 <!DOCTYPE html>
 <html>
@@ -60,7 +84,10 @@ try {
         <!-- HEADER -->
         <tr>
           <td style="padding:24px 32px;background:linear-gradient(90deg,#ff6b1f,#ff914d);color:#ffffff;">
-            <img src="https://via.placeholder.com/160x60?text=HHBOS" alt="HH Back Office Services" width="160" style="display:block;margin-bottom:10px;">
+            <img src="https://via.placeholder.com/160x60?text=HHBOS"
+                 alt="HH Back Office Services"
+                 width="160"
+                 style="display:block;margin-bottom:10px;">
             <p style="margin:0;font-size:14px;opacity:0.95;">
               New Website Inquiry
             </p>
@@ -69,15 +96,15 @@ try {
 
         <!-- CONTENT -->
         <tr>
-          <td style="padding:32px;color:#eaeaea;">
+          <td style="padding:32px;color:#eaeaea;font-family:Arial,Helvetica,sans-serif;">
             <p style="margin:0 0 18px;font-size:15px;line-height:1.6;">
               You have received a new inquiry through the HH Back Office Services website.
-              Please find the details below for your review and follow-up.
+              Please review the details below.
             </p>
 
             <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;">
               <tr>
-                <td style="padding:8px 0;color:#aaa;width:120px;">Full Name</td>
+                <td style="padding:8px 0;color:#aaa;width:140px;">Full Name</td>
                 <td style="padding:8px 0;color:#fff;">' . htmlspecialchars($data["name"]) . '</td>
               </tr>
               <tr>
@@ -93,7 +120,7 @@ try {
             <!-- MESSAGE -->
             <div style="margin-top:22px;">
               <p style="margin:0 0 8px;color:#aaa;font-size:13px;">
-                Message from the sender
+                Message
               </p>
               <div style="padding:16px;background:#1a1a1a;border-radius:6px;color:#ffffff;font-size:14px;line-height:1.6;">
                 ' . nl2br(htmlspecialchars($data["message"])) . '
@@ -102,7 +129,7 @@ try {
 
             <!-- REPLY BUTTON -->
             <div style="margin-top:28px;">
-              <a href="mailto:' . htmlspecialchars($data["email"]) . '" 
+              <a href="mailto:' . htmlspecialchars($data["email"]) . '"
                  style="display:inline-block;padding:12px 24px;
                         background:#ff6b1f;color:#ffffff;
                         text-decoration:none;border-radius:6px;
@@ -110,7 +137,6 @@ try {
                 Reply to Inquiry
               </a>
             </div>
-
           </td>
         </tr>
 
@@ -118,7 +144,7 @@ try {
         <tr>
           <td style="padding:18px 32px;background-color:#0d0d0d;color:#888;font-size:12px;text-align:center;">
             © ' . date("Y") . ' HH Back Office Services.<br>
-            This message was received from the official website contact form.
+            This email was generated from the official website contact form.
           </td>
         </tr>
 
@@ -131,8 +157,19 @@ try {
 </html>
 ';
 
+    // Plain-text fallback (best practice)
+    $mail->AltBody =
+        "New Website Inquiry – HH Back Office Services\n\n" .
+        "Name: {$data['name']}\n" .
+        "Email: {$data['email']}\n" .
+        "Phone: {$data['phone']}\n\n" .
+        "Message:\n{$data['message']}";
+
+    // SEND
     $mail->send();
+
     echo json_encode(["success" => true]);
+
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
@@ -140,4 +177,3 @@ try {
         "error" => $mail->ErrorInfo
     ]);
 }
-
