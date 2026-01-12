@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,6 +20,9 @@ const Contact = () => {
     // company: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<null | "success" | "error">(null);
+  const { toast } = useToast();
 
   useLayoutEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -64,10 +68,47 @@ const Contact = () => {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8000/api/send-mail.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error("Mail failed");
+      }
+
+      toast({
+        title: "Message sent",
+        description:
+          "Thank you for contacting us. Our team will get back to you shortly.",
+        className: "bg-green-600 text-white border-green-700",
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch (error) {
+      toast({
+        title: "Submission failed",
+        description: "Unable to send your message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (
@@ -282,10 +323,17 @@ const Contact = () => {
                 <div className="pt-6">
                   <Button
                     type="submit"
-                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2"
+                    disabled={loading}
+                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <Send className="w-5 h-5" />
-                    Send Message
+                    {loading ? (
+                      "Sending..."
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </div>
               </form>
