@@ -20,9 +20,7 @@ use PHPMailer\PHPMailer\Exception;
 $dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
-// --------------------
-// READ REQUEST BODY
-// --------------------
+
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (
@@ -40,9 +38,6 @@ if (
     exit;
 }
 
-// --------------------
-// SEND EMAIL
-// --------------------
 $mail = new PHPMailer(true);
 
 try {
@@ -64,9 +59,6 @@ try {
     $mail->isHTML(true);
     $mail->Subject = "New Website Inquiry HH Back Office Services";
 
-    // --------------------
-    // EMAIL BODY (HTML)
-    // --------------------
     $mail->Body = '
 <!DOCTYPE html>
 <html>
@@ -157,7 +149,6 @@ try {
 </html>
 ';
 
-    // Plain-text fallback (best practice)
     $mail->AltBody =
         "New Website Inquiry – HH Back Office Services\n\n" .
         "Name: {$data['name']}\n" .
