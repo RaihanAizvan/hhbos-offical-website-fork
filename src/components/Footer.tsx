@@ -112,11 +112,16 @@ const Footer = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 transition-colors inline-flex items-center justify-center"
                   aria-label={social.name}
+                  className="group w-9 h-9 rounded-md border border-white/10 bg-white/5 
+                 hover:bg-orange-400 transition-all duration-300 ease-in-out
+                 inline-flex items-center justify-center"
                 >
                   <svg
-                    className="w-4 h-4 text-white/60"
+                    className="w-4 h-4 text-white 
+                   transition-all duration-300 ease-out
+                   group-hover:text-black
+                   group-hover:scale-125"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -244,7 +249,6 @@ const Footer = () => {
                   ))}
                 </ul>
               </div> */}
-            
             </div>
           </div>
         </div>
