@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, ChevronDown } from "lucide-react";
+import { Search } from "lucide-react";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -99,7 +99,6 @@ const Navigation = () => {
                   />
                 </svg>
                 India
-                <ChevronDown className="w-4 h-4" />
               </button>
             </div>
 
