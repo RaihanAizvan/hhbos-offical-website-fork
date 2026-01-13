@@ -268,7 +268,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       className="bg-black border-white/10 text-white focus:border-primary/50"
-                      placeholder="John Doe"
+                      placeholder="Your Name"
                     />
                   </div>
 
@@ -283,7 +283,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       className="bg-black border-white/10 text-white focus:border-primary/50"
-                      placeholder="john@example.com"
+                      placeholder="Your Email Address"
                     />
                   </div>
 
@@ -300,7 +300,7 @@ const Contact = () => {
                       inputMode="tel"
                       pattern="^\+?[0-9]{7,15}$"
                       className="bg-black border-white/10 text-white focus:border-primary/50"
-                      placeholder="e.g. +91 9876543210"
+                      placeholder="e.g. +91 xxxxx xxxxxx"
                     />
                   </div>
 
