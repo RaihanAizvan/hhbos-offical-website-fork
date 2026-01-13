@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+.history/
+.env
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +24,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vercel
+
+# Rovo Dev temporary artifacts
+public/tmp_rovodev_refs/
