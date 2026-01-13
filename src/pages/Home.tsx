@@ -65,24 +65,21 @@ const Home = () => {
     {
       image: carouselRcm,
       title: "💰 RCM Services",
-      subtext:
-        "Optimize your revenue and billing processes.",
+      subtext: "Optimize your revenue and billing processes.",
       cta: "Explore RCM Services",
       link: "/services",
     },
     {
       image: carouselFinance,
       title: "💼 Finance & Accounts Outsourcing",
-      subtext:
-        "Simplify your financial operations.",
+      subtext: "Simplify your financial operations.",
       cta: "View Finance Services",
       link: "/services",
     },
     {
       image: carouselDatabase,
       title: "🖥️ Database Management",
-      subtext:
-        "Ensure your data is secure, scalable, and efficient.",
+      subtext: "Ensure your data is secure, scalable, and efficient.",
       cta: "Learn More",
       link: "/services",
     },
@@ -378,17 +375,34 @@ const Home = () => {
                 />
               </div>
               <div className="p-8 flex flex-col flex-1">
-                <div className="text-xs uppercase tracking-wider text-primary mb-3">HEALTHCARE</div>
+                <div className="text-xs uppercase tracking-wider text-primary mb-3">
+                  HEALTHCARE
+                </div>
                 <h3 className="text-2xl font-bold text-white leading-tight mb-4">
                   Revenue Cycle Management
                 </h3>
                 <p className="text-white/70 mb-6 flex-1">
-                  Supporting healthcare providers with revenue-optimized billing life cycles. End-to-end RCM operations for maximum efficiency.
+                  Supporting healthcare providers with revenue-optimized billing
+                  life cycles. End-to-end RCM operations for maximum efficiency.
                 </p>
-                <Link to="/services" className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all">
+                <Link
+                  to="/services"
+                  className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all"
+                >
                   <span>Learn more</span>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 4L16 12L8 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M8 4L16 12L8 20"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </Link>
               </div>
@@ -411,17 +425,35 @@ const Home = () => {
                 />
               </div>
               <div className="p-8 flex flex-col flex-1">
-                <div className="text-xs uppercase tracking-wider text-primary mb-3">FINANCE</div>
+                <div className="text-xs uppercase tracking-wider text-primary mb-3">
+                  FINANCE
+                </div>
                 <h3 className="text-2xl font-bold text-white leading-tight mb-4">
                   Finance & Accounts Outsourcing
                 </h3>
                 <p className="text-white/70 mb-6 flex-1">
-                  Maintain compliance, streamline finance, and reduce operational overhead with expert bookkeeping and financial management.
+                  Maintain compliance, streamline finance, and reduce
+                  operational overhead with expert bookkeeping and financial
+                  management.
                 </p>
-                <Link to="/services" className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all">
+                <Link
+                  to="/services"
+                  className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all"
+                >
                   <span>Learn more</span>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 4L16 12L8 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M8 4L16 12L8 20"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </Link>
               </div>
@@ -444,17 +476,35 @@ const Home = () => {
                 />
               </div>
               <div className="p-8 flex flex-col flex-1">
-                <div className="text-xs uppercase tracking-wider text-primary mb-3">TECHNOLOGY</div>
+                <div className="text-xs uppercase tracking-wider text-primary mb-3">
+                  TECHNOLOGY
+                </div>
                 <h3 className="text-2xl font-bold text-white leading-tight mb-4">
                   Database Administration
                 </h3>
                 <p className="text-white/70 mb-6 flex-1">
-                  Ensure secure data handling with 24/7 monitoring and disaster recovery support. Scalable and performance-optimized solutions.
+                  Ensure secure data handling with 24/7 monitoring and disaster
+                  recovery support. Scalable and performance-optimized
+                  solutions.
                 </p>
-                <Link to="/services" className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all">
+                <Link
+                  to="/services"
+                  className="text-primary flex items-center gap-2 group-hover:gap-4 transition-all"
+                >
                   <span>Learn more</span>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 4L16 12L8 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M8 4L16 12L8 20"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </Link>
               </div>
@@ -463,9 +513,8 @@ const Home = () => {
         </div>
       </section>
 
-
       {/* Our Core Service */}
-      <section className="section-padding bg-background">
+      {/* <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -509,44 +558,7 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* Why Choose Us Section */}
-      <section className="section-padding gradient-subtle">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Why Choose HH Back Office Services
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Your trusted partner for business excellence
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-            {whyChooseUs.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: index * 0.2,
-                  ease: "easeInOut",
-                }}
-                className="flex flex-col items-center text-center space-y-3 p-4"
-              >
-                <motion.div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                  <item.icon className="h-8 w-8 text-primary" />
-                </motion.div>
-                <p className="font-semibold text-foreground">{item.text}</p>
-                {item.subtext && (
-                  <p className="text-sm text-muted-foreground">{item.subtext}</p>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      </section> */}
 
       {/* Industries We Serve */}
       <section className="section-padding bg-background">
@@ -580,6 +592,45 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Why Choose Us Section */}
+      <section className="section-padding gradient-subtle">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Why Choose HH Back Office Services
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Your trusted partner for business excellence
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+            {whyChooseUs.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: index * 0.2,
+                  ease: "easeInOut",
+                }}
+                className="flex flex-col items-center text-center space-y-3 p-4"
+              >
+                <motion.div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+                  <item.icon className="h-8 w-8 text-primary" />
+                </motion.div>
+                <p className="font-semibold text-foreground">{item.text}</p>
+                {item.subtext && (
+                  <p className="text-sm text-muted-foreground">
+                    {item.subtext}
+                  </p>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Leadership Section */}
       <LeadershipSection />
 
@@ -595,7 +646,9 @@ const Home = () => {
           <Card className="bg-secondary border-none">
             <CardContent className="p-8 md:p-12 text-center">
               <p className="text-xl md:text-2xl text-foreground italic mb-6">
-                "Partnering with HH Back Office Services Pvt Ltd. helped us achieve 30% faster
+                Partnering with
+                <span className="font-bold text-orange-500 px-2">HH</span>
+                Back Office Services Pvt Ltd. helped us achieve 30% faster
                 financial reporting."
               </p>
               <p className="text-muted-foreground font-medium">— Client, CFO</p>
@@ -603,7 +656,6 @@ const Home = () => {
           </Card>
         </div>
       </section>
-
     </div>
   );
 };

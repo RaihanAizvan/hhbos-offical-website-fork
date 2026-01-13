@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,9 +17,12 @@ const Contact = () => {
     name: "",
     email: "",
     phone: "",
-    company: "",
+    // company: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<null | "success" | "error">(null);
+  const { toast } = useToast();
 
   useLayoutEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -64,10 +68,47 @@ const Contact = () => {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your form submission logic here
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8000/api/send-mail.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error("Mail failed");
+      }
+
+      toast({
+        title: "Message sent",
+        description:
+          "Thank you for contacting us. Our team will get back to you shortly.",
+        className: "bg-green-600 text-white border-green-700",
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch (error) {
+      toast({
+        title: "Submission failed",
+        description: "Unable to send your message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (
@@ -95,13 +136,15 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Kochi Office",
-      value: "Phase-2 Floor-2, Carnival Infopark, Kakkanad, Kochi - 682042, Kerala, India",
+      value:
+        "Phase-2 Floor-2, Carnival Infopark, Kakkanad, Kochi - 682042, Kerala, India",
       link: "#kochi",
     },
     {
       icon: MapPin,
       title: "Coimbatore Office",
-      value: "Dc 44 & 45, 4th Floor, Tidel Park, Aerodrome Po, Coimbatore - 641014, Tamilnadu, India",
+      value:
+        "Dc 44 & 45, 4th Floor, Tidel Park, Aerodrome Po, Coimbatore - 641014, Tamilnadu, India",
       link: "#coimbatore",
     },
   ];
@@ -165,10 +208,11 @@ const Contact = () => {
 
       {/* Contact Section */}
       <section className="section-padding bg-black">
-        <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+        <div className="container-custom space-y-20">
+          {/* Top: Contact Info + Form */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
             {/* Left: Contact Info */}
-            <div className="space-y-8">
+            <div className="flex flex-col space-y-10">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Contact Information
@@ -204,87 +248,114 @@ const Contact = () => {
                   );
                 })}
               </div>
-
-              {/* Google Maps Embed - Carnival Infopark */}
-              <div className="relative h-[300px] bg-zinc-950 border border-white/10 rounded-xl overflow-hidden">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.4820892641896!2d76.34782607501686!3d10.017394990090048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d1b4f3d1e17%3A0x7c2e3d0f9c8b5a6d!2sCarnival%20Infopark!5e0!3m2!1sen!2sin!4v1704470400000!5m2!1sen!2sin"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(95%) contrast(85%)' }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="HH Back Office Services - Carnival Infopark Location"
-                />
-                {/* Dark overlay to match theme */}
-                <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-              </div>
             </div>
 
             {/* Right: Contact Form */}
-            <div>
+            <div className="h-full">
               <form
                 ref={formRef}
                 onSubmit={handleSubmit}
-                className="space-y-6 bg-zinc-950 border border-white/10 rounded-2xl p-8"
+                className="flex flex-col h-full bg-zinc-950 border border-white/10 rounded-2xl p-8"
               >
-                <div className="form-field">
-                  <label className="block text-white mb-2 text-sm font-medium">
-                    Your Name *
-                  </label>
-                  <Input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="bg-black border-white/10 text-white focus:border-primary/50"
-                    placeholder="John Doe"
-                  />
+                <div className="flex flex-col space-y-5 flex-1">
+                  <div className="form-field">
+                    <label className="block text-white mb-2 text-sm font-medium">
+                      Your Name *
+                    </label>
+                    <Input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="bg-black border-white/10 text-white focus:border-primary/50"
+                      placeholder="John Doe"
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <label className="block text-white mb-2 text-sm font-medium">
+                      Email Address *
+                    </label>
+                    <Input
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="bg-black border-white/10 text-white focus:border-primary/50"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <label className="block text-white mb-2 text-sm font-medium">
+                      Phone Number (Please include country code) *
+                    </label>
+                    <Input
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      inputMode="tel"
+                      pattern="^\+?[0-9]{7,15}$"
+                      className="bg-black border-white/10 text-white focus:border-primary/50"
+                      placeholder="e.g. +91 9876543210"
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <label className="block text-white mb-2 text-sm font-medium">
+                      Message *
+                    </label>
+                    <Textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      rows={5}
+                      className="bg-black border-white/10 text-white focus:border-primary/50 resize-none"
+                      placeholder="Tell us about your project..."
+                    />
+                  </div>
                 </div>
 
-                <div className="form-field">
-                  <label className="block text-white mb-2 text-sm font-medium">
-                    Email Address *
-                  </label>
-                  <Input
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="bg-black border-white/10 text-white focus:border-primary/50"
-                    placeholder="john@example.com"
-                  />
-                </div>
-
-                <div className="form-field">
-                  <label className="block text-white mb-2 text-sm font-medium">
-                    Message *
-                  </label>
-                  <Textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    className="bg-black border-white/10 text-white focus:border-primary/50 resize-none"
-                    placeholder="Tell us about your project..."
-                  />
-                </div>
-
-                <div className="form-field">
+                <div className="pt-6">
                   <Button
                     type="submit"
-                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2"
+                    disabled={loading}
+                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <Send className="w-5 h-5" />
-                    Send Message
+                    {loading ? (
+                      "Sending..."
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </div>
-
               </form>
             </div>
+          </div>
+
+          {/* Bottom: Full Width Map */}
+          <div className="relative w-full h-[420px] bg-zinc-950 border border-white/10 rounded-2xl overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.4820892641896!2d76.34782607501686!3d10.017394990090048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d1b4f3d1e17%3A0x7c2e3d0f9c8b5a6d!2sCarnival%20Infopark!5e0!3m2!1sen!2sin!4v1704470400000!5m2!1sen!2sin"
+              className="w-full h-full"
+              style={{
+                border: 0,
+                filter:
+                  "invert(90%) hue-rotate(180deg) brightness(95%) contrast(85%)",
+              }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="HH Back Office Services - Carnival Infopark Location"
+            />
+            <div className="absolute inset-0 bg-black/20 pointer-events-none" />
           </div>
         </div>
       </section>
@@ -292,13 +363,14 @@ const Contact = () => {
       {/* CTA Section */}
       <section className="section-padding bg-zinc-950 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
-        
+
         <div className="relative container-custom text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Get Started?
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto mb-8">
-            Schedule a Free Consultation to discuss how we can help your business grow.
+            Schedule a Free Consultation to discuss how we can help your
+            business grow.
           </p>
           <Button
             asChild

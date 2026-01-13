@@ -17,6 +17,7 @@ const Navigation = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+  console.log("is active:", isActive);
 
 
    useEffect(() => {
