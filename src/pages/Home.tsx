@@ -346,7 +346,7 @@ const Home = () => {
       <StickyVideoHero />
 
       {/* Services Showcase - Tall Cards */}
-      <section className="section-padding relative bg-transparent -mt-32">
+      <section className="section-padding relative bg-transparent mt-32">
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
