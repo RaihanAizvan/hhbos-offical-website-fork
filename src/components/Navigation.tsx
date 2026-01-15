@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Globe, Search } from "lucide-react";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,14 +13,14 @@ const Navigation = () => {
     { name: "Home", path: "/" },
     { name: "About Us", path: "/about" },
     { name: "Services", path: "/services" },
+    { name: "Industries", path: "/industries" },
     { name: "Contact", path: "/contact" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
   console.log("is active:", isActive);
 
-
-   useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
@@ -67,20 +67,29 @@ const Navigation = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`text-sm transition-colors ${
-                    isActive(link.path)
-                      ? "text-white"
-                      : "text-white/80 hover:text-white"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+            <div className="hidden lg:flex items-center space-x-10">
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`relative group text-sm font-medium transition-colors ${
+                      active ? "text-primary" : "text-white/80 hover:text-white"
+                    }`}
+                  >
+                    {link.name}
+
+                    {/* Animated underline */}
+                    <span
+                      className={`absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500
+        transform origin-left transition-transform duration-300 ease-out
+        ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                    />
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Right side */}
@@ -90,15 +99,7 @@ const Navigation = () => {
               </button>
 
               <button className="text-sm text-white/80 hover:text-white flex items-center gap-1">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                </svg>
+                <Globe size={18}/>
                 India
               </button>
             </div>
