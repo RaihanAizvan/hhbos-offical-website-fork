@@ -96,8 +96,8 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="inline-flex items-baseline gap-2">
-              <span className="text-lg font-bold text-orange-500">HH</span>
-              <span className="text-sm text-white/60">
+              <span className="text-2xl font-bold text-orange-500">HH</span>
+              <span className="text-xl text-white/60">
                 Back Office Services Pvt Ltd
               </span>
             </Link>
