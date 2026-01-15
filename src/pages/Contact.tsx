@@ -213,16 +213,8 @@ const Contact = () => {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
             {/* Left: Contact Info */}
             <div className="flex flex-col space-y-10">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  Contact Information
-                </h2>
-                <p className="text-white/60 leading-relaxed">
-                  We’d love to discuss how we can help your business grow.
-                </p>
-              </div>
 
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {contactInfo.map((info, index) => {
                   const Icon = info.icon;
                   return (
