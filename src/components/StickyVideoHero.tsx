@@ -11,66 +11,48 @@ const StickyVideoHero = () => {
   const videoY = useTransform(scrollY, [0, 1000], [0, 600]);
 
   return (
-    <div ref={containerRef} className="relative min-h-screen overflow-hidden">
-      {/* Hero Content - Front Layer (near) - scrolls normally */}
-      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-10 min-h-screen flex items-center">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start w-full py-20">
-          {/* Left: Bold Typography */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="space-y-8 min-w-0"
-          >
-            <h1
-              className="text-6xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.05] tracking-tight break-normal"
+    <div ref={containerRef} className="relative min-h-screen overflow-hidden bg-black/50">
+      <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-10 min-h-screen flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center max-w-6xl space-y-6"
+        >
+          {/* Headline */}
+          <h1 className="font-bold leading-[1.1] tracking-tight text-white">
+            <span className="block text-4xl sm:text-3xl md:text-4xl lg:text-6xl">
+              Empowering Businesses with Precision,
+            </span>
+            <span className="block text-white text-5xl sm:text-2xl md:text-3xl lg:text-5xl">
+              Efficiency, and Data Intelligence
+            </span>
+          </h1>
+
+          {/* Subtext */}
+          <p className="text-base sm:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
+            We provide end-to-end Finance & Accounts, Revenue Cycle Management,
+            and Database Administration solutions that streamline your
+            operations and drive measurable growth.
+          </p>
+
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+            <Link
+              to="/contact"
+              className="px-6 py-3  bg-primary text-white font-semibold text-sm sm:text-base shadow-lg hover:scale-105 transition-all"
             >
-              <span className="block whitespace-nowrap text-[0.90em]">EMPOWERING</span>
-              <span className="inline-flex flex-wrap items-center gap-2">
-                <span
-                  className="text-[1.28em]"
-                  style={{ fontWeight: 800 }}
-                >
-                  BUSINESSES
-                </span>
-                <svg viewBox="0 0 40 40" className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 inline-block flex-shrink-0" fill="none">
-                  <path d="M8 8L20 20M20 20L32 8M20 20V32" stroke="#FF6D1F" strokeWidth="3" strokeLinecap="round"/>
-                </svg>
-              </span>
-            </h1>
-
-            
-          </motion.div>
-
-          {/* Right: Tagline Panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="space-y-6 lg:pl-12  min-w-0"
-          >
-            {/* Orange accent bar */}
-            <div className="w-16 h-1 bg-primary" />
-            
-            <h2 className="text-2xl lg:text-3xl font-bold text-white">
-              Precision, Efficiency, and Data Intelligence
-            </h2>
-            
-            <p className="text-lg text-white/80 leading-relaxed">
-              We provide end-to-end Finance & Accounts, Revenue Cycle Management, and Database Administration solutions that streamline your operations and drive measurable growth.
-            </p>
+              Get a Free Consultation
+            </Link>
 
             <Link
               to="/services"
-              className="inline-flex items-center gap-2 text-white font-medium hover:gap-4 transition-all group"
+              className="px-6 py-3 border text-primary bg-white font-semibold text-sm sm:text-base hover:bg-white hover:text-primary shadow-lg hover:scale-105 transition-all"
             >
               Explore Our Services
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 4L16 12L8 20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
             </Link>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
