@@ -333,7 +333,7 @@ const Home = () => {
         >
           <source src="/video/background.mp4" type="video/mp4" />
         </video>
-      </motion.div>
+      </div>
 
       {/* Sticky Video Hero with Parallax */}
       <StickyVideoHero />
