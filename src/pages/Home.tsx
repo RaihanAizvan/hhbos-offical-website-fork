@@ -323,7 +323,7 @@ const Home = () => {
   return (
     <div className="min-h-[100svh] relative">
       {/* Global Video Background - Parallax Effect */}
-      <div className="fixed inset-0 -z-50 w-screen h-[100svh] overflow-hidden">
+      <div className="absolute inset-0 -z-50 w-screen h-[100svh] overflow-hidden">
         <video
           autoPlay
           loop
