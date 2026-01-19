@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import SplitText from "@/components/SplitText";
@@ -320,17 +320,10 @@ const Home = () => {
     },
   ];
 
-  const { scrollY } = useScroll();
-  // Video moves upward slower (60% speed) - negative values for upward movement
-  const videoY = useTransform(scrollY, [0, 2000], [0, -1200]);
-
   return (
     <div className="min-h-[100svh] relative">
       {/* Global Video Background - Parallax Effect */}
-      <motion.div
-        className="fixed inset-0 -z-50 w-screen h-[100svh] overflow-hidden"
-        style={{ y: videoY }}
-      >
+      <div className="absolute inset-0 -z-50 w-screen h-[100svh] overflow-hidden">
         <video
           autoPlay
           loop
@@ -340,7 +333,7 @@ const Home = () => {
         >
           <source src="/video/background.mp4" type="video/mp4" />
         </video>
-      </motion.div>
+      </div>
 
       {/* Sticky Video Hero with Parallax */}
       <StickyVideoHero />
