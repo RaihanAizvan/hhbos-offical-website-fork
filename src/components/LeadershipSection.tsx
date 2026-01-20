@@ -49,13 +49,13 @@ const LeadershipSection = () => {
       if (!cards.length) return;
 
       // Base stacking offsets for already-revealed cards.
-      const stackOffset = 14; // px
+      const stackOffset = 10; // px
 
       // Initial state: first card visible, others start below (enter from bottom).
       cards.forEach((card, i) => {
         gsap.set(card, {
           opacity: i === 0 ? 1 : 0,
-          y: i === 0 ? 0 : 80,
+          y: i === 0 ? 0 : 60,
           zIndex: i === 0 ? 10 : 10 - i,
           pointerEvents: i === 0 ? "auto" : "none",
           willChange: "transform, opacity",
@@ -77,9 +77,18 @@ const LeadershipSection = () => {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: `+=${cards.length * 900}`,
-          scrub: 0.7,
+          end: `+=${cards.length * 520}`,
+          scrub: 0.6,
           pin: true,
+          snap:
+            cards.length > 1
+              ? {
+                  snapTo: 1 / (cards.length - 1),
+                  duration: { min: 0.15, max: 0.35 },
+                  delay: 0.02,
+                  ease: "power2.out",
+                }
+              : false,
           pinSpacing: true,
           anticipatePin: 1,
           onUpdate: (self) => {
@@ -120,7 +129,7 @@ const LeadershipSection = () => {
           next,
           {
             opacity: 0,
-            y: 90,
+            y: 60,
           },
           {
             opacity: 1,
