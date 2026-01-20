@@ -178,7 +178,7 @@ const LeadershipSection = () => {
               <div className="group relative h-full rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_24px_80px_rgba(0,0,0,0.65)]">
                 <div className="flex flex-col sm:flex-row h-full">
                   {/* Image */}
-                  <div className="w-full sm:w-2/5 h-[180px] sm:h-full relative overflow-hidden">
+                  <div className="w-full sm:w-2/5 h-[180px] sm:h-full relative overflow-hidden bg-black sm:flex-none">
                     <img
                       src={leader.image}
                       alt={leader.name}
@@ -188,7 +188,7 @@ const LeadershipSection = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="w-full sm:w-3/5 p-6 sm:p-8 flex flex-col justify-center">
+                  <div className="relative w-full sm:w-3/5 bg-black p-6 sm:p-8 flex flex-col justify-center sm:before:content-[''] sm:before:absolute sm:before:top-0 sm:before:left-[-8px] sm:before:w-[16px] sm:before:h-full sm:before:bg-black sm:before:pointer-events-none">
                     <h3 className="text-3xl font-semibold text-white mb-2">
                       {leader.name}
                     </h3>
