@@ -1,386 +1,700 @@
-import { useLayoutEffect, useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Card, CardContent } from "@/components/ui/card";
 import {
-  HeartPulse,
+  ArrowRight,
+  Building2,
+  Check,
+  ChevronDown,
+  CircuitBoard,
   DollarSign,
-  Database,
-  CheckCircle,
-  TrendingUp,
-  Shield,
-  Users,
-  Globe,
-  Settings,
+  Factory,
+  HeartPulse,
+  Home,
+  ShoppingBag,
+  Sparkles,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 import serviceHealthcare from "@/assets/service-healthcare.jpg";
 import serviceFinance from "@/assets/service-finance.jpg";
 import serviceDatabase from "@/assets/service-database.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
+type Industry = {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  image: string;
+  accent: string; // tailwind gradient tokens (used as bg-gradient-to-r ...)
+  icon: LucideIcon;
+  problems: string[];
+  solutions: string[];
+  outcomes: string[];
+};
+
+const GlassCard = ({
+  title,
+  items,
+  tone = "neutral",
+}: {
+  title: string;
+  items: string[];
+  tone?: "neutral" | "primary" | "success";
+}) => {
+  const toneStyles = {
+    neutral: "border-white/10 bg-white/5 text-white/85",
+    primary: "border-orange-500/30 bg-orange-500/10 text-white",
+    success: "border-emerald-500/30 bg-emerald-500/10 text-white",
+  } as const;
+
+  return (
+    <div
+      className={cn(
+        "rounded-2xl p-6 backdrop-blur-xl",
+        "shadow-[0_20px_80px_rgba(0,0,0,0.45)]",
+        "border",
+        toneStyles[tone]
+      )}
+    >
+      <div className="flex items-center justify-between">
+        <h3 className="text-xs uppercase tracking-[0.25em] text-white/70">
+          {title}
+        </h3>
+        <Sparkles className="h-4 w-4 text-white/60" />
+      </div>
+
+      <ul className="mt-4 space-y-2.5 text-[15px] leading-relaxed">
+        {items.map((item) => (
+          <li key={item} className="flex gap-3">
+            <Check className="mt-0.5 h-4 w-4 text-white/70" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 const Industries = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const servicesRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [activeId, setActiveId] = useState<string>("healthcare");
 
   useLayoutEffect(() => {
+    // Ensure consistent experience when navigating between routes
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, []);
 
+  const industries = useMemo<Industry[]>(
+    () => [
+      {
+        id: "healthcare",
+        title: "Healthcare",
+        tagline: "Smarter Revenue, Better Patient Outcomes",
+        description:
+          "We help hospitals, clinics, and healthcare providers maximize revenue while reducing administrative burden and compliance risk.",
+        image: serviceHealthcare,
+        accent: "from-orange-500 via-amber-400 to-rose-500",
+        icon: HeartPulse,
+        problems: [
+          "High claim denial rates",
+          "Delayed reimbursements",
+          "Complex coding & billing rules",
+          "Data security & HIPAA compliance",
+        ],
+        solutions: [
+          "End-to-end Revenue Cycle Management",
+          "Medical coding & billing automation",
+          "Denial management and AR recovery",
+          "HIPAA compliant data handling",
+        ],
+        outcomes: [
+          "30–40% faster reimbursements",
+          "Lower claim rejection rate",
+          "Higher cash flow stability",
+        ],
+      },
+      {
+        id: "finance",
+        title: "Finance & Banking",
+        tagline: "Accuracy, Compliance, and Financial Intelligence",
+        description:
+          "We support banks, NBFCs, and finance teams with accounting, compliance, reporting, and financial intelligence.",
+        image: serviceFinance,
+        accent: "from-orange-500 via-yellow-300 to-emerald-400",
+        icon: DollarSign,
+        problems: [
+          "Manual accounting errors",
+          "Regulatory compliance pressure",
+          "Delayed financial reports",
+          "Data silos",
+        ],
+        solutions: [
+          "Automated bookkeeping & reconciliations",
+          "Compliance-ready financial reporting",
+          "Payroll & tax support",
+          "Financial analytics dashboards",
+        ],
+        outcomes: [
+          "Audit-ready financials",
+          "Lower compliance risk",
+          "Real-time financial visibility",
+        ],
+      },
+      {
+        id: "retail",
+        title: "Retail & E-commerce",
+        tagline: "Real-Time Insights for High-Volume Businesses",
+        description:
+          "We help retailers and e-commerce brands manage finance, inventory, payments, and customer data at scale.",
+        image: serviceDatabase,
+        accent: "from-orange-500 via-fuchsia-400 to-cyan-400",
+        icon: ShoppingBag,
+        problems: [
+          "High transaction volumes",
+          "Payment reconciliation issues",
+          "Inventory data mismatches",
+          "Revenue leakage",
+        ],
+        solutions: [
+          "Sales & payment reconciliation",
+          "Inventory finance tracking",
+          "Revenue & margin reporting",
+          "Customer and order database management",
+        ],
+        outcomes: [
+          "Accurate daily revenue",
+          "Better margin control",
+          "Reduced financial leakage",
+        ],
+      },
+      {
+        id: "it",
+        title: "IT & Software",
+        tagline: "Scalable Data and Financial Operations",
+        description:
+          "We support SaaS, IT services, and software companies with financial ops and data infrastructure.",
+        image: serviceDatabase,
+        accent: "from-orange-500 via-indigo-400 to-sky-400",
+        icon: CircuitBoard,
+        problems: [
+          "Subscription revenue tracking",
+          "Complex billing cycles",
+          "Rapid data growth",
+          "Security risks",
+        ],
+        solutions: [
+          "Subscription revenue accounting",
+          "Usage-based billing support",
+          "Database optimization",
+          "Data security & backups",
+        ],
+        outcomes: [
+          "Accurate MRR & ARR",
+          "Scalable backend operations",
+          "Lower system downtime",
+        ],
+      },
+      {
+        id: "manufacturing",
+        title: "Manufacturing",
+        tagline: "Cost Control & Operational Visibility",
+        description:
+          "We help manufacturers control costs, manage finance, and gain visibility into production economics.",
+        image: serviceFinance,
+        accent: "from-orange-500 via-red-400 to-violet-500",
+        icon: Factory,
+        problems: [
+          "High operational costs",
+          "Inventory valuation issues",
+          "Manual accounting",
+          "Delayed financial insights",
+        ],
+        solutions: [
+          "Cost accounting",
+          "Inventory & asset tracking",
+          "Payroll and vendor payments",
+          "Financial reporting",
+        ],
+        outcomes: [
+          "Better cost control",
+          "Improved profit margins",
+          "Faster management reporting",
+        ],
+      },
+      {
+        id: "real-estate",
+        title: "Real Estate",
+        tagline: "Financial Clarity Across Properties",
+        description:
+          "We help real estate companies manage leasing, payments, expenses, and property-level profitability.",
+        image: serviceFinance,
+        accent: "from-orange-500 via-lime-300 to-emerald-400",
+        icon: Home,
+        problems: [
+          "Rent tracking",
+          "Expense management",
+          "Property-wise profitability",
+          "Tax & compliance complexity",
+        ],
+        solutions: [
+          "Rent & payment reconciliation",
+          "Property accounting",
+          "Tax & compliance support",
+          "Financial dashboards",
+        ],
+        outcomes: [
+          "Clear cash flow",
+          "Higher asset ROI",
+          "Simpler financial operations",
+        ],
+      },
+    ],
+    []
+  );
+
   useEffect(() => {
-    if (!heroRef.current) return;
+    const root = rootRef.current;
+    if (!root) return;
 
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-industry-panel]")
+    );
+
+    // Scroll-spy: update active section
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort(
+            (a, b) =>
+              (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0)
+          )[0];
+
+        const id = visible?.target.getAttribute("data-industry-id");
+        if (id) setActiveId(id);
+      },
+      { threshold: [0.35, 0.55, 0.75] }
+    );
+
+    panels.forEach((p) => io.observe(p));
+
+    // GSAP: parallax images + reveal content blocks
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".services-hero-text",
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power3.out",
-        }
-      );
+      panels.forEach((panel) => {
+        const img = panel.querySelector<HTMLElement>("[data-panel-image]");
+        const content = panel.querySelectorAll<HTMLElement>(
+          "[data-panel-reveal]"
+        );
 
-      if (servicesRef.current) {
-        const cards = servicesRef.current.querySelectorAll(".service-card");
+        if (img) {
+          gsap.fromTo(
+            img,
+            { yPercent: -10, scale: 1.12 },
+            {
+              yPercent: 10,
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: panel,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
+            }
+          );
+        }
+
         gsap.fromTo(
-          cards,
-          { opacity: 0, y: 80, scale: 0.9 },
+          content,
+          { opacity: 0, y: 26 },
           {
             opacity: 1,
             y: 0,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.2,
+            duration: 0.9,
+            stagger: 0.12,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: servicesRef.current,
-              start: "top 70%",
+              trigger: panel,
+              start: "top 65%",
             },
           }
         );
-      }
-    }, heroRef);
+      });
+    }, root);
 
-    return () => ctx.revert();
+    return () => {
+      io.disconnect();
+      ctx.revert();
+      // Ensure we don't leak triggers on route changes
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
   }, []);
 
-  const industries = [
-    {
-      id: "healthcare",
-      title: "Healthcare",
-      tagline: "Smarter Revenue, Better Patient Outcomes",
-      image: serviceHealthcare,
-      description:
-        "We help hospitals, clinics, and healthcare providers maximize revenue while reducing administrative burden and compliance risk.",
-
-      problems: [
-        "High claim denial rates",
-        "Delayed reimbursements",
-        "Complex coding & billing rules",
-        "Data security & HIPAA compliance",
-      ],
-
-      solutions: [
-        "End-to-end Revenue Cycle Management",
-        "Medical coding & billing automation",
-        "Denial management and AR recovery",
-        "HIPAA compliant data handling",
-      ],
-
-      outcomes: [
-        "30–40% faster reimbursements",
-        "Lower claim rejection rate",
-        "Higher cash flow stability",
-      ],
-    },
-
-    {
-      id: "finance",
-      title: "Finance & Banking",
-      tagline: "Accuracy, Compliance, and Financial Intelligence",
-      image: serviceFinance,
-      description:
-        "We support banks, NBFCs, and finance teams with accounting, compliance, reporting, and financial intelligence.",
-
-      problems: [
-        "Manual accounting errors",
-        "Regulatory compliance pressure",
-        "Delayed financial reports",
-        "Data silos",
-      ],
-
-      solutions: [
-        "Automated bookkeeping & reconciliations",
-        "Compliance-ready financial reporting",
-        "Payroll & tax support",
-        "Financial analytics dashboards",
-      ],
-
-      outcomes: [
-        "Audit-ready financials",
-        "Lower compliance risk",
-        "Real-time financial visibility",
-      ],
-    },
-
-    {
-      id: "retail",
-      title: "Retail & E-commerce",
-      tagline: "Real-Time Insights for High-Volume Businesses",
-      image: serviceDatabase,
-      description:
-        "We help retailers and e-commerce brands manage finance, inventory, payments, and customer data at scale.",
-
-      problems: [
-        "High transaction volumes",
-        "Payment reconciliation issues",
-        "Inventory data mismatches",
-        "Revenue leakage",
-      ],
-
-      solutions: [
-        "Sales & payment reconciliation",
-        "Inventory finance tracking",
-        "Revenue & margin reporting",
-        "Customer and order database management",
-      ],
-
-      outcomes: [
-        "Accurate daily revenue",
-        "Better margin control",
-        "Reduced financial leakage",
-      ],
-    },
-
-    {
-      id: "it",
-      title: "IT & Software",
-      tagline: "Scalable Data and Financial Operations",
-      image: serviceDatabase,
-      description:
-        "We support SaaS, IT services, and software companies with financial ops and data infrastructure.",
-
-      problems: [
-        "Subscription revenue tracking",
-        "Complex billing cycles",
-        "Rapid data growth",
-        "Security risks",
-      ],
-
-      solutions: [
-        "Subscription revenue accounting",
-        "Usage-based billing support",
-        "Database optimization",
-        "Data security & backups",
-      ],
-
-      outcomes: [
-        "Accurate MRR & ARR",
-        "Scalable backend operations",
-        "Lower system downtime",
-      ],
-    },
-
-    {
-      id: "manufacturing",
-      title: "Manufacturing",
-      tagline: "Cost Control & Operational Visibility",
-      image: serviceFinance,
-      description:
-        "We help manufacturers control costs, manage finance, and gain visibility into production economics.",
-
-      problems: [
-        "High operational costs",
-        "Inventory valuation issues",
-        "Manual accounting",
-        "Delayed financial insights",
-      ],
-
-      solutions: [
-        "Cost accounting",
-        "Inventory & asset tracking",
-        "Payroll and vendor payments",
-        "Financial reporting",
-      ],
-
-      outcomes: [
-        "Better cost control",
-        "Improved profit margins",
-        "Faster management reporting",
-      ],
-    },
-
-    {
-      id: "real-estate",
-      title: "Real Estate",
-      tagline: "Financial Clarity Across Properties",
-      image: serviceFinance,
-      description:
-        "We help real estate companies manage leasing, payments, expenses, and property-level profitability.",
-
-      problems: [
-        "Rent tracking",
-        "Expense management",
-        "Property-wise profitability",
-        "Tax & compliance complexity",
-      ],
-
-      solutions: [
-        "Rent & payment reconciliation",
-        "Property accounting",
-        "Tax & compliance support",
-        "Financial dashboards",
-      ],
-
-      outcomes: [
-        "Clear cash flow",
-        "Higher asset ROI",
-        "Simpler financial operations",
-      ],
-    },
-  ];
-
+  const scrollToId = (id: string) => {
+    const el = document.getElementById(`industry-${id}`);
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <section
-        ref={heroRef}
-        className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black"
-      >
+    <div ref={rootRef} className="min-h-screen bg-black">
+      {/* HERO: Industry Atlas */}
+      <header className="relative overflow-hidden bg-black">
         <div className="absolute inset-0">
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            className="absolute inset-0 h-full w-full object-cover opacity-20"
           >
             <source src="/video/background.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-black/60" />
-          {/* Bottom fade gradient mask */}
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
-        </div>
+          <div className="absolute inset-0 bg-black/70" />
 
-        <div className="absolute inset-0 opacity-10">
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 opacity-[0.08]"
             style={{
               backgroundImage:
-                "linear-gradient(rgba(255,107,31,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.2) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
+                "linear-gradient(rgba(255,107,31,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.22) 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
             }}
           />
         </div>
 
-        <div className="relative z-10 container-custom text-center px-6">
-          <div className="space-y-6 max-w-4xl mx-auto">
-            <div className="services-hero-text flex items-center justify-center gap-4 mb-6">
-              <div className="h-px w-16 bg-primary" />
-              <span className="text-primary text-sm uppercase tracking-[0.3em]">
-                Industries We Serve
-              </span>
-              <div className="h-px w-16 bg-primary" />
+        {/* Animated blobs */}
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-3xl opacity-30"
+          animate={{ y: [0, 18, 0], x: [0, -14, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background:
+              "radial-gradient(circle at 30% 30%, rgba(255,107,31,0.95), rgba(255,145,77,0.0) 60%)",
+          }}
+        />
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-40 right-[-120px] h-[620px] w-[620px] rounded-full blur-3xl opacity-25"
+          animate={{ y: [0, -22, 0], x: [0, -18, 0] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background:
+              "radial-gradient(circle at 60% 40%, rgba(56,189,248,0.7), rgba(0,0,0,0) 62%)",
+          }}
+        />
+
+        <div className="relative z-10">
+          <div className="container-custom px-6 lg:px-10 pt-28 pb-14 lg:pt-36 lg:pb-20">
+            <div className="max-w-5xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70">
+                <Building2 className="h-4 w-4 text-primary" />
+                Industry Atlas
+              </div>
+
+              <h1 className="mt-6 text-balance text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.02] text-white">
+                Big operations,
+                <span className="block">
+                  tailored for
+                  <span className="relative ml-3 inline-block">
+                    <span className="bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent">
+                      your industry
+                    </span>
+                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500 opacity-70" />
+                  </span>
+                </span>
+              </h1>
+
+              <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-white/70">
+                Explore how HH Back Office Services improves revenue, accuracy,
+                and operational efficiency across diverse sectors.
+              </p>
+
+              <div className="mt-10 flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={() => scrollToId(industries[0].id)}
+                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
+                >
+                  Explore the Atlas
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </button>
+
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-6 py-3 font-semibold text-white/90 backdrop-blur-xl transition-colors hover:bg-white/10"
+                >
+                  Talk to our team
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              <div className="mt-10 flex items-center gap-3 text-white/60">
+                <ChevronDown className="h-5 w-5" />
+                <span className="text-sm">
+                  Scroll to see immersive full-screen panels
+                </span>
+              </div>
             </div>
+          </div>
 
-            <h1 className="services-hero-text text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
-              Powering Businesses Across{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
-                Multiple Industries
-              </span>
-            </h1>
-
-            <p className="services-hero-text text-lg md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              Helping organizations improve profitability, compliance, and
-              operational efficiency.
-            </p>
+          {/* Quick chips */}
+          <div className="border-t border-white/10 bg-black/40 backdrop-blur-xl">
+            <div className="container-custom px-6 lg:px-10 py-6">
+              <div className="flex flex-wrap gap-2">
+                {industries.map((ind) => {
+                  const Icon = ind.icon;
+                  const active = ind.id === activeId;
+                  return (
+                    <button
+                      key={ind.id}
+                      onClick={() => scrollToId(ind.id)}
+                      className={cn(
+                        "group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm",
+                        "transition-colors",
+                        active
+                          ? "border-white/25 bg-white/10 text-white"
+                          : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          "h-4 w-4",
+                          active ? "text-primary" : "text-white/60"
+                        )}
+                      />
+                      {ind.title}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* Main Services Section */}
-      <section ref={servicesRef} className="section-padding bg-black">
-        <div className="container-custom space-y-20">
-          {industries.map((industry, index) => {
-            const isReverse = index % 2 !== 0;
+      {/* Sticky scroll-spy rail */}
+      <div className="pointer-events-none fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
+        <div className="pointer-events-auto rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-2 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
+          {industries.map((ind, idx) => {
+            const active = ind.id === activeId;
+            const Icon = ind.icon;
             return (
-              <div
-                key={industry.id}
-                className={`service-card grid lg:grid-cols-2 gap-12 items-center`}
+              <button
+                key={ind.id}
+                onClick={() => scrollToId(ind.id)}
+                className={cn(
+                  "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors",
+                  active ? "bg-white/10" : "hover:bg-white/5"
+                )}
               >
-                {/* Image */}
-                <div className={isReverse ? "lg:order-2" : ""}>
-                  <div className="relative group overflow-hidden rounded-2xl">
-                    <img
-                      src={industry.image}
-                      alt={industry.title}
-                      className="w-full h-[420px] object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                <span
+                  className={cn(
+                    "inline-flex h-9 w-9 items-center justify-center rounded-xl border",
+                    active
+                      ? "border-orange-500/30 bg-orange-500/15"
+                      : "border-white/10 bg-white/5"
+                  )}
+                >
+                  <Icon
+                    className={cn(
+                      "h-4 w-4",
+                      active ? "text-primary" : "text-white/60"
+                    )}
+                  />
+                </span>
+                <div className="min-w-0">
+                  <div
+                    className={cn(
+                      "text-sm font-semibold",
+                      active ? "text-white" : "text-white/70"
+                    )}
+                  >
+                    {ind.title}
                   </div>
+                  <div className="text-[11px] text-white/50">#{idx + 1}</div>
                 </div>
-
-                {/* Content */}
-                <div className={`space-y-6 ${isReverse ? "lg:order-1" : ""}`}>
-                  <h2 className="text-4xl md:text-5xl font-bold text-white">
-                    {industry.title}
-                  </h2>
-
-                  <p className="text-primary font-semibold uppercase tracking-wider text-sm">
-                    {industry.tagline}
-                  </p>
-
-                  <p className="text-white/70 text-lg leading-relaxed">
-                    {industry.description}
-                  </p>
-
-                  {/* Problems */}
-                  <div className="pt-4">
-                    <h3 className="text-white font-semibold mb-2">
-                      Industry Challenges
-                    </h3>
-                    <ul className="space-y-2 text-white/70">
-                      {industry.problems.map((p, i) => (
-                        <li key={i}>• {p}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Solutions */}
-                  <div className="pt-4 border-t border-white/10">
-                    <h3 className="text-white font-semibold mb-2">
-                      How We Help
-                    </h3>
-                    <ul className="space-y-2 text-primary">
-                      {industry.solutions.map((s, i) => (
-                        <li key={i}>✔ {s}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Outcomes */}
-                  <div className="pt-4 border-t border-white/10">
-                    <h3 className="text-white font-semibold mb-2">
-                      Business Outcomes
-                    </h3>
-                    <ul className="space-y-2 text-green-400">
-                      {industry.outcomes.map((o, i) => (
-                        <li key={i}>▲ {o}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              </button>
             );
           })}
         </div>
-      </section>
+      </div>
+
+      {/* PANELS */}
+      <main className="bg-black">
+        {industries.map((ind, idx) => {
+          const Icon = ind.icon;
+          const number = String(idx + 1).padStart(2, "0");
+
+          return (
+            <section
+              key={ind.id}
+              id={`industry-${ind.id}`}
+              data-industry-panel
+              data-industry-id={ind.id}
+              className="relative isolate min-h-[110svh] overflow-hidden border-b border-white/10"
+            >
+              {/* Background image layer */}
+              <div className="absolute inset-0">
+                <div
+                  data-panel-image
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${ind.image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                />
+
+                {/* Contrast overlay */}
+                <div className="absolute inset-0 bg-black/60" />
+
+                {/* Accent wash */}
+                <div
+                  className={cn(
+                    "absolute inset-0 opacity-35",
+                    "bg-gradient-to-br",
+                    ind.accent
+                  )}
+                />
+
+                {/* Vignette */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.75)_70%,rgba(0,0,0,0.95)_100%)]" />
+              </div>
+
+              <div className="relative z-10 container-custom px-6 lg:px-10 py-16 lg:py-24">
+                <div className="grid gap-10 lg:gap-14 lg:grid-cols-12 items-start">
+                  {/* Left: headline */}
+                  <div className="lg:col-span-5">
+                    <div data-panel-reveal className="flex items-center gap-3">
+                      <span className="text-white/40 text-sm tracking-[0.25em]">
+                        {number}
+                      </span>
+                      <span
+                        className={cn(
+                          "h-px flex-1 max-w-24",
+                          "bg-gradient-to-r",
+                          ind.accent
+                        )}
+                      />
+                    </div>
+
+                    <div
+                      data-panel-reveal
+                      className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70"
+                    >
+                      <Icon className="h-4 w-4 text-white/80" />
+                      {ind.title}
+                    </div>
+
+                    <h2
+                      data-panel-reveal
+                      className="mt-6 text-4xl md:text-5xl font-bold leading-[1.05] text-white"
+                    >
+                      <span
+                        className={cn(
+                          "bg-gradient-to-r bg-clip-text text-transparent",
+                          ind.accent
+                        )}
+                      >
+                        {ind.tagline}
+                      </span>
+                    </h2>
+
+                    <p
+                      data-panel-reveal
+                      className="mt-5 text-lg leading-relaxed text-white/75"
+                    >
+                      {ind.description}
+                    </p>
+
+                    <div data-panel-reveal className="mt-8 flex flex-col sm:flex-row gap-3">
+                      <Link
+                        to="/services"
+                        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-xl transition-colors hover:bg-white/15"
+                      >
+                        View Services
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </Link>
+
+                      <Link
+                        to="/contact"
+                        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
+                      >
+                        Get a Consultation
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </Link>
+                    </div>
+
+                    {/* Decorative label */}
+                    <div data-panel-reveal className="mt-10">
+                      <div className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 backdrop-blur-xl">
+                        <span className="text-xs uppercase tracking-[0.25em] text-white/60">
+                          Designed for outcomes
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: content blocks */}
+                  <div className="lg:col-span-7">
+                    <div className="grid gap-5 lg:gap-6 lg:grid-cols-2">
+                      <div data-panel-reveal className="lg:col-span-2">
+                        <GlassCard title="Industry Challenges" items={ind.problems} />
+                      </div>
+
+                      <div data-panel-reveal>
+                        <GlassCard
+                          title="How We Help"
+                          items={ind.solutions}
+                          tone="primary"
+                        />
+                      </div>
+
+                      <div data-panel-reveal>
+                        <GlassCard
+                          title="Business Outcomes"
+                          items={ind.outcomes}
+                          tone="success"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Bottom: subtle marquee-style metrics */}
+                    <div
+                      data-panel-reveal
+                      className="mt-8 rounded-2xl border border-white/10 bg-black/35 px-6 py-5 backdrop-blur-xl"
+                    >
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                        <div className="text-sm font-semibold text-white">
+                          Your operations, engineered for speed.
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {["Compliance", "Accuracy", "Automation", "Reporting"].map(
+                            (t) => (
+                              <span
+                                key={t}
+                                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
+                              >
+                                {t}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          );
+        })}
+      </main>
     </div>
   );
 };
