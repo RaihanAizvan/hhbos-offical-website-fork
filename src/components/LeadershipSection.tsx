@@ -51,11 +51,17 @@ const LeadershipSection = () => {
       // Base stacking offsets for already-revealed cards.
       const stackOffset = 10; // px
 
-      // Initial state: first card visible, others start below (enter from bottom).
+      // Incoming card starts fully below the pinned viewport (so no "tip" is visible).
+      // Use actual card height to guarantee it begins out of view on all screens.
+      const cardHeight = cards[0].getBoundingClientRect().height;
+      const fromY = window.innerHeight / 2 + cardHeight / 2 + 80;
+
+      // Initial state: first card starts slightly below center; others start fully below viewport.
       cards.forEach((card, i) => {
         gsap.set(card, {
-          opacity: i === 0 ? 1 : 0,
-          y: i === 0 ? 0 : 60,
+          opacity: 1,
+          y: i === 0 ? fromY * 0.55 : fromY,
+          scale: i === 0 ? 1 : 1.14,
           zIndex: i === 0 ? 10 : 10 - i,
           pointerEvents: i === 0 ? "auto" : "none",
           willChange: "transform, opacity",
@@ -71,24 +77,15 @@ const LeadershipSection = () => {
       };
       setActive(0);
 
-      // Pinned scroll timeline: each step brings in the next card and
-      // pushes previous cards slightly back (stacked) without scaling.
+      // Pinned scroll timeline: first card settles into center, then each step brings in the next card
+      // and pushes previous cards slightly back (stacked) without scaling.
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: `+=${cards.length * 520}`,
-          scrub: 0.6,
+          scrub: 1,
           pin: true,
-          snap:
-            cards.length > 1
-              ? {
-                  snapTo: 1 / (cards.length - 1),
-                  duration: { min: 0.15, max: 0.35 },
-                  delay: 0.02,
-                  ease: "power2.out",
-                }
-              : false,
           pinSpacing: true,
           anticipatePin: 1,
           onUpdate: (self) => {
@@ -101,9 +98,20 @@ const LeadershipSection = () => {
         },
       });
 
+      // Intro: bring the first card to center on initial scroll.
+      tl.to(
+        cards[0],
+        {
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        0
+      );
+
       // Each card gets time to "sit" before the next arrives.
-      const hold = 0.65;
-      const transition = 0.85;
+      const hold = 0.55;
+      const transition = 1.0;
 
       for (let i = 1; i < cards.length; i++) {
         const prev = cards[i - 1];
@@ -128,12 +136,12 @@ const LeadershipSection = () => {
         tl.fromTo(
           next,
           {
-            opacity: 0,
-            y: 60,
+            y: fromY,
+            scale: 1.14,
           },
           {
-            opacity: 1,
             y: 0,
+            scale: 1,
             duration: transition,
             ease: "power3.out",
           },
@@ -152,11 +160,11 @@ const LeadershipSection = () => {
 
   return (
     <section ref={containerRef} className="relative h-screen bg-black overflow-hidden">
-      {/* Background text */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <h2 className="text-[15vw] font-bold text-white/10 whitespace-nowrap">
-          Our Leadership
-        </h2>
+      {/* Center hint text (gets covered by first card as user scrolls) */}
+      <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
+        <div className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[0.14em] uppercase text-white/35">
+          Scroll Down
+        </div>
       </div>
 
       {/* Cards are stacked in a single centered position; timeline controls entry */}
