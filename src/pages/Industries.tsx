@@ -275,58 +275,56 @@ const Industries = () => {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    // Gentle snap-to-section when user stops scrolling.
-    // (CSS scroll-snap is unreliable with Lenis; do it programmatically instead.)
-    let snapTimeout: number | null = null;
-    let lastScrollY = window.scrollY;
-    let snapping = false;
+    // Reels-style snap (but gentler): each wheel gesture advances to the next
+    // section. We avoid doing this on touch; mobile should remain natural.
+    let wheelLocked = false;
 
-    const getNearestSection = () => {
-      const viewportCenter = window.scrollY + window.innerHeight * 0.35;
-      let best = snapSections[0];
+    const getNearestIndex = () => {
+      const y = window.scrollY;
+      let bestIndex = 0;
       let bestDist = Number.POSITIVE_INFINITY;
 
-      for (const s of snapSections) {
-        const top = s.getBoundingClientRect().top + window.scrollY;
-        const dist = Math.abs(top - viewportCenter);
+      for (let i = 0; i < snapSections.length; i++) {
+        const top = snapSections[i].getBoundingClientRect().top + window.scrollY;
+        const dist = Math.abs(top - y);
         if (dist < bestDist) {
           bestDist = dist;
-          best = s;
+          bestIndex = i;
         }
       }
 
-      return best;
+      return bestIndex;
     };
 
-    const requestSnap = () => {
-      if (prefersReduced || snapping) return;
+    const scrollToIndex = (idx: number) => {
+      const clamped = Math.max(0, Math.min(snapSections.length - 1, idx));
+      const el = snapSections[clamped];
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top, behavior: prefersReduced ? "auto" : "smooth" });
+    };
 
-      if (snapTimeout) window.clearTimeout(snapTimeout);
-      snapTimeout = window.setTimeout(() => {
-        const delta = Math.abs(window.scrollY - lastScrollY);
-        lastScrollY = window.scrollY;
+    const onWheel = (e: WheelEvent) => {
+      // Only apply on devices that actually generate wheel events.
+      // Let touch devices scroll naturally.
+      if (prefersReduced) return;
+      if (wheelLocked) return;
 
-        // If we are still moving, wait.
-        if (delta > 2) {
-          requestSnap();
-          return;
-        }
+      // Ignore tiny deltas (trackpad micro scroll).
+      if (Math.abs(e.deltaY) < 18) return;
 
-        const nearest = getNearestSection();
-        if (!nearest) return;
+      // We want the scroll to feel section-based.
+      e.preventDefault();
 
-        const targetTop = nearest.getBoundingClientRect().top + window.scrollY;
-        // Avoid micro-snaps.
-        if (Math.abs(window.scrollY - targetTop) < 60) return;
+      const current = getNearestIndex();
+      const next = e.deltaY > 0 ? current + 1 : current - 1;
+      scrollToIndex(next);
 
-        snapping = true;
-        window.scrollTo({ top: targetTop, behavior: "smooth" });
-
-        // Release after a short period.
-        window.setTimeout(() => {
-          snapping = false;
-        }, 450);
-      }, 140);
+      // Cooldown so it doesn't feel as intense as Reels.
+      wheelLocked = true;
+      window.setTimeout(() => {
+        wheelLocked = false;
+      }, 650);
     };
 
     // Scroll-spy: update active section
@@ -347,11 +345,8 @@ const Industries = () => {
 
     panels.forEach((p) => io.observe(p));
 
-    // Start snap detection on user input.
-    const onScroll = () => requestSnap();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("touchend", onScroll, { passive: true });
-    window.addEventListener("mouseup", onScroll, { passive: true });
+    // Reels-like snap on wheel (desktop). We need non-passive to preventDefault.
+    window.addEventListener("wheel", onWheel, { passive: false });
 
     // GSAP: parallax images + reveal content blocks
     const ctx = gsap.context(() => {
@@ -398,10 +393,7 @@ const Industries = () => {
     }, root);
 
     return () => {
-      if (snapTimeout) window.clearTimeout(snapTimeout);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("touchend", onScroll);
-      window.removeEventListener("mouseup", onScroll);
+      window.removeEventListener("wheel", onWheel);
 
       io.disconnect();
       ctx.revert();
