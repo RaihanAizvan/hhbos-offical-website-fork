@@ -1,6 +1,5 @@
 import React, { useLayoutEffect, useRef, useCallback } from "react";
 import type { ReactNode } from "react";
-import Lenis from "lenis";
 
 export interface ScrollStackItemProps {
   itemClassName?: string;
@@ -50,7 +49,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   useWindowScroll = false,
 }) => {
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const lenisRef = useRef<Lenis | null>(null);
   const cardsRef = useRef<HTMLElement[]>([]);
   const rafRef = useRef<number | null>(null);
 
@@ -123,39 +121,28 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
     cardsRef.current = cards;
 
-    const lenis = new Lenis({
-      wrapper: useWindowScroll ? undefined : scrollerRef.current!,
-      content: useWindowScroll
-        ? undefined
-        : scrollerRef.current!.querySelector(".scroll-stack-inner")!,
-      smoothWheel: true,
-      lerp: 0.08,
-    });
+    const onScroll = () => update();
 
-    lenis.on("scroll", update);
-
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafRef.current = requestAnimationFrame(raf);
-    };
-
-    rafRef.current = requestAnimationFrame(raf);
-    lenisRef.current = lenis;
+    if (useWindowScroll) {
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
 
     update();
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      lenis.destroy();
+      if (useWindowScroll) {
+        window.removeEventListener("scroll", onScroll);
+      }
     };
   }, [update, useWindowScroll]);
 
   return (
     <div
       ref={scrollerRef}
-      className={`relative h-full w-full overflow-y-auto overscroll-contain ${className}`}
+      className={`relative w-full ${useWindowScroll ? "overflow-visible" : "h-full overflow-y-auto overscroll-contain"} ${className}`}
     >
-      <div className="scroll-stack-inner pt-[20vh] px-16 pb-[50rem] min-h-screen">
+      <div className="scroll-stack-inner pt-[20vh] px-6 sm:px-10 lg:px-16 pb-[50rem] min-h-screen">
         {children}
         <div className="scroll-stack-end w-full h-px" />
       </div>

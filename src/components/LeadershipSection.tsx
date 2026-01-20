@@ -40,7 +40,7 @@ const LeadershipSection = () => {
         </h2>
       </div>
 
-      <ScrollStack className="relative z-10" blurAmount={0}>
+      <ScrollStack className="relative z-10" blurAmount={0} useWindowScroll>
         {leaders.map((leader, index) => (
           <ScrollStackItem
             key={index}
