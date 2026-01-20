@@ -42,7 +42,10 @@ const LeadershipSection = () => {
 
       <ScrollStack className="relative z-10">
         {leaders.map((leader, index) => (
-          <ScrollStackItem key={index}>
+          <ScrollStackItem
+            key={index}
+            itemClassName="mx-auto my-0 w-full sm:w-[92%] lg:w-[760px] xl:w-[900px] h-[300px] sm:h-[340px] lg:h-[380px] p-0"
+          >
             <div className="group relative h-full rounded-3xl overflow-hidden border border-white/10 bg-white/[0.03] shadow-[0_24px_80px_rgba(0,0,0,0.65)]">
               <div className="flex h-full">
                 {/* Image */}
