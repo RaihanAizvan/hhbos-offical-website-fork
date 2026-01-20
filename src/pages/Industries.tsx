@@ -469,12 +469,12 @@ const Industries = () => {
               </div>
 
               <h1 className="mt-6 text-balance text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.02] text-white">
-                Big operations,
+                Powering Businesses  
                 <span className="block">
-                  tailored for
+                  Across
                   <span className="relative ml-3 inline-block">
                     <span className="bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent">
-                      your industry
+                      Multiple Industries
                     </span>
                     <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500 opacity-70" />
                   </span>
