@@ -267,6 +267,68 @@ const Industries = () => {
       root.querySelectorAll<HTMLElement>("[data-industry-panel]")
     );
 
+    const snapSections = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-snap-section]")
+    );
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    // Gentle snap-to-section when user stops scrolling.
+    // (CSS scroll-snap is unreliable with Lenis; do it programmatically instead.)
+    let snapTimeout: number | null = null;
+    let lastScrollY = window.scrollY;
+    let snapping = false;
+
+    const getNearestSection = () => {
+      const viewportCenter = window.scrollY + window.innerHeight * 0.35;
+      let best = snapSections[0];
+      let bestDist = Number.POSITIVE_INFINITY;
+
+      for (const s of snapSections) {
+        const top = s.getBoundingClientRect().top + window.scrollY;
+        const dist = Math.abs(top - viewportCenter);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = s;
+        }
+      }
+
+      return best;
+    };
+
+    const requestSnap = () => {
+      if (prefersReduced || snapping) return;
+
+      if (snapTimeout) window.clearTimeout(snapTimeout);
+      snapTimeout = window.setTimeout(() => {
+        const delta = Math.abs(window.scrollY - lastScrollY);
+        lastScrollY = window.scrollY;
+
+        // If we are still moving, wait.
+        if (delta > 2) {
+          requestSnap();
+          return;
+        }
+
+        const nearest = getNearestSection();
+        if (!nearest) return;
+
+        const targetTop = nearest.getBoundingClientRect().top + window.scrollY;
+        // Avoid micro-snaps.
+        if (Math.abs(window.scrollY - targetTop) < 60) return;
+
+        snapping = true;
+        window.scrollTo({ top: targetTop, behavior: "smooth" });
+
+        // Release after a short period.
+        window.setTimeout(() => {
+          snapping = false;
+        }, 450);
+      }, 140);
+    };
+
     // Scroll-spy: update active section
     const io = new IntersectionObserver(
       (entries) => {
@@ -284,6 +346,12 @@ const Industries = () => {
     );
 
     panels.forEach((p) => io.observe(p));
+
+    // Start snap detection on user input.
+    const onScroll = () => requestSnap();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("touchend", onScroll, { passive: true });
+    window.addEventListener("mouseup", onScroll, { passive: true });
 
     // GSAP: parallax images + reveal content blocks
     const ctx = gsap.context(() => {
@@ -330,6 +398,11 @@ const Industries = () => {
     }, root);
 
     return () => {
+      if (snapTimeout) window.clearTimeout(snapTimeout);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("touchend", onScroll);
+      window.removeEventListener("mouseup", onScroll);
+
       io.disconnect();
       ctx.revert();
       // Ensure we don't leak triggers on route changes
@@ -345,7 +418,10 @@ const Industries = () => {
   return (
     <div ref={rootRef} className="min-h-screen bg-black">
       {/* HERO: Industry Atlas */}
-      <header className="relative overflow-hidden bg-black min-h-[100svh] flex flex-col">
+      <header
+        data-snap-section
+        className="relative overflow-hidden bg-black min-h-[100svh] flex flex-col"
+      >
         <div className="absolute inset-0">
           <video
             autoPlay
@@ -537,6 +613,7 @@ const Industries = () => {
               id={`industry-${ind.id}`}
               data-industry-panel
               data-industry-id={ind.id}
+              data-snap-section
               className="relative isolate min-h-[110svh] overflow-hidden border-b border-white/10"
             >
               {/* Background image layer */}
