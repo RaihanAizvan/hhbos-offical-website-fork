@@ -345,7 +345,7 @@ const Industries = () => {
   return (
     <div ref={rootRef} className="min-h-screen bg-black">
       {/* HERO: Industry Atlas */}
-      <header className="relative overflow-hidden bg-black">
+      <header className="relative overflow-hidden bg-black min-h-[100svh] flex flex-col">
         <div className="absolute inset-0">
           <video
             autoPlay
@@ -391,7 +391,7 @@ const Industries = () => {
         />
 
         <div className="relative z-10">
-          <div className="container-custom px-6 lg:px-10 pt-28 pb-14 lg:pt-36 lg:pb-20">
+          <div className="container-custom px-6 lg:px-10 pt-28 pb-14 lg:pt-36 lg:pb-20 flex-1 flex items-center">
             <div className="max-w-5xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70">
                 <Building2 className="h-4 w-4 text-primary" />
