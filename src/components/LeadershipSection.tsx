@@ -173,12 +173,12 @@ const LeadershipSection = () => {
           {leaders.map((leader, index) => (
             <div
               key={index}
-              className="leader-card absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-[92%] lg:w-[760px] xl:w-[900px] h-[300px] sm:h-[340px] lg:h-[380px]"
+              className="leader-card absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-[900px] h-[440px] sm:h-[340px] lg:h-[380px]"
             >
               <div className="group relative h-full rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_24px_80px_rgba(0,0,0,0.65)]">
-                <div className="flex h-full">
+                <div className="flex flex-col sm:flex-row h-full">
                   {/* Image */}
-                  <div className="w-2/5 relative overflow-hidden">
+                  <div className="w-full sm:w-2/5 h-[180px] sm:h-full relative overflow-hidden">
                     <img
                       src={leader.image}
                       alt={leader.name}
@@ -188,7 +188,7 @@ const LeadershipSection = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="w-3/5 p-8 flex flex-col justify-center">
+                  <div className="w-full sm:w-3/5 p-6 sm:p-8 flex flex-col justify-center">
                     <h3 className="text-3xl font-semibold text-white mb-2">
                       {leader.name}
                     </h3>
