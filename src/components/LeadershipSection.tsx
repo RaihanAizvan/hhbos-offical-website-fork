@@ -202,12 +202,7 @@ const LeadershipSection = () => {
                   </div>
                 </div>
 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-black/95 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-8">
-                  <p className="text-white/80 text-sm max-w-xl">
-                    {leader.details}
-                  </p>
-                </div>
+  
               </div>
             </div>
           ))}
