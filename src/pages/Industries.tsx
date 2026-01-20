@@ -84,6 +84,8 @@ const GlassCard = ({
 const Industries = () => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string>("healthcare");
+  const [dockHoverIndex, setDockHoverIndex] = useState<number | null>(null);
+  const dockItemRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   useLayoutEffect(() => {
     // Ensure consistent experience when navigating between routes
@@ -546,50 +548,154 @@ const Industries = () => {
         </div>
       </header>
 
-      {/* Sticky scroll-spy rail */}
+      {/* Sticky scroll-spy rail (Dock style) */}
       <div className="pointer-events-none fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
-        <div className="pointer-events-auto rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-2 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
-          {industries.map((ind, idx) => {
-            const active = ind.id === activeId;
-            const Icon = ind.icon;
-            return (
-              <button
-                key={ind.id}
-                onClick={() => scrollToId(ind.id)}
-                className={cn(
-                  "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors",
-                  active ? "bg-white/10" : "hover:bg-white/5"
-                )}
-              >
-                <span
+        <div
+          className="pointer-events-auto"
+          onMouseLeave={() => setDockHoverIndex(null)}
+          onMouseMove={(e) => {
+            // True dock feel: hovering the dock area (not only an item) drives the focus.
+            let bestIdx = 0;
+            let bestDist = Number.POSITIVE_INFINITY;
+            dockItemRefs.current.forEach((el, i) => {
+              if (!el) return;
+              const rect = el.getBoundingClientRect();
+              const centerY = rect.top + rect.height / 2;
+              const dist = Math.abs(e.clientY - centerY);
+              if (dist < bestDist) {
+                bestDist = dist;
+                bestIdx = i;
+              }
+            });
+            setDockHoverIndex(bestIdx);
+          }}
+        >
+          {/*
+            Dock behavior:
+            - icons only by default
+            - when dock is hovered: ALL labels are visible
+            - hovered item largest; neighbors gradually smaller (macOS Dock feel)
+          */}
+          <div className="flex flex-col gap-1">
+            {industries.map((ind, idx) => {
+              const active = ind.id === activeId;
+              const Icon = ind.icon;
+
+              const d = dockHoverIndex === null ? 99 : Math.abs(idx - dockHoverIndex);
+              const iconScale =
+                dockHoverIndex === null
+                  ? 1
+                  : d === 0
+                    ? 1.5
+                    : d === 1
+                      ? 1.25
+                      : d === 2
+                        ? 1.12
+                        : d === 3
+                          ? 1.06
+                          : 1;
+
+              const labelScale =
+                dockHoverIndex === null
+                  ? 0
+                  : d === 0
+                    ? 1
+                    : d === 1
+                      ? 0.82
+                      : d === 2
+                        ? 0.68
+                        : d === 3
+                          ? 0.6
+                          : 0.5;
+
+              const labelOpacity =
+                dockHoverIndex === null
+                  ? 0
+                  : d === 0
+                    ? 1
+                    : d === 1
+                      ? 0.85
+                      : d === 2
+                        ? 0.7
+                        : d === 3
+                          ? 0.6
+                          : 0.45;
+
+              return (
+                <button
+                  key={ind.id}
+                  ref={(el) => {
+                    dockItemRefs.current[idx] = el;
+                  }}
+                  type="button"
+                  onFocus={() => setDockHoverIndex(idx)}
+                  onClick={() => scrollToId(ind.id)}
                   className={cn(
-                    "inline-flex h-9 w-9 items-center justify-center rounded-xl border",
-                    active
-                      ? "border-orange-500/30 bg-orange-500/15"
-                      : "border-white/10 bg-white/5"
+                    "group relative flex items-center justify-end",
+                    "h-12 w-12",
+                    "select-none"
                   )}
+                  aria-label={ind.title}
                 >
-                  <Icon
+                  {/* Label: floats to the left, doesn't push layout */}
+                  <motion.div
                     className={cn(
-                      "h-4 w-4",
-                      active ? "text-primary" : "text-white/60"
+                      "pointer-events-none absolute right-[56px]",
+                      "origin-right whitespace-nowrap",
+                      "text-white/90"
                     )}
-                  />
-                </span>
-                <div className="min-w-0">
-                  <div
-                    className={cn(
-                      "text-sm font-semibold",
-                      active ? "text-white" : "text-white/70"
-                    )}
+                    animate={{
+                      opacity: labelOpacity,
+                      scale: labelScale,
+                      x: dockHoverIndex === null ? 6 : 0,
+                    }}
+                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
                   >
-                    {ind.title}
-                  </div>
-                  <div className="text-[11px] text-white/50">#{idx + 1}</div>
-                </div>
-              </button>
-            );
-          })}
+                    <div
+                      className={cn(
+                        "rounded-full px-3 py-1",
+                        "bg-black/45 backdrop-blur-xl",
+                        active ? "text-white" : "text-white/85"
+                      )}
+                    >
+                      <span className="text-sm font-semibold">{ind.title}</span>
+                      <span className="ml-2 text-[11px] text-white/60">
+                        #{String(idx + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                  </motion.div>
+
+                  {/* Icon (no outer outline box) */}
+                  <motion.div
+                    className={cn(
+                      "relative grid h-12 w-12 place-items-center rounded-2xl",
+                      active
+                        ? "bg-orange-500/15"
+                        : "bg-white/5 group-hover:bg-white/10",
+                      "backdrop-blur-xl"
+                    )}
+                    animate={{ scale: iconScale }}
+                    transition={{ type: "spring", stiffness: 360, damping: 28 }}
+                  >
+                    <Icon
+                      className={cn(
+                        "h-5 w-5",
+                        active ? "text-primary" : "text-white/75"
+                      )}
+                    />
+
+                    {/* Active dot */}
+                    <span
+                      className={cn(
+                        "absolute -left-1 top-1/2 h-2.5 w-1 -translate-y-1/2 rounded-full",
+                        active ? "bg-primary" : "bg-transparent"
+                      )}
+                    />
+                  </motion.div>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
