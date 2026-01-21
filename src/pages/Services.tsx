@@ -1,4 +1,10 @@
-import { useLayoutEffect, useEffect, useRef } from "react";
+import {
+  useLayoutEffect,
+  useEffect,
+  useRef,
+  RefAttributes,
+  ForwardRefExoticComponent,
+} from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,63 +19,125 @@ import {
   Users,
   Globe,
   Settings,
+  LucideProps,
+  CircleCheckBig,
 } from "lucide-react";
 import serviceHealthcare from "@/assets/service-healthcare.jpg";
 import serviceFinance from "@/assets/service-finance.jpg";
 import serviceDatabase from "@/assets/service-database.jpg";
+import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+interface Service {
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+  title: string;
+  description: string;
+  image: string;
+  features: string[];
+  benefits: string[];
+}
+
 const Services = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const servicesRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef(null);
+  const benefitsRef = useRef(null);
 
   useLayoutEffect(() => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, []);
 
-  useEffect(() => {
-    if (!heroRef.current) return;
+  useGSAP(
+    () => {
+      const cards = gsap.utils.toArray(".service-card") as HTMLElement[];
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".services-hero-text",
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power3.out",
-        }
-      );
+      cards.forEach((card) => {
+        const image = card.querySelector(".service-image");
+        const headingChars = card.querySelectorAll(".char");
+        const features = card.querySelectorAll(".feature-item");
+        const benefitItems = card.querySelectorAll(".benefit-item");
 
-      if (servicesRef.current) {
-        const cards = servicesRef.current.querySelectorAll(".service-card");
         gsap.fromTo(
-          cards,
-          { opacity: 0, y: 80, scale: 0.9 },
+          benefitItems,
+          {
+            opacity: 0,
+            y: 16,
+            filter: "blur(6px)",
+          },
           {
             opacity: 1,
             y: 0,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: servicesRef.current,
-              start: "top 70%",
+            filter: "blur(0px)",
+            stagger: {
+              each: 0.12,
+              ease: "power3.out",
             },
-          }
+            duration: 0.4,
+            scrollTrigger: {
+              trigger: benefitItems[0],
+              start: "top 40%",
+              toggleActions: "play none none none",
+            },
+          },
         );
-      }
-    }, heroRef);
 
-    return () => ctx.revert();
-  }, []);
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: "top 75%",
+          },
+        });
 
-  const services = [
+        // Image Mask Reveal
+        tl.fromTo(
+          image,
+          {
+            clipPath: "inset(100% 0 0 0)",
+            scale: 1.2,
+          },
+          {
+            clipPath: "inset(0% 0 0 0)",
+            scale: 1,
+            duration: 1.2,
+            ease: "expo.out",
+            willChange: "transform, clip-path",
+          },
+        );
+
+        // Heading Split Reveal
+        tl.from(
+          headingChars,
+          {
+            y: 10,
+            opacity: 0,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: "expo.out",
+          },
+          "-=0.8",
+        );
+
+        // Feature List Stagger
+        tl.from(
+          features,
+          {
+            opacity: 0,
+            x: -10,
+            stagger: 0.2,
+            duration: 0.3,
+            ease: "power3.out",
+          },
+          "-=0.4",
+        );
+      });
+    },
+    { scope: sectionRef },
+  );
+
+  const services: Service[] = [
     {
       icon: HeartPulse,
       title: "Revenue Cycle Management (RCM)",
@@ -164,7 +232,7 @@ const Services = () => {
       {/* Hero Section */}
       <section
         ref={heroRef}
-        className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black"
+        className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black mt-20"
       >
         <div className="absolute inset-0">
           <video
@@ -210,81 +278,90 @@ const Services = () => {
             </h1>
 
             <p className="services-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              Expert services in RCM, Finance, and Database Administration tailored to your business needs
+              Expert services in RCM, Finance, and Database Administration
+              tailored to your business needs
             </p>
           </div>
         </div>
       </section>
 
       {/* Main Services Section */}
-      <section ref={servicesRef} className="section-padding bg-black">
-        <div className="container-custom space-y-20">
+      <section ref={sectionRef} className="bg-[#050505] text-white px-6">
+        <div
+          className="max-w-7xl mx-auto"
+          style={{
+            paddingBlock: "clamp(4rem, 8vw, 12rem)",
+          }}
+        >
           {services.map((service, index) => {
-            const Icon = service.icon;
             const isReverse = index % 2 !== 0;
 
             return (
               <div
                 key={index}
-                className={`service-card grid lg:grid-cols-2 gap-12 items-center ${
-                  isReverse ? "lg:flex-row-reverse" : ""
-                }`}
+                className="service-card grid lg:grid-cols-2 items-center gap-20 mb-[clamp(4rem,8vw,10rem)]"
               >
-                {/* Image Side */}
-                <div className={`${isReverse ? "lg:order-2" : ""}`}>
-                  <div className="relative group overflow-hidden rounded-2xl">
+                {/* Image */}
+                <div className={`relative ${isReverse ? "lg:order-2" : ""}`}>
+                  <div className="service-image clip-hidden transform-gpu will-change-transform rounded-xl overflow-hidden bg-[#1A1A1A] border border-white/10">
                     <img
                       src={service.image}
                       alt={service.title}
-                      className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                   </div>
                 </div>
 
-                {/* Content Side */}
+                {/* Content */}
                 <div className={`space-y-6 ${isReverse ? "lg:order-1" : ""}`}>
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Icon className="w-8 h-8 text-primary" />
-                  </div>
+                  {/* Title */}
+                  <h3 className="text-4xl font-semibold tracking-tight leading-tight">
+                    {service.title.split("").map((char, i) => (
+                      <span key={i} className="char inline-block">
+                        {char === " " ? "\u00A0" : char}
+                      </span>
+                    ))}
+                  </h3>
 
-                  <h2 className="text-4xl md:text-5xl font-bold text-white">
-                    {service.title}
-                  </h2>
-
-                  <p className="text-white/70 text-lg leading-relaxed">
+                  {/* Description */}
+                  <p className="benefit-item text-white/70 leading-relaxed max-w-md">
                     {service.description}
                   </p>
 
-                  {/* Features Grid */}
-                  <div className="space-y-3 pt-4">
-                    <h3 className="text-sm font-semibold text-white/90 uppercase tracking-wider">Our Expertise Includes:</h3>
-                    {service.features.map((feature, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-start gap-2 text-white/80 text-sm"
+                  {/* Features */}
+                  <ul className="space-y-3">
+                    {service.features.map((feature, i) => (
+                      <li
+                        key={i}
+                        className="feature-item flex items-start gap-3 text-white/80"
                       >
-                        <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="mt-2 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-slate-400 to-gray-200 flex-shrink-0" />
                         <span>{feature}</span>
-                      </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
 
                   {/* Benefits */}
-                  {"benefits" in service && (
-                    <div className="space-y-3 pt-4 border-t border-white/10">
-                      <h3 className="text-sm font-semibold text-white/90 uppercase tracking-wider">Benefits:</h3>
-                      {service.benefits.map((benefit, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-start gap-2 text-primary/90 text-sm font-medium"
+                  <div
+                    ref={benefitsRef}
+                    className="pt-6 border-t border-white/10"
+                  >
+                    <h4 className="benefit-item  text-lg font-semibold text-primary mb-4">
+                      Benefits:
+                    </h4>
+
+                    <ul className="grid sm:grid-cols-2 gap-3">
+                      {service.benefits.map((benefit, i) => (
+                        <li
+                          key={i}
+                          className="benefit-item flex items-center gap-3 text-white/70"
                         >
-                          <span>•</span>
+                          <CircleCheckBig size={14} color="#fe7216" />
                           <span>{benefit}</span>
-                        </div>
+                        </li>
                       ))}
-                    </div>
-                  )}
+                    </ul>
+                  </div>
                 </div>
               </div>
             );
@@ -310,7 +387,7 @@ const Services = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 xl:gap-8">
             {benefits.map((benefit, index) => {
               const Icon = benefit.icon;
               return (
@@ -319,18 +396,60 @@ const Services = () => {
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
+                  transition={{ duration: 0.6, delay: index * 0.08 }}
+                  className="group h-full"
                 >
-                  <Card className="h-full bg-black/50 backdrop-blur-sm border-white/10 hover:border-primary/50 transition-all duration-300">
-                    <CardContent className="p-6 space-y-4">
-                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                  <Card
+                    className="
+            h-full
+            bg-black/50
+            backdrop-blur-sm
+            border border-white/10
+            hover:border-primary/50
+            transition-all
+            duration-300
+          "
+                  >
+                    <CardContent className="p-6 space-y-4 h-full flex flex-col">
+                      {/* Icon */}
+                      <div
+                        className="
+                w-14 h-14
+                rounded-full
+                bg-primary/10
+                flex items-center justify-center
+                group-hover:bg-primary/20
+                transition-colors
+                duration-300
+              "
+                      >
                         <Icon className="w-7 h-7 text-primary" />
                       </div>
-                      <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors duration-300">
+
+                      {/* Title */}
+                      <h3
+                        className="
+                text-lg
+                md:text-xl
+                font-semibold
+                text-white
+                group-hover:text-primary
+                transition-colors
+                duration-300
+              "
+                      >
                         {benefit.title}
                       </h3>
-                      <p className="text-white/60 text-sm leading-relaxed">
+
+                      {/* Description */}
+                      <p
+                        className="
+                text-white/60
+                text-sm
+                leading-relaxed
+                flex-grow
+              "
+                      >
                         {benefit.description}
                       </p>
                     </CardContent>

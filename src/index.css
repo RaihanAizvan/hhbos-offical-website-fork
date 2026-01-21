@@ -151,4 +151,8 @@ All colors MUST be HSL.
   .container-custom {
     @apply max-w-7xl mx-auto;
   }
+  
+  .clip-hidden {
+    clip-path: inset(100% 0 0 0);
+  }
 }
