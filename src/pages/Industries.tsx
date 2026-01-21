@@ -512,39 +512,6 @@ const Industries = () => {
               </div>
             </div>
           </div>
-
-          {/* Quick chips (pinned to bottom of hero) */}
-          <div className="mt-auto border-t border-white/10 bg-black/40 backdrop-blur-xl">
-            <div className="container-custom px-6 lg:px-10 py-6">
-              <div className="flex flex-wrap gap-2">
-                {industries.map((ind) => {
-                  const Icon = ind.icon;
-                  const active = ind.id === activeId;
-                  return (
-                    <button
-                      key={ind.id}
-                      onClick={() => scrollToId(ind.id)}
-                      className={cn(
-                        "group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm",
-                        "transition-colors",
-                        active
-                          ? "border-white/25 bg-white/10 text-white"
-                          : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
-                      )}
-                    >
-                      <Icon
-                        className={cn(
-                          "h-4 w-4",
-                          active ? "text-primary" : "text-white/60"
-                        )}
-                      />
-                      {ind.title}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
         </div>
       </header>
 
@@ -659,9 +626,6 @@ const Industries = () => {
                       )}
                     >
                       <span className="text-sm font-semibold">{ind.title}</span>
-                      <span className="ml-2 text-[11px] text-white/60">
-                        #{String(idx + 1).padStart(2, "0")}
-                      </span>
                     </div>
                   </motion.div>
 
