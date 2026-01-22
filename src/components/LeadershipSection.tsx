@@ -43,7 +43,7 @@ const LeadershipSection = () => {
 
     const ctx = gsap.context(() => {
       const cards = gsap.utils.toArray<HTMLElement>(
-        cardsRef.current!.querySelectorAll(".leader-card")
+        cardsRef.current!.querySelectorAll(".leader-card"),
       );
 
       if (!cards.length) return;
@@ -91,7 +91,7 @@ const LeadershipSection = () => {
           onUpdate: (self) => {
             const idx = Math.min(
               cards.length - 1,
-              Math.max(0, Math.round(self.progress * (cards.length - 1)))
+              Math.max(0, Math.round(self.progress * (cards.length - 1))),
             );
             setActive(idx);
           },
@@ -106,7 +106,7 @@ const LeadershipSection = () => {
           duration: 0.8,
           ease: "power3.out",
         },
-        0
+        0,
       );
 
       // Each card gets time to "sit" before the next arrives.
@@ -129,7 +129,7 @@ const LeadershipSection = () => {
             duration: transition,
             ease: "power3.out",
           },
-          t
+          t,
         );
 
         // Bring in the next card from the bottom.
@@ -145,7 +145,7 @@ const LeadershipSection = () => {
             duration: transition,
             ease: "power3.out",
           },
-          t
+          t,
         );
       }
 
@@ -159,16 +159,22 @@ const LeadershipSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-screen bg-black overflow-hidden">
+    <section
+      ref={containerRef}
+      className="relative h-screen bg-black overflow-hidden"
+    >
       {/* Center hint text (gets covered by first card as user scrolls) */}
       <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
-        <div className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[0.14em] uppercase text-white/35">
-          Scroll Down
+        <div className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] uppercase text-white/35 text-center">
+          Our Leadership
         </div>
       </div>
 
       {/* Cards are stacked in a single centered position; timeline controls entry */}
-      <div ref={cardsRef} className="absolute inset-0 z-10 flex items-center justify-center px-4 lg:px-12">
+      <div
+        ref={cardsRef}
+        className="absolute inset-0 z-10 flex items-center justify-center px-4 lg:px-12"
+      >
         <div className="relative w-full max-w-7xl mx-auto flex items-center justify-center">
           {leaders.map((leader, index) => (
             <div
@@ -201,8 +207,6 @@ const LeadershipSection = () => {
                     <div className="mt-4 h-1 w-16 bg-primary" />
                   </div>
                 </div>
-
-  
               </div>
             </div>
           ))}
