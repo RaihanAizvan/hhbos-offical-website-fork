@@ -42,9 +42,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
       gsap.set(sheenRef.current, { opacity: 0, xPercent: -70, scale: 1.15 });
 
+      // Content should be visible by default (no hover-required reveal)
       gsap.set(["[data-line]", "[data-cta]"], {
-        opacity: 0,
-        y: 10,
+        opacity: 1,
+        y: 0,
       });
 
       tl.current = gsap
@@ -119,27 +120,25 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           },
           0.32
         )
-        // Content reveal
+        // Content micro-emphasis (content is already visible)
         .to(
           "[data-line]",
           {
-            opacity: 1,
-            y: 0,
-            duration: 0.25,
+            y: -2,
+            duration: 0.22,
             stagger: 0.02,
-            ease: "power3.out",
+            ease: "power2.out",
           },
-          0.04
+          0.12
         )
         .to(
           "[data-cta]",
           {
-            opacity: 1,
-            y: 0,
-            duration: 0.2,
-            ease: "power3.out",
+            y: -2,
+            duration: 0.22,
+            ease: "power2.out",
           },
-          0.22
+          0.16
         );
     }, rootRef);
 
@@ -147,7 +146,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   }, []);
 
   return (
-    <div ref={rootRef} className="relative w-full h-[560px] md:h-[640px]">
+    <div ref={rootRef} className="relative w-full h-[520px] md:h-[600px]">
       {/* Back layers */}
       <div
         ref={layer2Ref}
@@ -190,7 +189,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             style={{ filter: "grayscale(0.35) saturate(0.9) contrast(1.02)" }}
           />
           <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute bottom-0 left-0 right-0 h-[55%] bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-[60%] bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
         </div>
 
         {/* Sheen (masked, subtle) */}
