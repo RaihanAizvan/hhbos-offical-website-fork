@@ -45,11 +45,6 @@ const Services = () => {
   const sectionRef = useRef(null);
   const benefitsRef = useRef(null);
 
-  useLayoutEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
-
   useGSAP(
     () => {
       const cards = gsap.utils.toArray(".service-card") as HTMLElement[];

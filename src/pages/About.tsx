@@ -10,11 +10,6 @@ const About = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const valuesRef = useRef<HTMLDivElement>(null);
   
-  useLayoutEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
-  
   useEffect(() => {
     if (!heroRef.current) return;
     

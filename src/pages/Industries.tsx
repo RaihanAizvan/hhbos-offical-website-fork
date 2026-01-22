@@ -92,12 +92,6 @@ const Industries = () => {
   const [dockHoverIndex, setDockHoverIndex] = useState<number | null>(null);
   const dockItemRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  useLayoutEffect(() => {
-    // Ensure consistent experience when navigating between routes
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
-
   const industries = useMemo<Industry[]>(
     () => [
       {

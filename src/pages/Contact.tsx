@@ -24,10 +24,6 @@ const Contact = () => {
   const [status, setStatus] = useState<null | "success" | "error">(null);
   const { toast } = useToast();
 
-  useLayoutEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
 
   useEffect(() => {
     if (!heroRef.current) return;

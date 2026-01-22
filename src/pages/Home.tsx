@@ -26,10 +26,6 @@ const FeatureCard = ({ title }: { title: string }) => {
 };
 
 const Home = () => {
-  useLayoutEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
 
   const services = [
     {
