@@ -11,11 +11,12 @@ interface ServiceCardProps {
 }
 
 /**
- * ServiceCard
- * Unique-but-professional hover interaction:
- * - Cursor-origin "portal" reveal using clip-path: a circle expands from the cursor to unveil content.
- * - Subtle 3D response (tilt + lift) so it feels physical.
- * - CTA gets a bespoke underline/arrow glide.
+ * ServiceCard (Chroma / spotlight variant)
+ * Inspired by React Bits "ChromaGrid":
+ * - Cursor-driven masked overlays (via CSS mask-image) create a premium spotlight
+ *   that selectively reveals clarity/color while the outside area is subtly muted.
+ * - Smooth radius expansion on hover.
+ * - Subtle 3D tilt for depth (kept professional).
  */
 const ServiceCard: React.FC<ServiceCardProps> = ({
   category,
@@ -26,22 +27,36 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const imageWrapRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
 
-  const portalRef = useRef<HTMLDivElement>(null);
-  const portalBgRef = useRef<HTMLDivElement>(null);
+  const maskDimRef = useRef<HTMLDivElement>(null);
+  const maskChromaRef = useRef<HTMLDivElement>(null);
 
-  const cursorX = useRef(50);
-  const cursorY = useRef(50);
+  const rafRef = useRef<number | null>(null);
+  const hoverRef = useRef(false);
 
-  const tl = useRef<gsap.core.Timeline>();
-  const hover = useRef(false);
+  const mouse = useRef({ x: 50, y: 50 });
+  const radius = useRef(120);
+
+  const applyVars = () => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.style.setProperty("--x", `${mouse.current.x}%`);
+    el.style.setProperty("--y", `${mouse.current.y}%`);
+    el.style.setProperty("--r", `${radius.current}px`);
+  };
+
+  const scheduleVars = () => {
+    if (rafRef.current) return;
+    rafRef.current = window.requestAnimationFrame(() => {
+      rafRef.current = null;
+      applyVars();
+    });
+  };
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       if (!containerRef.current || !cardRef.current) return;
 
-      // Base 3D setup
       gsap.set(containerRef.current, { perspective: 1400 });
       gsap.set(cardRef.current, {
         transformStyle: "preserve-3d",
@@ -49,132 +64,101 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       });
 
       gsap.set(imageWrapRef.current, { willChange: "transform" });
-      gsap.set(imageRef.current, { scale: 1.03, willChange: "transform" });
 
-      // Portal overlay starts hidden
-      gsap.set(portalRef.current, {
-        opacity: 0,
-        // initial clip-path hidden (tiny circle)
-        clipPath: "circle(0% at 50% 50%)",
-        willChange: "clip-path, opacity",
-      });
-      gsap.set(portalBgRef.current, { opacity: 0, willChange: "opacity" });
+      // Base state
+      radius.current = 120;
+      applyVars();
 
-      // Hide the reveal text and CTA until portal opens (scoped to this card)
-      const revealEls = portalRef.current?.querySelectorAll<HTMLElement>(
-        ".reveal-text"
-      );
-      const ctaEl = portalRef.current?.querySelector<HTMLElement>(
-        ".cta-button"
-      );
-
-      if (revealEls) gsap.set(revealEls, { opacity: 0, y: 14 });
-      if (ctaEl) gsap.set(ctaEl, { opacity: 0, y: 14 });
-
-      // Timeline: portal reveal + premium depth response
-      tl.current = gsap
-        .timeline({ paused: true })
-        .to(
-          cardRef.current,
-          {
-            y: -10,
-            rotationZ: 0.25,
-            duration: 0.45,
-            ease: "power3.out",
-          },
-          0
-        )
-        .to(
-          imageRef.current,
-          {
-            scale: 1.08,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          0
-        )
-        .to(
-          portalRef.current,
-          {
-            opacity: 1,
-            duration: 0.15,
-            ease: "power2.out",
-          },
-          0.02
-        )
-        .to(
-          portalBgRef.current,
-          {
-            opacity: 1,
-            duration: 0.25,
-            ease: "power2.out",
-          },
-          0.06
-        )
-        // Expand portal to reveal the content area.
-        // We animate to a large circle; the center is updated live via mousemove.
-        .to(
-          portalRef.current,
-          {
-            clipPath: () =>
-              `circle(140% at ${cursorX.current}% ${cursorY.current}%)`,
-            duration: 0.65,
-            ease: "power3.out",
-          },
-          0.08
-        )
-        .to(
-          revealEls ?? [],
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.55,
-            stagger: 0.07,
-            ease: "power3.out",
-          },
-          0.2
-        )
-        .to(
-          ctaEl ?? [],
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power3.out",
-          },
-          0.32
-        );
+      gsap.set([maskDimRef.current, maskChromaRef.current], { opacity: 0 });
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      ctx.revert();
+    };
   }, []);
 
-  const setCursorPercent = (e: MouseEvent<HTMLDivElement>) => {
+  const setMousePercent = (e: MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    cursorX.current = Math.max(0, Math.min(100, x));
-    cursorY.current = Math.max(0, Math.min(100, y));
+    mouse.current.x = Math.max(0, Math.min(100, x));
+    mouse.current.y = Math.max(0, Math.min(100, y));
   };
 
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current || !imageWrapRef.current) return;
+  const onEnter = (e: MouseEvent<HTMLDivElement>) => {
+    hoverRef.current = true;
+    setMousePercent(e);
 
-    setCursorPercent(e);
+    gsap.killTweensOf(radius);
+    gsap.to(radius, {
+      current: 240,
+      duration: 0.45,
+      ease: "power3.out",
+      onUpdate: scheduleVars,
+    });
 
-    // While hovering, keep portal origin attached to cursor.
-    // We only update the center (cheap), not the radius.
-    if (hover.current && portalRef.current) {
-      gsap.set(portalRef.current, {
-        clipPath: `circle(140% at ${cursorX.current}% ${cursorY.current}%)`,
-      });
-    }
+    gsap.to([maskDimRef.current, maskChromaRef.current], {
+      opacity: 1,
+      duration: 0.25,
+      ease: "power2.out",
+    });
 
-    // Subtle physical response (tilt + micro parallax)
-    if (!hover.current) return;
+    gsap.to(cardRef.current, {
+      y: -10,
+      duration: 0.45,
+      ease: "power3.out",
+    });
 
+    gsap.to(imageWrapRef.current, {
+      scale: 1.04,
+      duration: 0.65,
+      ease: "power3.out",
+    });
+  };
+
+  const onLeave = () => {
+    hoverRef.current = false;
+
+    gsap.killTweensOf(radius);
+    gsap.to(radius, {
+      current: 120,
+      duration: 0.35,
+      ease: "power3.out",
+      onUpdate: scheduleVars,
+    });
+
+    gsap.to([maskDimRef.current, maskChromaRef.current], {
+      opacity: 0,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+
+    gsap.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: 0,
+      y: 0,
+      duration: 0.55,
+      ease: "power3.out",
+    });
+
+    gsap.to(imageWrapRef.current, {
+      x: 0,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+      ease: "power3.out",
+    });
+  };
+
+  const onMove = (e: MouseEvent<HTMLDivElement>) => {
+    setMousePercent(e);
+    scheduleVars();
+
+    if (!hoverRef.current || !cardRef.current || !imageWrapRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
+
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
 
@@ -193,130 +177,104 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     });
   };
 
-  const onEnter = (e: MouseEvent<HTMLDivElement>) => {
-    hover.current = true;
-    setCursorPercent(e);
-
-    // Start portal from cursor.
-    gsap.set(portalRef.current, {
-      clipPath: `circle(0% at ${cursorX.current}% ${cursorY.current}%)`,
-    });
-
-    tl.current?.restart();
-  };
-
-  const onLeave = () => {
-    hover.current = false;
-
-    // Collapse portal quickly towards the last cursor position, then fade.
-    if (portalRef.current) {
-      gsap.to(portalRef.current, {
-        clipPath: `circle(0% at ${cursorX.current}% ${cursorY.current}%)`,
-        duration: 0.32,
-        ease: "power3.inOut",
-      });
-      gsap.to([portalRef.current, portalBgRef.current], {
-        opacity: 0,
-        duration: 0.25,
-        delay: 0.12,
-        ease: "power2.out",
-      });
-    }
-
-    // Reverse the rest of the timeline (text/cta etc.)
-    tl.current?.reverse();
-
-    gsap.to(cardRef.current, {
-      rotateX: 0,
-      rotateY: 0,
-      rotationZ: 0,
-      y: 0,
-      duration: 0.55,
-      ease: "power3.out",
-    });
-
-    gsap.to(imageWrapRef.current, {
-      x: 0,
-      y: 0,
-      duration: 0.55,
-      ease: "power3.out",
-    });
-  };
-
   return (
-    <div ref={containerRef} className="w-[420px] h-[540px]">
+    <div
+      ref={containerRef}
+      className="w-[420px] h-[540px]"
+      style={{
+        // defaults; updated live on hover
+        // @ts-expect-error CSS vars
+        "--x": "50%",
+        // @ts-expect-error CSS vars
+        "--y": "50%",
+        // @ts-expect-error CSS vars
+        "--r": "120px",
+      }}
+    >
       <div
         ref={cardRef}
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
-        onMouseMove={handleMouseMove}
+        onMouseMove={onMove}
         className={
-          "relative w-full h-full rounded-2xl overflow-hidden cursor-pointer " +
+          "group relative w-full h-full rounded-2xl overflow-hidden cursor-pointer " +
           "bg-[#050505] shadow-[0_30px_90px_rgba(0,0,0,0.70)]"
         }
       >
-        {/* Image base */}
-        <div ref={imageWrapRef} className="absolute inset-0 z-0">
+        {/* Border / surface */}
+        <div className="absolute inset-0 rounded-2xl border border-white/10" />
+
+        {/* Image */}
+        <div ref={imageWrapRef} className="absolute inset-0">
           <img
-            ref={imageRef}
             src={imageUrl}
             alt={title}
             className="h-full w-full object-cover"
+            loading="lazy"
           />
-          <div className="absolute inset-0 bg-black/35" />
+          {/* base readability */}
+          <div className="absolute inset-0 bg-black/25" />
         </div>
 
-        {/* Portal overlay (reveals content) */}
-        <div ref={portalRef} className="absolute inset-0 z-10">
-          {/* Rich, controlled background for readability (inside portal) */}
-          <div
-            ref={portalBgRef}
-            className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/35"
-          />
+        {/* DIM MASK: darken outside spotlight */}
+        <div
+          ref={maskDimRef}
+          className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-200"
+          style={{
+            background: "rgba(0,0,0,0.55)",
+            maskImage:
+              "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.9) 100%)",
+            WebkitMaskImage:
+              "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.9) 100%)",
+          }}
+        />
 
-          {/* Optional: thin highlight line for premium feel */}
-          <div className="absolute inset-0">
-            <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-orange-500/25 via-white/5 to-sky-400/15" />
-            <div className="absolute inset-0 rounded-2xl border border-white/10" />
-          </div>
+        {/* CHROMA MASK: subtly mute everything EXCEPT spotlight by using backdrop-filter */}
+        <div
+          ref={maskChromaRef}
+          className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-200"
+          style={{
+            backdropFilter: "grayscale(1) brightness(0.78)",
+            WebkitBackdropFilter: "grayscale(1) brightness(0.78)",
+            background: "rgba(0,0,0,0.001)",
+            maskImage:
+              "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.75) 100%)",
+            WebkitMaskImage:
+              "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.75) 100%)",
+          }}
+        />
 
-          {/* Content */}
-          <div className="absolute inset-0 p-6 flex flex-col justify-end">
-            <span className="reveal-text text-orange-400 text-[11px] font-bold tracking-widest uppercase mb-3">
-              {category}
-            </span>
+        {/* Accent: thin gradient rim that reacts subtly */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background:
+              "linear-gradient(145deg, rgba(255,107,31,0.45), rgba(0,0,0,0) 45%, rgba(56,189,248,0.22))",
+            mixBlendMode: "screen",
+          }}
+        />
 
-            <h3 className="text-white text-2xl font-semibold mb-3 leading-snug">
-              {title}
-            </h3>
+        {/* Content */}
+        <div className="absolute inset-0 p-6 flex flex-col justify-end z-10">
+          <span className="text-orange-400 text-[11px] font-bold tracking-widest uppercase mb-3">
+            {category}
+          </span>
 
-            <p className="reveal-text text-white/75 text-sm mb-6 leading-relaxed">
-              {description}
-            </p>
+          <h3 className="text-white text-2xl font-semibold mb-3 leading-snug">
+            {title}
+          </h3>
 
-            <Link
-              to="/services"
-              className="cta-button group inline-flex items-center gap-2 text-white text-sm font-bold"
-            >
-              <span className="relative">
-                LEARN MORE
-                <span className="absolute left-0 -bottom-1 h-[2px] w-full origin-left scale-x-0 bg-gradient-to-r from-primary to-orange-500 transition-transform duration-300 group-hover:scale-x-100" />
-              </span>
-              <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-          </div>
-        </div>
+          <p className="text-white/75 text-sm mb-6 leading-relaxed">
+            {description}
+          </p>
 
-        {/* Base title (visible even without hover) */}
-        <div className="absolute inset-x-0 bottom-0 z-[5] p-6">
-          <div className="max-w-[26ch]">
-            <div className="text-white/80 text-[11px] font-bold tracking-widest uppercase">
-              {category}
-            </div>
-            <div className="mt-2 text-white text-2xl font-semibold leading-snug">
-              {title}
-            </div>
-          </div>
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 text-white text-sm font-bold"
+          >
+            LEARN MORE
+            <ArrowRight className="h-[18px] w-[18px]" />
+          </Link>
         </div>
       </div>
     </div>
