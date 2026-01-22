@@ -1,4 +1,4 @@
-import React, { MouseEvent, useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,11 +12,8 @@ interface ServiceCardProps {
 
 /**
  * ServiceCard (Chroma / spotlight variant)
- * Inspired by React Bits "ChromaGrid":
- * - Cursor-driven masked overlays (via CSS mask-image) create a premium spotlight
- *   that selectively reveals clarity/color while the outside area is subtly muted.
- * - Smooth radius expansion on hover.
- * - Subtle 3D tilt for depth (kept professional).
+ * Layout: image panel on top + separate bottom content panel (text is NOT on the image).
+ * Effect: cursor-driven chroma spotlight on the image panel (inspired by React Bits ChromaGrid).
  */
 const ServiceCard: React.FC<ServiceCardProps> = ({
   category,
@@ -26,10 +23,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const imageWrapRef = useRef<HTMLDivElement>(null);
-
-  const maskDimRef = useRef<HTMLDivElement>(null);
-  const maskChromaRef = useRef<HTMLDivElement>(null);
 
   const rafRef = useRef<number | null>(null);
   const hoverRef = useRef(false);
@@ -55,21 +48,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      if (!containerRef.current || !cardRef.current) return;
-
-      gsap.set(containerRef.current, { perspective: 1400 });
-      gsap.set(cardRef.current, {
-        transformStyle: "preserve-3d",
-        willChange: "transform",
-      });
-
-      gsap.set(imageWrapRef.current, { willChange: "transform" });
-
       // Base state
       radius.current = 160;
       applyVars();
-
-      gsap.set([maskDimRef.current, maskChromaRef.current], { opacity: 0 });
     }, containerRef);
 
     return () => {
@@ -78,9 +59,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     };
   }, []);
 
-  const setMousePercent = (e: Pick<MouseEvent<HTMLDivElement>, "clientX" | "clientY">) => { 
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+  const setMousePercent = (e: { clientX: number; clientY: number }) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     mouse.current.x = Math.max(0, Math.min(100, x));
@@ -90,8 +72,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   const onEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     hoverRef.current = true;
     setMousePercent(e);
-
-    // Apply immediately so the spotlight works even without mouse movement
     applyVars();
 
     gsap.killTweensOf(radius);
@@ -108,34 +88,29 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
     gsap.killTweensOf(radius);
     gsap.to(radius, {
-      current: 120,
+      current: 160,
       duration: 0.35,
       ease: "power3.out",
       onUpdate: scheduleVars,
     });
-
-    // Ensure vars are in a sane state after leaving
-    applyVars();
   };
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
     setMousePercent(e);
     scheduleVars();
-
-    // No transform/parallax/tilt on hover; Chroma + spotlight only.
-    // (mousemove is used only to update spotlight vars above)
-    return;
+    void hoverRef;
   };
 
   return (
     <div
       ref={containerRef}
-      className="w-full h-[520px] md:h-[560px]"
+      className="w-full h-[580px] md:h-[640px]"
       style={{
-        // defaults; updated live on hover
         // @ts-expect-error CSS vars
         "--x": "50%",
+        // @ts-expect-error CSS vars
         "--y": "50%",
+        // @ts-expect-error CSS vars
         "--r": "160px",
       }}
     >
@@ -146,24 +121,24 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         onPointerMove={onMove}
         className={
           "group relative w-full h-full rounded-2xl overflow-hidden cursor-pointer " +
-          "bg-[#050505] shadow-[0_30px_90px_rgba(0,0,0,0.70)]"
+          "bg-[#111111] shadow-[0_30px_90px_rgba(0,0,0,0.70)] flex flex-col"
         }
       >
-        {/* Border / surface */}
+        {/* Border */}
         <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10" />
 
-        {/* Image */}
-        <div ref={imageWrapRef} className="pointer-events-none absolute inset-0">
-          {/* Base image: monochrome by default */}
+        {/* IMAGE PANEL */}
+        <div className="relative w-full flex-1 overflow-hidden">
+          {/* Base monochrome */}
           <img
             src={imageUrl}
             alt={title}
-            className="h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
             style={{ filter: "grayscale(0.45) saturate(0.75) contrast(1.05)" }}
             loading="lazy"
           />
 
-          {/* Color reveal image: visible only inside spotlight */}
+          {/* Color reveal inside spotlight (image-only) */}
           <img
             src={imageUrl}
             alt=""
@@ -171,67 +146,20 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             className="absolute inset-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-200"
             style={{
               maskImage:
-                "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%)",
+                "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 78%, rgba(0,0,0,0) 100%)",
               WebkitMaskImage:
-                "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%)",
+                "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 78%, rgba(0,0,0,0) 100%)",
               maskRepeat: "no-repeat",
               WebkitMaskRepeat: "no-repeat",
               maskSize: "100% 100%",
               WebkitMaskSize: "100% 100%",
             }}
           />
-          {/* base readability */}
-          <div className="absolute inset-0 bg-black/25" />
         </div>
 
-        {/* DIM MASK: darken outside spotlight */}
-        <div
-          ref={maskDimRef}
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-          style={{
-            background: "rgba(0,0,0,0.55)",
-            maskImage:
-              "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.9) 100%)",
-            WebkitMaskImage:
-              "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.9) 100%)",
-            maskRepeat: "no-repeat",
-            WebkitMaskRepeat: "no-repeat",
-            maskSize: "100% 100%",
-            WebkitMaskSize: "100% 100%", 
-          }}
-        />
-
-        {/* CHROMA MASK: subtly mute everything EXCEPT spotlight by using backdrop-filter */}
-        <div
-          ref={maskChromaRef}
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-          style={{
-            backdropFilter: "grayscale(1) brightness(0.78)",
-            WebkitBackdropFilter: "grayscale(1) brightness(0.78)",
-            background: "rgba(0,0,0,0.001)",
-            maskImage:
-              "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.75) 100%)",
-            WebkitMaskImage:
-              "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.75) 100%)",
-            maskRepeat: "no-repeat",
-            WebkitMaskRepeat: "no-repeat",
-            maskSize: "100% 100%",
-            WebkitMaskSize: "100% 100%", 
-          }}
-        />
-
-        {/* Accent: black-themed vignette/sheen for depth (no orange) */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background:
-              "radial-gradient(circle at var(--x) var(--y), rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.75) 100%)",
-          }}
-        />
-
-        {/* Content */}
-        <div className="pointer-events-auto absolute inset-0 p-6 flex flex-col justify-end z-10">
-          <span className="text-white/70 text-[11px] font-bold tracking-widest uppercase mb-3">
+        {/* CONTENT PANEL (separate from image) */}
+        <div className="relative z-10 p-6 backdrop-blur-xl border-t border-white/10" style={{ backgroundColor: "rgba(17,17,17,0.78)" }}>
+          <span className="text-white/70 text-[11px] font-bold tracking-widest uppercase mb-3 block">
             {category}
           </span>
 
@@ -251,6 +179,55 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             <ArrowRight className="h-[18px] w-[18px]" />
           </Link>
         </div>
+
+        {/* CARD-LEVEL CHROMA/SPOTLIGHT OVERLAYS (affect image + text) */}
+        <div className="pointer-events-none absolute inset-0 z-20">
+          {/* Darken outside spotlight */}
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            style={{
+              background: "rgba(0,0,0,0.38)",
+              maskImage:
+                "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 30%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.65) 100%)",
+              WebkitMaskImage:
+                "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 30%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.65) 100%)",
+              maskRepeat: "no-repeat",
+              WebkitMaskRepeat: "no-repeat",
+              maskSize: "100% 100%",
+              WebkitMaskSize: "100% 100%",
+            }}
+          />
+
+          {/* Chroma mute outside spotlight (subtle) */}
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            style={{
+              backdropFilter: "grayscale(1) brightness(0.82)",
+              WebkitBackdropFilter: "grayscale(1) brightness(0.82)",
+              background: "rgba(0,0,0,0.001)",
+              maskImage:
+                "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 30%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.7) 100%)",
+              WebkitMaskImage:
+                "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 30%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.7) 100%)",
+              maskRepeat: "no-repeat",
+              WebkitMaskRepeat: "no-repeat",
+              maskSize: "100% 100%",
+              WebkitMaskSize: "100% 100%",
+            }}
+          />
+
+          {/* Black-themed vignette for depth */}
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{
+              background:
+                "radial-gradient(circle at var(--x) var(--y), rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.28) 58%, rgba(0,0,0,0.65) 100%)",
+            }}
+          />
+        </div>
+
+        {/* Ensure border stays above overlays */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10 z-30" />
       </div>
     </div>
   );
