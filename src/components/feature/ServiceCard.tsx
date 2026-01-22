@@ -204,7 +204,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           style={{
             background:
-              "linear-gradient(145deg, rgba(255,107,31,0.45), rgba(0,0,0,0) 45%, rgba(56,189,248,0.22))",
+              "linear-gradient(145deg, rgba(255,107,31,0.55), rgba(0,0,0,0) 45%, rgba(255,145,77,0.22))",
             mixBlendMode: "screen",
           }}
         />
