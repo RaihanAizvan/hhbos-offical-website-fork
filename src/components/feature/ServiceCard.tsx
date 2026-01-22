@@ -96,7 +96,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           sheenRef.current,
           {
             opacity: 1,
-            duration: 0.22,
+            duration: 0.10,
             ease: "power2.out",
           },
           0.06
@@ -105,7 +105,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           sheenRef.current,
           {
             xPercent: 70,
-            duration: 0.9,
+            duration: 0.4,
             ease: "power1.inOut",
           },
           0.08
@@ -114,10 +114,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           sheenRef.current,
           {
             opacity: 0,
-            duration: 0.3,
+            duration: 0.1,
             ease: "power2.out",
           },
-          0.62
+          0.32
         )
         // Content reveal
         .to(
@@ -125,21 +125,21 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           {
             opacity: 1,
             y: 0,
-            duration: 0.45,
-            stagger: 0.06,
+            duration: 0.25,
+            stagger: 0.02,
             ease: "power3.out",
           },
-          0.14
+          0.04
         )
         .to(
           "[data-cta]",
           {
             opacity: 1,
             y: 0,
-            duration: 0.4,
+            duration: 0.2,
             ease: "power3.out",
           },
-          0.32
+          0.22
         );
     }, rootRef);
 
