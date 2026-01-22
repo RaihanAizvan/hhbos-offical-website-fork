@@ -3,13 +3,7 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-import {
-  TrendingUp,
-  Users,
-  Settings,
-  Globe,
-  Lock,
-} from "lucide-react";
+import { TrendingUp, Users, Settings, Globe, Lock } from "lucide-react";
 
 import StickyVideoHero from "@/components/StickyVideoHero";
 import LeadershipSection from "@/components/LeadershipSection";
@@ -20,6 +14,16 @@ import serviceRcm from "@/assets/service-rcm.jpg";
 import serviceDatabase from "@/assets/service-database.jpg";
 import { useLayoutEffect } from "react";
 import ServiceCard from "@/components/feature/ServiceCard";
+import LogoLoop from "@/components/LogoLoop";
+import { WhyChooseUs } from "@/components/WhyChooseUs";
+
+const FeatureCard = ({ title }: { title: string }) => {
+  return (
+    <div className="rounded-xl border border-border bg-card px-6 py-5 text-center">
+      <h3 className="text-white text-xl font-semibold">{title}</h3>
+    </div>
+  );
+};
 
 const Home = () => {
   useLayoutEffect(() => {
@@ -79,6 +83,11 @@ const Home = () => {
     },
   ];
 
+  const logoItems = services.map((item) => ({
+    node: <FeatureCard title={item.title} />,
+    title: item.title,
+  }));
+
   return (
     <div className="min-h-[100svh] relative">
       {/* Global Video Background - Parallax Effect */}
@@ -126,36 +135,28 @@ const Home = () => {
       </section>
 
       {/* Industries We Serve */}
+
       <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Industries We Serve
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground">
               Specialized outsourcing support across key industries
             </p>
           </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {[
-              "Healthcare",
-              "Finance & Banking",
-              "Retail & E-commerce",
-              "IT & Software",
-              "Manufacturing",
-              "Real Estate",
-            ].map((industry) => (
-              <div
-                key={industry}
-                className="rounded-xl border border-border bg-card px-6 py-5 text-center"
-              >
-                <p className="font-semibold text-foreground">{industry}</p>
-              </div>
-            ))}
-          </div>
+        </div>
+        <div className="flex flex-col gap-5 ">
+          <LogoLoop logos={logoItems} />
         </div>
       </section>
+
+      {/* Leadership Section */}
+      <LeadershipSection />
+
+      {/* Portal CTA Section */}
+      <PortalCTA />
 
       {/* Why Choose Us Section */}
       <section className="section-padding gradient-subtle">
@@ -195,12 +196,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Leadership Section */}
-      <LeadershipSection />
-
-      {/* Portal CTA Section */}
-      <PortalCTA />
 
       {/* Insights Tiles Section */}
       <InsightsSection />
