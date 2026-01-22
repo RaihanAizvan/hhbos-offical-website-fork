@@ -438,28 +438,6 @@ const Industries = () => {
           />
         </div>
 
-        {/* Animated blobs */}
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-3xl opacity-30"
-          animate={{ y: [0, 18, 0], x: [0, -14, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            background:
-              "radial-gradient(circle at 30% 30%, rgba(255,107,31,0.95), rgba(255,145,77,0.0) 60%)",
-          }}
-        />
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-40 right-[-120px] h-[620px] w-[620px] rounded-full blur-3xl opacity-25"
-          animate={{ y: [0, -22, 0], x: [0, -18, 0] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            background:
-              "radial-gradient(circle at 60% 40%, rgba(56,189,248,0.7), rgba(0,0,0,0) 62%)",
-          }}
-        />
-
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="container-custom px-6 lg:px-10 pt-28 pb-14 lg:pt-36 lg:pb-20 flex-1 flex items-center">
             <div className="max-w-5xl">
