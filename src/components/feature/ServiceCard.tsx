@@ -135,7 +135,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   return (
     <div
       ref={containerRef}
-      className="w-full h-[420px] md:h-[440px]"
+      className="w-full h-[460px] md:h-[500px]"
       style={{
         // defaults; updated live on hover
         // @ts-expect-error CSS vars
@@ -164,7 +164,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           <img
             src={imageUrl}
             alt={title}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover saturate-[0.6]"
             loading="lazy"
           />
           {/* base readability */}
