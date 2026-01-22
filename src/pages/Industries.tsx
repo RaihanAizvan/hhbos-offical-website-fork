@@ -19,9 +19,14 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import serviceHealthcare from "@/assets/service-healthcare.jpg";
-import serviceFinance from "@/assets/service-finance.jpg";
-import serviceDatabase from "@/assets/service-database.jpg";
+import industryHealthcare from "@/assets/service-healthcare.jpg";
+import industryFinance from "@/assets/service-finance.jpg";
+import industryDatabase from "@/assets/service-database.jpg";
+import industryRetail from "@/assets/industry-retail.jpg"
+import industryManufacturing from "@/assets/industry-manufacturing.jpg"
+import industrySoftware from "@/assets/industry-software.jpg"
+import industryRealEstate1 from "@/assets/industry-real-estate-1.jpg"
+import industryRealEstate2 from "@/assets/industry-real-estate-2.jpg"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -101,7 +106,7 @@ const Industries = () => {
         tagline: "Smarter Revenue, Better Patient Outcomes",
         description:
           "We help hospitals, clinics, and healthcare providers maximize revenue while reducing administrative burden and compliance risk.",
-        image: serviceHealthcare,
+        image: industryHealthcare,
         accent: "from-orange-500 via-amber-400 to-rose-500",
         icon: HeartPulse,
         problems: [
@@ -128,7 +133,7 @@ const Industries = () => {
         tagline: "Accuracy, Compliance, and Financial Intelligence",
         description:
           "We support banks, NBFCs, and finance teams with accounting, compliance, reporting, and financial intelligence.",
-        image: serviceFinance,
+        image: industryFinance,
         accent: "from-orange-500 via-yellow-300 to-emerald-400",
         icon: DollarSign,
         problems: [
@@ -155,7 +160,7 @@ const Industries = () => {
         tagline: "Real-Time Insights for High-Volume Businesses",
         description:
           "We help retailers and e-commerce brands manage finance, inventory, payments, and customer data at scale.",
-        image: serviceDatabase,
+        image: industryRetail,
         accent: "from-orange-500 via-fuchsia-400 to-cyan-400",
         icon: ShoppingBag,
         problems: [
@@ -182,7 +187,7 @@ const Industries = () => {
         tagline: "Scalable Data and Financial Operations",
         description:
           "We support SaaS, IT services, and software companies with financial ops and data infrastructure.",
-        image: serviceDatabase,
+        image: industrySoftware,
         accent: "from-orange-500 via-indigo-400 to-sky-400",
         icon: CircuitBoard,
         problems: [
@@ -209,7 +214,7 @@ const Industries = () => {
         tagline: "Cost Control & Operational Visibility",
         description:
           "We help manufacturers control costs, manage finance, and gain visibility into production economics.",
-        image: serviceFinance,
+        image: industryManufacturing,
         accent: "from-orange-500 via-red-400 to-violet-500",
         icon: Factory,
         problems: [
@@ -236,7 +241,7 @@ const Industries = () => {
         tagline: "Financial Clarity Across Properties",
         description:
           "We help real estate companies manage leasing, payments, expenses, and property-level profitability.",
-        image: serviceFinance,
+        image: industryRealEstate2,
         accent: "from-orange-500 via-lime-300 to-emerald-400",
         icon: Home,
         problems: [
