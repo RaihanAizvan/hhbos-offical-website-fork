@@ -23,7 +23,6 @@ export default function SmoothScroll() {
       // Smooth but not "floaty"; tweak if you want more/less smoothing.
       lerp: 0.1,
       smoothWheel: true,
-      smoothTouch: true,
       wheelMultiplier: 1,
       touchMultiplier: 1.5,
       infinite: false,
