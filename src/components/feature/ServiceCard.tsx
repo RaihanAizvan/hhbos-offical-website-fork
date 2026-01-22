@@ -35,7 +35,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   const hoverRef = useRef(false);
 
   const mouse = useRef({ x: 50, y: 50 });
-  const radius = useRef(120);
+  const radius = useRef(160);
 
   const applyVars = () => {
     const el = containerRef.current;
@@ -66,7 +66,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       gsap.set(imageWrapRef.current, { willChange: "transform" });
 
       // Base state
-      radius.current = 120;
+      radius.current = 160;
       applyVars();
 
       gsap.set([maskDimRef.current, maskChromaRef.current], { opacity: 0 });
@@ -78,7 +78,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     };
   }, []);
 
-  const setMousePercent = (e: MouseEvent<HTMLDivElement>) => {
+  const setMousePercent = (e: Pick<MouseEvent<HTMLDivElement>, "clientX" | "clientY">) => { 
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -87,26 +87,23 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     mouse.current.y = Math.max(0, Math.min(100, y));
   };
 
-  const onEnter = (e: MouseEvent<HTMLDivElement>) => {
+  const onEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     hoverRef.current = true;
     setMousePercent(e);
 
+    // Apply immediately so the spotlight works even without mouse movement
+    applyVars();
+
     gsap.killTweensOf(radius);
     gsap.to(radius, {
-      current: 240,
+      current: 320,
       duration: 0.45,
       ease: "power3.out",
       onUpdate: scheduleVars,
     });
-
-    gsap.to([maskDimRef.current, maskChromaRef.current], {
-      opacity: 1,
-      duration: 0.25,
-      ease: "power2.out",
-    });
   };
 
-  const onLeave = () => {
+  const onLeave = (_e: React.PointerEvent<HTMLDivElement>) => {
     hoverRef.current = false;
 
     gsap.killTweensOf(radius);
@@ -117,55 +114,71 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       onUpdate: scheduleVars,
     });
 
-    gsap.to([maskDimRef.current, maskChromaRef.current], {
-      opacity: 0,
-      duration: 0.25,
-      ease: "power2.out",
-    });
+    // Ensure vars are in a sane state after leaving
+    applyVars();
   };
 
-  const onMove = (e: MouseEvent<HTMLDivElement>) => {
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
     setMousePercent(e);
     scheduleVars();
 
     // No transform/parallax/tilt on hover; Chroma + spotlight only.
-    void e;
+    // (mousemove is used only to update spotlight vars above)
+    return;
   };
 
   return (
     <div
       ref={containerRef}
-      className="w-full h-[460px] md:h-[500px]"
+      className="w-full h-[520px] md:h-[560px]"
       style={{
         // defaults; updated live on hover
         // @ts-expect-error CSS vars
         "--x": "50%",
-        // @ts-expect-error CSS vars
         "--y": "50%",
-        // @ts-expect-error CSS vars
-        "--r": "120px",
+        "--r": "160px",
       }}
     >
       <div
         ref={cardRef}
-        onMouseEnter={onEnter}
-        onMouseLeave={onLeave}
-        onMouseMove={onMove}
+        onPointerEnter={onEnter}
+        onPointerLeave={onLeave}
+        onPointerMove={onMove}
         className={
           "group relative w-full h-full rounded-2xl overflow-hidden cursor-pointer " +
           "bg-[#050505] shadow-[0_30px_90px_rgba(0,0,0,0.70)]"
         }
       >
         {/* Border / surface */}
-        <div className="absolute inset-0 rounded-2xl border border-white/10" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10" />
 
         {/* Image */}
-        <div ref={imageWrapRef} className="absolute inset-0">
+        <div ref={imageWrapRef} className="pointer-events-none absolute inset-0">
+          {/* Base image: monochrome by default */}
           <img
             src={imageUrl}
             alt={title}
-            className="h-full w-full object-cover saturate-[0.6]"
+            className="h-full w-full object-cover"
+            style={{ filter: "grayscale(0.45) saturate(0.75) contrast(1.05)" }}
             loading="lazy"
+          />
+
+          {/* Color reveal image: visible only inside spotlight */}
+          <img
+            src={imageUrl}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            style={{
+              maskImage:
+                "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%)",
+              WebkitMaskImage:
+                "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%)",
+              maskRepeat: "no-repeat",
+              WebkitMaskRepeat: "no-repeat",
+              maskSize: "100% 100%",
+              WebkitMaskSize: "100% 100%",
+            }}
           />
           {/* base readability */}
           <div className="absolute inset-0 bg-black/25" />
@@ -174,20 +187,24 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         {/* DIM MASK: darken outside spotlight */}
         <div
           ref={maskDimRef}
-          className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-200"
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200"
           style={{
             background: "rgba(0,0,0,0.55)",
             maskImage:
               "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.9) 100%)",
             WebkitMaskImage:
               "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.9) 100%)",
+            maskRepeat: "no-repeat",
+            WebkitMaskRepeat: "no-repeat",
+            maskSize: "100% 100%",
+            WebkitMaskSize: "100% 100%", 
           }}
         />
 
         {/* CHROMA MASK: subtly mute everything EXCEPT spotlight by using backdrop-filter */}
         <div
           ref={maskChromaRef}
-          className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-200"
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200"
           style={{
             backdropFilter: "grayscale(1) brightness(0.78)",
             WebkitBackdropFilter: "grayscale(1) brightness(0.78)",
@@ -196,22 +213,25 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.75) 100%)",
             WebkitMaskImage:
               "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 35%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.75) 100%)",
+            maskRepeat: "no-repeat",
+            WebkitMaskRepeat: "no-repeat",
+            maskSize: "100% 100%",
+            WebkitMaskSize: "100% 100%", 
           }}
         />
 
-        {/* Accent: thin gradient rim that reacts subtly */}
+        {/* Accent: black-themed vignette/sheen for depth (no orange) */}
         <div
           className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           style={{
             background:
-              "linear-gradient(145deg, rgba(255,107,31,0.55), rgba(0,0,0,0) 45%, rgba(255,145,77,0.22))",
-            mixBlendMode: "screen",
+              "radial-gradient(circle at var(--x) var(--y), rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.75) 100%)",
           }}
         />
 
         {/* Content */}
-        <div className="absolute inset-0 p-6 flex flex-col justify-end z-10">
-          <span className="text-orange-400 text-[11px] font-bold tracking-widest uppercase mb-3">
+        <div className="pointer-events-auto absolute inset-0 p-6 flex flex-col justify-end z-10">
+          <span className="text-white/70 text-[11px] font-bold tracking-widest uppercase mb-3">
             {category}
           </span>
 
