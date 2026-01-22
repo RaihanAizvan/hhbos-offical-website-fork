@@ -11,9 +11,12 @@ interface ServiceCardProps {
 }
 
 /**
- * ServiceCard (Chroma / spotlight variant)
- * Layout: image panel on top + separate bottom content panel (text is NOT on the image).
- * Effect: cursor-driven chroma spotlight on the image panel (inspired by React Bits ChromaGrid).
+ * ServiceCard — Stacked Cards (Premium Depth)
+ * Unique but professional:
+ * - 2 offset "shadow slabs" behind the card (stack effect)
+ * - On hover, layers separate slightly (depth)
+ * - Subtle masked sheen passes across the card
+ * - Content micro-reveal + CTA underline
  */
 const ServiceCard: React.FC<ServiceCardProps> = ({
   category,
@@ -21,213 +24,242 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   description,
   imageUrl,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const layer1Ref = useRef<HTMLDivElement>(null);
+  const layer2Ref = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const sheenRef = useRef<HTMLDivElement>(null);
 
-  const rafRef = useRef<number | null>(null);
-  const hoverRef = useRef(false);
-
-  const mouse = useRef({ x: 50, y: 50 });
-  const radius = useRef(160);
-
-  const applyVars = () => {
-    const el = containerRef.current;
-    if (!el) return;
-    el.style.setProperty("--x", `${mouse.current.x}%`);
-    el.style.setProperty("--y", `${mouse.current.y}%`);
-    el.style.setProperty("--r", `${radius.current}px`);
-  };
-
-  const scheduleVars = () => {
-    if (rafRef.current) return;
-    rafRef.current = window.requestAnimationFrame(() => {
-      rafRef.current = null;
-      applyVars();
-    });
-  };
+  const tl = useRef<gsap.core.Timeline>();
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Base state
-      radius.current = 160;
-      applyVars();
-    }, containerRef);
+      // Initial states
+      gsap.set([layer1Ref.current, layer2Ref.current], {
+        transformOrigin: "50% 50%",
+      });
 
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      ctx.revert();
-    };
+      gsap.set(sheenRef.current, { opacity: 0, xPercent: -70, scale: 1.15 });
+
+      gsap.set(["[data-line]", "[data-cta]"], {
+        opacity: 0,
+        y: 10,
+      });
+
+      tl.current = gsap
+        .timeline({ paused: true })
+        // Separate layers (depth)
+        .to(
+          layer2Ref.current,
+          {
+            x: 18,
+            y: 18,
+            duration: 0.35,
+            ease: "power3.out",
+          },
+          0
+        )
+        .to(
+          layer1Ref.current,
+          {
+            x: 10,
+            y: 10,
+            duration: 0.35,
+            ease: "power3.out",
+          },
+          0
+        )
+        // Main card subtle lift
+        .to(
+          cardRef.current,
+          {
+            y: -4,
+            duration: 0.35,
+            ease: "power3.out",
+          },
+          0
+        )
+        // Image treatment (refined)
+        .to(
+          imageRef.current,
+          {
+            scale: 1.04,
+            filter: "grayscale(0.2) saturate(1.05) contrast(1.08)",
+            duration: 0.65,
+            ease: "power3.out",
+          },
+          0
+        )
+        // Sheen sweep (feathered)
+        .to(
+          sheenRef.current,
+          {
+            opacity: 1,
+            duration: 0.22,
+            ease: "power2.out",
+          },
+          0.06
+        )
+        .to(
+          sheenRef.current,
+          {
+            xPercent: 70,
+            duration: 0.9,
+            ease: "power1.inOut",
+          },
+          0.08
+        )
+        .to(
+          sheenRef.current,
+          {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          },
+          0.62
+        )
+        // Content reveal
+        .to(
+          "[data-line]",
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.45,
+            stagger: 0.06,
+            ease: "power3.out",
+          },
+          0.14
+        )
+        .to(
+          "[data-cta]",
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            ease: "power3.out",
+          },
+          0.32
+        );
+    }, rootRef);
+
+    return () => ctx.revert();
   }, []);
 
-  const setMousePercent = (e: { clientX: number; clientY: number }) => {
-    const el = cardRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    mouse.current.x = Math.max(0, Math.min(100, x));
-    mouse.current.y = Math.max(0, Math.min(100, y));
-  };
-
-  const onEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-    hoverRef.current = true;
-    setMousePercent(e);
-    applyVars();
-
-    gsap.killTweensOf(radius);
-    gsap.to(radius, {
-      current: 320,
-      duration: 0.45,
-      ease: "power3.out",
-      onUpdate: scheduleVars,
-    });
-  };
-
-  const onLeave = (_e: React.PointerEvent<HTMLDivElement>) => {
-    hoverRef.current = false;
-
-    gsap.killTweensOf(radius);
-    gsap.to(radius, {
-      current: 160,
-      duration: 0.35,
-      ease: "power3.out",
-      onUpdate: scheduleVars,
-    });
-  };
-
-  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    setMousePercent(e);
-    scheduleVars();
-    void hoverRef;
-  };
-
   return (
-    <div
-      ref={containerRef}
-      className="w-full h-[580px] md:h-[640px]"
-      style={{
-        // @ts-expect-error CSS vars
-        "--x": "50%",
-        // @ts-expect-error CSS vars
-        "--y": "50%",
-        // @ts-expect-error CSS vars
-        "--r": "160px",
-      }}
-    >
+    <div ref={rootRef} className="relative w-full h-[560px] md:h-[640px]">
+      {/* Back layers */}
+      <div
+        ref={layer2Ref}
+        className="absolute inset-0 rounded-3xl"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(17,17,17,0.85) 0%, rgba(17,17,17,0.95) 100%)",
+          boxShadow: "0 40px 110px rgba(0,0,0,0.55)",
+        }}
+      />
+      <div
+        ref={layer1Ref}
+        className="absolute inset-0 rounded-3xl border border-white/10"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(17,17,17,0.65) 0%, rgba(17,17,17,0.88) 100%)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+        }}
+      />
+
+      {/* Main card */}
       <div
         ref={cardRef}
-        onPointerEnter={onEnter}
-        onPointerLeave={onLeave}
-        onPointerMove={onMove}
+        onPointerEnter={() => tl.current?.restart()}
+        onPointerLeave={() => tl.current?.reverse()}
         className={
-          "group relative w-full h-full rounded-2xl overflow-hidden cursor-pointer " +
-          "bg-[#111111] shadow-[0_30px_90px_rgba(0,0,0,0.70)] flex flex-col"
+          "relative h-full rounded-3xl overflow-hidden border border-white/10 " +
+          "bg-[#111111] shadow-[0_30px_90px_rgba(0,0,0,0.55)]"
         }
       >
-        {/* Border */}
-        <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10" />
-
-        {/* IMAGE PANEL */}
-        <div className="relative w-full flex-1 overflow-hidden">
-          {/* Base monochrome */}
+        {/* Media */}
+        <div className="absolute inset-0">
           <img
+            ref={imageRef}
             src={imageUrl}
             alt={title}
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ filter: "grayscale(0.45) saturate(0.75) contrast(1.05)" }}
             loading="lazy"
+            className="h-full w-full object-cover"
+            style={{ filter: "grayscale(0.35) saturate(0.9) contrast(1.02)" }}
           />
-
-          {/* Color reveal inside spotlight (image-only) */}
-          <img
-            src={imageUrl}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            style={{
-              maskImage:
-                "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 78%, rgba(0,0,0,0) 100%)",
-              WebkitMaskImage:
-                "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 78%, rgba(0,0,0,0) 100%)",
-              maskRepeat: "no-repeat",
-              WebkitMaskRepeat: "no-repeat",
-              maskSize: "100% 100%",
-              WebkitMaskSize: "100% 100%",
-            }}
-          />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute bottom-0 left-0 right-0 h-[55%] bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
         </div>
 
-        {/* CONTENT PANEL (separate from image) */}
-        <div className="relative z-10 p-6 backdrop-blur-xl border-t border-white/10" style={{ backgroundColor: "rgba(17,17,17,0.78)" }}>
-          <span className="text-white/70 text-[11px] font-bold tracking-widest uppercase mb-3 block">
-            {category}
-          </span>
+        {/* Sheen (masked, subtle) */}
+        <div
+          ref={sheenRef}
+          className="pointer-events-none absolute inset-0 opacity-0"
+          style={{
+            // Feathered, soft specular sweep (no hard edge)
+            background:
+              "linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0.04) 75%, rgba(255,255,255,0) 100%)",
+            filter: "blur(18px)",
+            mixBlendMode: "screen",
+            // Extra feather on band edges so it never looks like a paper strip
+            maskImage:
+              "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 22%, rgba(0,0,0,1) 78%, rgba(0,0,0,0) 100%)",
+            WebkitMaskImage:
+              "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 22%, rgba(0,0,0,1) 78%, rgba(0,0,0,0) 100%)",
+          }}
+        />
 
-          <h3 className="text-white text-2xl font-semibold mb-3 leading-snug">
+        {/* Content */}
+        <div className="absolute inset-0 p-7 md:p-8 flex flex-col justify-end">
+          <div className="flex items-center justify-between">
+            <span
+              data-line
+              className="text-white/70 text-[11px] font-bold tracking-widest uppercase"
+            >
+              {category}
+            </span>
+            <span
+              data-line
+              className="text-white/35 text-[11px] tracking-[0.25em] uppercase"
+            >
+              HHBOS
+            </span>
+          </div>
+
+          <h3
+            data-line
+            className="mt-4 text-white text-3xl md:text-4xl font-semibold leading-tight"
+          >
             {title}
           </h3>
 
-          <p className="text-white/75 text-sm mb-6 leading-relaxed">
+          <p
+            data-line
+            className="mt-3 text-white/70 text-sm leading-relaxed max-w-[62ch]"
+          >
             {description}
           </p>
 
-          <Link
-            to="/services"
-            className="inline-flex items-center gap-2 text-white text-sm font-bold"
-          >
-            LEARN MORE
-            <ArrowRight className="h-[18px] w-[18px]" />
-          </Link>
+          <div className="mt-7 flex items-center justify-between">
+            <Link
+              to="/services"
+              data-cta
+              className="group/link inline-flex items-center gap-2 text-white text-sm font-bold"
+            >
+              <span className="relative">
+                Learn more
+                <span className="absolute left-0 -bottom-1 h-[2px] w-full origin-left scale-x-0 bg-white/70 transition-transform duration-300 group-hover/link:scale-x-100" />
+              </span>
+              <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover/link:translate-x-1" />
+            </Link>
+
+            <span data-line className="hidden md:block text-white/40 text-xs">
+              Calm execution. Clear outcomes.
+            </span>
+          </div>
         </div>
-
-        {/* CARD-LEVEL CHROMA/SPOTLIGHT OVERLAYS (affect image + text) */}
-        <div className="pointer-events-none absolute inset-0 z-20">
-          {/* Darken outside spotlight */}
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            style={{
-              background: "rgba(0,0,0,0.38)",
-              maskImage:
-                "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 30%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.65) 100%)",
-              WebkitMaskImage:
-                "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 30%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.65) 100%)",
-              maskRepeat: "no-repeat",
-              WebkitMaskRepeat: "no-repeat",
-              maskSize: "100% 100%",
-              WebkitMaskSize: "100% 100%",
-            }}
-          />
-
-          {/* Chroma mute outside spotlight (subtle) */}
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            style={{
-              backdropFilter: "grayscale(1) brightness(0.82)",
-              WebkitBackdropFilter: "grayscale(1) brightness(0.82)",
-              background: "rgba(0,0,0,0.001)",
-              maskImage:
-                "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 30%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.7) 100%)",
-              WebkitMaskImage:
-                "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 30%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.7) 100%)",
-              maskRepeat: "no-repeat",
-              WebkitMaskRepeat: "no-repeat",
-              maskSize: "100% 100%",
-              WebkitMaskSize: "100% 100%",
-            }}
-          />
-
-          {/* Black-themed vignette for depth */}
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            style={{
-              background:
-                "radial-gradient(circle at var(--x) var(--y), rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.28) 58%, rgba(0,0,0,0.65) 100%)",
-            }}
-          />
-        </div>
-
-        {/* Ensure border stays above overlays */}
-        <div className="pointer-events-none absolute inset-0 rounded-2xl border border-white/10 z-30" />
       </div>
     </div>
   );
