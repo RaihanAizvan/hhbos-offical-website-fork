@@ -89,7 +89,7 @@ const About = () => {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black">
+      <section ref={heroRef} className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black mt-20">
         <div className="absolute inset-0">
           <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-30">
             <source src="/video/background.mp4" type="video/mp4" />
@@ -119,7 +119,7 @@ const About = () => {
             </h1>
             
             <p className="about-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              HH Back Office Services Pvt Ltd is a professional outsourcing firm specializing in Revenue Cycle Management, Finance & Accounts, and Database Administration.
+             HH Back Office Services Pvt Ltd provides expert outsourcing in RCM, Finance & Accounts, and Database Administration.
             </p>
           </div>
         </div>
