@@ -104,18 +104,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       duration: 0.25,
       ease: "power2.out",
     });
-
-    gsap.to(cardRef.current, {
-      y: -10,
-      duration: 0.45,
-      ease: "power3.out",
-    });
-
-    gsap.to(imageWrapRef.current, {
-      scale: 1.04,
-      duration: 0.65,
-      ease: "power3.out",
-    });
   };
 
   const onLeave = () => {
@@ -134,47 +122,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       duration: 0.25,
       ease: "power2.out",
     });
-
-    gsap.to(cardRef.current, {
-      rotateX: 0,
-      rotateY: 0,
-      y: 0,
-      duration: 0.55,
-      ease: "power3.out",
-    });
-
-    gsap.to(imageWrapRef.current, {
-      x: 0,
-      y: 0,
-      scale: 1,
-      duration: 0.6,
-      ease: "power3.out",
-    });
   };
 
   const onMove = (e: MouseEvent<HTMLDivElement>) => {
     setMousePercent(e);
     scheduleVars();
 
-    if (!hoverRef.current || !cardRef.current || !imageWrapRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-
-    const px = (e.clientX - rect.left) / rect.width - 0.5;
-    const py = (e.clientY - rect.top) / rect.height - 0.5;
-
-    gsap.to(cardRef.current, {
-      rotateY: px * 8,
-      rotateX: -py * 8,
-      duration: 0.45,
-      ease: "power3.out",
-    });
-
-    gsap.to(imageWrapRef.current, {
-      x: px * 10,
-      y: py * 10,
-      duration: 0.6,
-      ease: "power3.out",
-    });
+    // No transform/parallax/tilt on hover; Chroma + spotlight only.
+    void e;
   };
 
   return (
