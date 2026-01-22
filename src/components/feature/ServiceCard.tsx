@@ -180,7 +180,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   return (
     <div
       ref={containerRef}
-      className="w-[420px] h-[540px]"
+      className="w-full h-[420px] md:h-[440px]"
       style={{
         // defaults; updated live on hover
         // @ts-expect-error CSS vars
