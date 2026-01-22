@@ -504,12 +504,6 @@ const Industries = () => {
                 </Link>
               </div>
 
-              <div className="mt-10 flex items-center gap-3 text-white/60">
-                <ChevronDown className="h-5 w-5" />
-                <span className="text-sm">
-                  Scroll to see immersive full-screen panels
-                </span>
-              </div>
             </div>
           </div>
         </div>
