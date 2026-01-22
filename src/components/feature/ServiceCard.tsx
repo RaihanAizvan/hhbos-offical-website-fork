@@ -17,71 +17,72 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   imageUrl,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const flyWrapperRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
-  const tl = useRef<gsap.core.Timeline | null>(null);
+  const tl = useRef<gsap.core.Timeline>();
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Gentle Idle (only on the wrapper)
-      gsap.to(flyWrapperRef.current, {
-        y: -8,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
+      gsap.set(containerRef.current, {
+        perspective: 1200,
       });
 
-      gsap.set(containerRef.current, { transformPerspective: 1000 });
+      gsap.set(imageRef.current, {
+        scale: 1,
+        transformOrigin: "top right",
+      });
 
-      // 2. High-End Interaction Timeline
       tl.current = gsap
         .timeline({ paused: true })
-        // Step A: The "Physical" launch
-        .to(flyWrapperRef.current, {
-          x: 20, // Reduced from 140 to keep it within safe UI bounds
-          y: 20,
-          rotationZ: 1,
-          skewX: 4,
-          filter: "blur(8px)",
-          duration: 0.4,
-          ease: "power2.in",
+        // 1. Micro lift (physical response)
+        .to(wrapperRef.current, {
+          y: -6,
+          rotationZ: 0.6,
+          duration: 0.35,
+          ease: "power2.out",
         })
-        // Step B: The "Settle"
-        .to(flyWrapperRef.current, {
-          x: 0,
-          y: 0,
-          rotationZ: 0,
-          skewX: 0,
-          filter: "blur(0px)",
-          duration: 0.6,
-          ease: "expo.out",
-        })
-        // Step C: Content & Image Transform (happens during settle)
+        // 2. Image compress & drift
         .to(
           imageRef.current,
           {
-            scale: 0.4,
-            x: "15%",
-            y: "100%",
-            borderRadius: "20px",
+            scale: 0.45,
+            x: "14%",
+            y: "90%",
+            borderRadius: "18px",
             duration: 0.6,
             ease: "expo.out",
           },
-          "-=0.5",
+          "-=0.25",
         )
-        .to(".card-overlay", { opacity: 0.9, duration: 0.4 }, "<")
+        // 3. Overlay fade (readability)
+        .to(
+          ".card-overlay",
+          {
+            opacity: 1,
+            duration: 0.4,
+            ease: "power1.out",
+          },
+          "<",
+        )
+        // 4. Text reveal (controlled)
         .fromTo(
           ".reveal-text",
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.05, duration: 0.4 },
+          { y: 14, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.06,
+            duration: 0.4,
+            ease: "power2.out",
+          },
           "-=0.3",
         )
+        // 5. CTA last (always last)
         .fromTo(
           ".cta-button",
           { y: 10, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.4 },
+          { y: 0, opacity: 1, duration: 0.35 },
           "-=0.2",
         );
     }, containerRef);
@@ -90,60 +91,53 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   }, []);
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!flyWrapperRef.current || !spotlightRef.current) return;
-    const rect = flyWrapperRef.current.getBoundingClientRect();
+    if (!wrapperRef.current || !spotlightRef.current) return;
+
+    const rect = wrapperRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
     gsap.to(spotlightRef.current, {
-      opacity: 1,
       x: x - 150,
       y: y - 150,
-      duration: 0.5,
+      opacity: 0.9,
+      duration: 0.4,
       ease: "power3.out",
     });
   };
 
   return (
-    // 1. Layout Anchor (Stays in the grid)
-    <div
-      ref={containerRef}
-      className="w-[420px] h-[540px]"
-    >
-      {/* 2. Fly Wrapper (Does the heavy moving) */}
+    <div ref={containerRef} className="w-[420px] h-[540px]">
       <div
-        ref={flyWrapperRef}
-        onMouseMove={handleMouseMove}
+        ref={wrapperRef}
         onMouseEnter={() => tl.current?.play()}
         onMouseLeave={() => {
           tl.current?.reverse();
-          gsap.to(spotlightRef.current, { opacity: 0 });
+          gsap.to(spotlightRef.current, { opacity: 0, duration: 0.3 });
         }}
-        className="relative w-full h-full bg-[#050505] rounded-md overflow-hidden border border-white/10 cursor-pointer shadow-2xl will-change-transform"
+        onMouseMove={handleMouseMove}
+        className="relative w-full h-full bg-[#050505] rounded-lg overflow-hidden border border-white/10 shadow-2xl cursor-pointer"
       >
         {/* Spotlight */}
         <div
           ref={spotlightRef}
-          className="absolute w-[300px] h-[300px] bg-orange-600/15 rounded-full blur-[90px] pointer-events-none opacity-0 z-0"
+          className="absolute w-[300px] h-[300px] bg-orange-500/15 blur-[90px] rounded-full opacity-0 pointer-events-none z-0"
         />
 
-        {/* Image Layer */}
+        {/* Image */}
         <div
           ref={imageRef}
-          className="absolute inset-0 w-full h-full z-10 origin-top-right"
+          className="absolute inset-0 z-10"
         >
           <img
             src={imageUrl}
             alt={title}
             className="w-full h-full object-cover"
           />
-          {/* Dual overlay for readability */}
-          <div className="card-overlay absolute inset-0 transition-opacity">
-            {/* Global darken */}
-            <div className="absolute inset-0 bg-black/50" />
 
-            {/* Bottom gradient scrim (key part) */}
-            <div className="absolute bottom-0 left-0 w-full h-[65%] bg-gradient-to-t from-black via-black/80 to-transparent" />
+          <div className="card-overlay absolute inset-0 opacity-0">
+            <div className="absolute inset-0 bg-black/50" />
+            <div className="absolute bottom-0 w-full h-[60%] bg-gradient-to-t from-black via-black/80 to-transparent" />
           </div>
         </div>
 
@@ -152,19 +146,18 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           <span className="reveal-text text-orange-400 text-[11px] font-bold tracking-widest uppercase mb-3">
             {category}
           </span>
-          <h3 className="text-white text-2xl font-semibold mb-3 leading-snug drop-shadow-md">
+
+          <h3 className="text-white text-2xl font-semibold mb-3 leading-snug">
             {title}
           </h3>
 
-          <div className="overflow-hidden">
-            <p className="reveal-text text-gray-300 text-sm mb-6 opacity-0 leading-relaxed">
-              {description}
-            </p>
-          </div>
+          <p className="reveal-text text-gray-300 text-sm mb-6 opacity-0 leading-relaxed">
+            {description}
+          </p>
 
           <Link
-            to={"/services"}
-            className="cta-button flex items-center gap-2 text-white text-sm font-bold opacity-0 group"
+            to="/services"
+            className="cta-button flex items-center gap-2 text-white text-sm font-bold opacity-0"
           >
             LEARN MORE
             <ArrowRight size={18} />
