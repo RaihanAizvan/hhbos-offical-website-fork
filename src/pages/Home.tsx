@@ -505,54 +505,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Our Core Service */}
-      {/* <section className="section-padding bg-background">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Our Core Services
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive solutions tailored to your business needs
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {highlights.map((item, index) => (
-              <motion.div
-                whileHover={{
-                  y: -10,
-                  transition: { type: "spring", stiffness: 400 },
-                }}
-              >
-                <Card
-                  key={index}
-                  className="h-full border-2 hover:border-primary transition-all duration-300 hover-scale animate-fade-in"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CardContent className="h-full p-6 space-y-4">
-                    <div className="h-14 w-14 rounded-lg bg-secondary flex items-center justify-center">
-                      <item.icon className="h-7 w-7 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-bold text-foreground">
-                      {item.title}
-                    </h3>
-                    <p className="text-muted-foreground">{item.description}</p>
-                    <Link
-                      to="/services"
-                      className="inline-flex items-center text-primary font-medium hover:underline"
-                    >
-                      Learn more →
-                    </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
+      
       {/* Industries We Serve */}
       <section className="section-padding bg-background">
         <div className="container-custom">
