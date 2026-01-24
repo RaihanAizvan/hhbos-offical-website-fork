@@ -36,13 +36,6 @@ const StickyVideoHero = () => {
           {/* Buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
             <Link
-              to="/contact"
-              className="w-full sm:w-auto text-center px-6 py-3 bg-primary text-white font-semibold text-sm sm:text-base rounded-lg shadow-lg hover:scale-105 transition-all"
-            >
-              Get a Free Consultation
-            </Link>
-
-            <Link
               to="/services"
               className="w-full sm:w-auto text-center px-6 py-3 border border-white/20 text-primary bg-white font-semibold text-sm sm:text-base rounded-lg shadow-lg hover:scale-105 transition-all"
             >
