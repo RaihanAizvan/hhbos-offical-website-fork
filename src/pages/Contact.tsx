@@ -120,8 +120,8 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email Us",
-      value: "info@hhbos.com",
-      link: "mailto:info@hhbos.com",
+      value: "admin@hhbos.com",
+      link: "mailto:admin@hhbos.com",
     },
     {
       icon: Phone,
@@ -364,7 +364,7 @@ const Contact = () => {
             asChild
             className="bg-primary hover:bg-primary/90 text-white font-bold px-8 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
           >
-            <a href="mailto:info@hhbos.com">Schedule a Free Consultation</a>
+            <a href="mailto:admin@hhbos.com">Schedule a Free Consultation</a>
           </Button>
         </div>
       </section>
