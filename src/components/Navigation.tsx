@@ -13,6 +13,7 @@ const Navigation = () => {
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
     { name: "About Us", path: "/about" },
+    { name: "Careers", path: "/careers" },
     { name: "Industries", path: "/industries" },
     { name: "Contact", path: "/contact" },
   ];
@@ -93,14 +94,15 @@ const Navigation = () => {
 
             {/* Right side */}
             <div className="hidden lg:flex items-center gap-6">
-              <button className="text-white/80 hover:text-white transition-colors">
-                <Search className="w-5 h-5" />
-              </button>
-
-              <button className="text-sm text-white/80 hover:text-white flex items-center gap-1">
-                <Globe size={18}/>
-                India
-              </button>
+              <Link
+                to="/contact"
+                className="px-5 py-2.5 text-sm font-semibold rounded-xl
+               bg-gradient-to-r from-primary to-orange-500
+               text-white shadow-lg
+               hover:opacity-90 transition"
+              >
+                Request a Consultation
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -134,7 +136,6 @@ const Navigation = () => {
             </button>
           </div>
 
-          {/* Mobile Navigation */}
           {isOpen && (
             <div className="lg:hidden py-6 border-t border-white/10 mt-4">
               {navLinks.map((link) => (
@@ -151,6 +152,17 @@ const Navigation = () => {
                   {link.name}
                 </Link>
               ))}
+
+              {/* Mobile View  */}
+              <Link
+                to="/contact"
+                onClick={() => setIsOpen(false)}
+                className="mt-4 block text-center px-5 py-3 rounded-xl
+                 bg-gradient-to-r from-primary to-orange-500
+                 text-white font-semibold"
+              >
+                Request a Consultation
+              </Link>
             </div>
           )}
         </div>
