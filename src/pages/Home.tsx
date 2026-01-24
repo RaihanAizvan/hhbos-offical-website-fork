@@ -19,14 +19,13 @@ import { WhyChooseUs } from "@/components/WhyChooseUs";
 
 const FeatureCard = ({ title }: { title: string }) => {
   return (
-    <div className="rounded-xl border border-border bg-card px-6 py-5 text-center">
+    <div className="min-w-[240px] rounded-xl border border-border bg-card px-6 py-5 text-center">
       <h3 className="text-white text-xl font-semibold">{title}</h3>
     </div>
   );
 };
 
 const Home = () => {
-
   const services = [
     {
       category: "FINANCE",
@@ -79,9 +78,18 @@ const Home = () => {
     },
   ];
 
-  const logoItems = services.map((item) => ({
-    node: <FeatureCard title={item.title} />,
-    title: item.title,
+  const industries: string[] = [
+    "Health",
+    "Finance & Banking",
+    "Retail & E-commerce",
+    "IT & Software",
+    "Manufacturing",
+    "Real Estate",
+  ];
+
+  const logoItems = industries.map((item) => ({
+    node: <FeatureCard title={item} />,
+    title: item,
   }));
 
   return (
