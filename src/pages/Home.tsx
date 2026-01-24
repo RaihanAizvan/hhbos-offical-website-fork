@@ -11,6 +11,7 @@ import PortalCTA from "@/components/PortalCTA";
 import InsightsSection from "@/components/InsightsSection";
 import serviceFinance from "@/assets/carousel-finance.jpg";
 import serviceRcm from "@/assets/service-rcm.jpg";
+import serviceIT from "@/assets/service-IT.jpg";
 import serviceDatabase from "@/assets/service-database.jpg";
 import { useLayoutEffect } from "react";
 import ServiceCard from "@/components/feature/ServiceCard";
@@ -47,6 +48,13 @@ const Home = () => {
       description:
         "Ensure secure data handling with 24/7 monitoring and disaster recovery support Scalable and performance-optimized solutions.",
       imageUrl: serviceDatabase,
+    },
+    {
+      category: "IT SOLUTIONS",
+      title: "IT Department Services",
+      description:
+        "End-to-end IT support including infrastructure management, application support, cybersecurity, and cloud solutions to keep your business running smoothly.",
+      imageUrl: serviceIT,
     },
   ];
 
@@ -122,7 +130,7 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-6">
             {services.map(({ category, title, imageUrl, description }) => {
               return (
                 <ServiceCard
