@@ -40,3 +40,14 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Image Card - Careers */
+
+.img-reveal {
+  transform-origin: top;
+  will-change: transform;
+}
+
+.gallery-photo {
+  will-change: transform, filter;
+}
