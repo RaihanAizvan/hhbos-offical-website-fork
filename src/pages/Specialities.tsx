@@ -39,17 +39,17 @@ const pmsPlatforms = [
 const credentialing = ["Modio (Credentialing)"];
 
 const specialties = [
-  "General Medicine",
-  "Pain Management",
-  "Emergency Room",
-  "Urgent Care",
-  "Podiatry",
-  "Orthopedics",
-  "Paediatrics",
-  "Senior Care",
-  "ASC Billing",
-  "DME",
-  "Dental",
+  { name: "General Medicine", icon: "fi-rr-stethoscope" },
+  { name: "Pain Management", icon: "fi-rr-heart-rate" },
+  { name: "Emergency Room", icon: "fi-rr-ambulance" },
+  { name: "Urgent Care", icon: "fi-rr-doctor" },
+  { name: "Podiatry", icon: "fi-rr-shoe-prints" },
+  { name: "Orthopedics", icon: "fi-rr-bone-break" },
+  { name: "Paediatrics", icon: "fi-rr-baby" },
+  { name: "Senior Care", icon: "fi-rr-user-time" },
+  { name: "ASC Billing", icon: "fi-rr-hospital-user" },
+  { name: "DME", icon: "fi-rr-medicine" },
+  { name: "Dental", icon: "fi-rr-tooth" },
 ];
 
 const platformIcons = [
@@ -63,18 +63,19 @@ const platformIcons = [
   "fi-rr-network",
 ];
 
-const specialtyIcons = [
+const logoIcons = [
   "fi-rr-stethoscope",
-  "fi-rr-heart-rate",
-  "fi-rr-ambulance",
-  "fi-rr-urgent",
-  "fi-rr-foot",
+  "fi-rr-laptop-medical",
+  "fi-rr-hospital",
   "fi-rr-bone-break",
-  "fi-rr-baby",
+  "fi-rr-database",
+  "fi-rr-clipboard-list",
   "fi-rr-user-time",
-  "fi-rr-hospital-user",
+  "fi-rr-ambulance",
   "fi-rr-tooth",
-  "fi-rr-pill",
+  "fi-rr-heart-rate",
+  "fi-rr-shield-check",
+  "fi-rr-briefcase",
 ];
 
 const tileBase =
@@ -122,6 +123,7 @@ const Specialities = () => {
             className="absolute inset-0 h-full w-full object-cover opacity-25"
           >
             <source src="/video/web%20bg.webm" type="video/webm" />
+            <source src="/video/background.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-black/70" />
           <div className="absolute inset-0 bg-gradient-to-b from-black via-black/85 to-black" />
@@ -139,15 +141,17 @@ const Specialities = () => {
             directory.
           </p>
 
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-            {Array.from({ length: 6 }).map((_, idx) => (
-              <div
-                key={idx}
-                className="h-12 rounded-xl border border-white/10 bg-black/50 flex items-center justify-center text-white/30 text-xs uppercase tracking-widest"
-              >
-                Logo
-              </div>
-            ))}
+          <div className="mt-10 overflow-hidden">
+            <div className="flex w-max gap-4 animate-marquee">
+              {[...logoIcons, ...logoIcons].map((icon, idx) => (
+                <div
+                  key={`${icon}-${idx}`}
+                  className="h-16 w-16 rounded-2xl border border-white/10 bg-black/60 flex items-center justify-center shrink-0 text-primary"
+                >
+                  <i className={`fi ${icon} text-2xl`} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -189,19 +193,17 @@ const Specialities = () => {
             subtitle="Domain expertise across clinical and billing services"
           />
           <div className={gridClasses}>
-            {specialties.map((item, index) => (
+            {specialties.map((item) => (
               <motion.div
-                key={item}
+                key={item.name}
                 className={`${tileBase} ${tileHover}`}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <i
-                  className={`fi ${specialtyIcons[index % specialtyIcons.length]} text-3xl text-primary`}
-                />
-                <div className="mt-3 font-medium">{item}</div>
+                <i className={`fi ${item.icon} text-3xl text-primary`} />
+                <div className="mt-3 font-medium">{item.name}</div>
               </motion.div>
             ))}
           </div>
