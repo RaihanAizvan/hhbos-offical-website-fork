@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import type { LucideIcon } from "lucide-react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import gsap from "gsap";
@@ -9,33 +8,12 @@ import {
   Building2,
   Check,
   ChevronDown,
-  CircuitBoard,
-  DollarSign,
-  Factory,
-  HeartPulse,
-  Home,
-  ShoppingBag,
   Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-import serviceHealthcare from "@/assets/service-healthcare.jpg";
-import serviceFinance from "@/assets/service-finance.jpg";
-import serviceDatabase from "@/assets/service-database.jpg";
+import { services } from "@/data/services";
 
 gsap.registerPlugin(ScrollTrigger);
-
-type Service = {
-  id: string;
-  title: string;
-  tagline: string;
-  description: string;
-  image: string;
-  accent: string;
-  icon: LucideIcon;
-  features: string[];
-  benefits: string[];
-};
 
 const GlassCard = ({
   title,
@@ -90,78 +68,6 @@ const Services = () => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, []);
-
-  const services = useMemo<Service[]>(
-    () => [
-      {
-        id: "rcm",
-        title: "Revenue Cycle Management (RCM)",
-        tagline: "Accelerate cash flow with end-to-end RCM excellence",
-        description:
-          "End-to-end RCM solutions that optimize healthcare financial performance.",
-        image: serviceHealthcare,
-        accent: "from-orange-900 via-orange-950 to-orange-950",
-        icon: HeartPulse,
-        features: [
-          "Medical Coding & Charge Entry",
-          "Claims Submission & Follow-up",
-          "Denial Management & Appeals",
-          "Payment Posting & Reconciliation",
-        ],
-        benefits: [
-          "Reduced claim rejection rates",
-          "Faster reimbursements",
-          "Improved cash flow visibility",
-          "Compliance-ready operations",
-        ],
-      },
-      {
-        id: "finance",
-        title: "Finance & Accounts Services",
-        tagline: "Accurate, compliant, and insight-driven finance ops",
-        description:
-          "Streamlined finance operations with bookkeeping, reporting, and compliance support.",
-        image: serviceFinance,
-        accent: "from-orange-800 via-orange-900 to-orange-950",
-        icon: DollarSign,
-        features: [
-          "Bookkeeping & General Ledger",
-          "Accounts Payable & Receivable",
-          "Payroll Processing",
-          "Financial Reporting & Analysis",
-        ],
-        benefits: [
-          "Audit-ready records",
-          "Lower compliance risk",
-          "Faster month-end close",
-          "Better financial visibility",
-        ],
-      },
-      {
-        id: "database",
-        title: "Database Administration & Management",
-        tagline: "Reliable, secure, and scalable database operations",
-        description:
-          "Database setup, optimization, monitoring, and security for critical systems.",
-        image: serviceDatabase,
-        accent: "from-orange-800 via-orange-900 to-orange-950",
-        icon: CircuitBoard,
-        features: [
-          "Database Setup & Configuration (SQL, Oracle, MySQL)",
-          "Performance Tuning & Monitoring",
-          "Backup & Disaster Recovery",
-          "Security & Access Controls",
-        ],
-        benefits: [
-          "Higher system uptime",
-          "Faster query performance",
-          "Stronger data protection",
-          "Scalable infrastructure",
-        ],
-      },
-    ],
-    []
-  );
 
   useEffect(() => {
     const root = rootRef.current;
@@ -318,10 +224,10 @@ const Services = () => {
           <div className="absolute inset-0 bg-black/70" />
 
           <div
-            className="absolute inset-0 opacity-[0.08]"
+            className="absolute inset-0 opacity-[0.07]"
             style={{
               backgroundImage:
-                "linear-gradient(rgba(255,107,31,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.08) 1px, transparent 1px)",
+                "linear-gradient(rgba(255,107,31,1.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,1.08) 1px, transparent 1px)",
               backgroundSize: "48px 48px",
             }}
           />
@@ -334,7 +240,7 @@ const Services = () => {
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           style={{
             background:
-              "radial-gradient(circle at 30% 30%, rgba(255,107,31,0.15), rgba(0,0,0,0) 65%)",
+              "radial-gradient(circle at 30% 30%, rgba(255,107,31,1.15), rgba(0,0,0,0) 65%)",
           }}
         />
         <motion.div
@@ -344,12 +250,12 @@ const Services = () => {
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           style={{
             background:
-              "radial-gradient(circle at 60% 40%, rgba(255,107,31,0.21), rgba(0,0,0,0) 62%)",
+              "radial-gradient(circle at 60% 40%, rgba(255,107,31,1.21), rgba(0,0,0,0) 62%)",
           }}
         />
 
         <div className="relative z-10 flex-1 flex flex-col">
-          <div className="container-custom px-6 lg:px-10 pt-28 pb-14 lg:pt-36 lg:pb-20 flex-1 flex items-center">
+          <div className="container-custom px-6 lg:px-10 pt-36 pb-20 lg:pt-40 lg:pb-24 flex-1 flex items-center justify-center text-center">
             <div className="max-w-5xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70">
                 <Building2 className="h-4 w-4 text-primary" />
@@ -662,10 +568,10 @@ const Services = () => {
 
                     <div data-panel-reveal className="mt-8 flex flex-col sm:flex-row gap-3">
                       <Link
-                        to="/contact"
+                        to={`/services/${service.slug}`}
                         className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
                       >
-                        Get a Consultation
+                        View Details
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                       </Link>
                     </div>
