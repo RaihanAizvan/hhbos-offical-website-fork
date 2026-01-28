@@ -13,7 +13,6 @@ dist-ssr
 *.local
 .history/
 .env
-backend/vendor/
 
 # Editor directories and files
 .vscode/*
