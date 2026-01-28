@@ -267,23 +267,25 @@ const Careers = () => {
 
       {/* Life at HH */}
       <section className="py-24 bg-black">
-        <div className="max-w-7xl px-6 mb-16">
-          <h2 className="text-4xl font-bold mb-2 text-white">
-            Life at <span className="text-orange-500">HH</span> Back Office
-          </h2>
-          <p className="text-gray-400">Where collaboration meets innovation.</p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 h-[620px]">
-          <GalleryImage
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80"
-            span="col-span-2 row-span-2"
-          />
-          <GalleryImage src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80" />
-          <GalleryImage src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80" />
-          <GalleryImage
-            src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80"
-            span="col-span-2"
-          />
+        <div className="container-custom px-6">
+          <div className="mb-16">
+            <h2 className="text-4xl font-bold mb-2 text-white">
+              Life at <span className="text-orange-500">HH</span> Back Office
+            </h2>
+            <p className="text-gray-400">Where collaboration meets innovation.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-[620px]">
+            <GalleryImage
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80"
+              span="col-span-2 row-span-2"
+            />
+            <GalleryImage src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80" />
+            <GalleryImage src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80" />
+            <GalleryImage
+              src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80"
+              span="col-span-2"
+            />
+          </div>
         </div>
       </section>
 
