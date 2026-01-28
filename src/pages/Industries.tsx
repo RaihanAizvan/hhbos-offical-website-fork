@@ -423,7 +423,7 @@ const Industries = () => {
             playsInline
             className="absolute inset-0 h-full w-full object-cover opacity-20"
           >
-            <source src="/video/background.mp4" type="video/mp4" />
+            <source src="/video/web%20bg.webm" type="video/webm" />
           </video>
           <div className="absolute inset-0 bg-black/70" />
 

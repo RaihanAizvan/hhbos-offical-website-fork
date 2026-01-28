@@ -111,7 +111,7 @@ const Home = () => {
           playsInline
           className="absolute inset-0 w-full h-full object-cover object-bottom"
         >
-          <source src="/video/background.mp4" type="video/mp4" />
+          <source src="/video/web%20bg.webm" type="video/webm" />
         </video>
       </div>
 
