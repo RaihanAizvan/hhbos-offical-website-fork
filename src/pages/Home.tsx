@@ -20,7 +20,7 @@ import { WhyChooseUs } from "@/components/WhyChooseUs";
 
 const FeatureCard = ({ title }: { title: string }) => {
   return (
-    <div className="min-w-[240px] rounded-xl border border-border bg-card px-6 py-5 text-center">
+    <div className="min-w-[240px] rounded-xl border border-white/10 bg-black/50 px-6 py-5 text-center">
       <h3 className="text-white text-xl font-semibold">{title}</h3>
     </div>
   );
@@ -146,16 +146,16 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Industries We Serve */}
+      {/* Services We Offer */}
 
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-black">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Industries We Serve
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Services We Offer
             </h2>
-            <p className="text-lg text-muted-foreground">
-              Specialized outsourcing support across key industries
+            <p className="text-lg text-white/70">
+              Focused expertise across RCM, Finance, and Database operations
             </p>
           </div>
         </div>
@@ -171,13 +171,13 @@ const Home = () => {
       <PortalCTA />
 
       {/* Why Choose Us Section */}
-      <section className="section-padding gradient-subtle">
+      <section className="section-padding bg-zinc-950">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Why Choose HH Back Office Services
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-white/70">
               Your trusted partner for business excellence
             </p>
           </div>
@@ -197,9 +197,9 @@ const Home = () => {
                 <motion.div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                   <item.icon className="h-8 w-8 text-primary" />
                 </motion.div>
-                <p className="font-semibold text-foreground">{item.text}</p>
+                <p className="font-semibold text-white">{item.text}</p>
                 {item.subtext && (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-white/60">
                     {item.subtext}
                   </p>
                 )}
@@ -213,17 +213,17 @@ const Home = () => {
       <InsightsSection />
 
       {/* Testimonial Section */}
-      <section className="section-padding gradient-subtle">
+      <section className="section-padding bg-zinc-950">
         <div className="container-custom">
-          <Card className="bg-secondary border-none">
+          <Card className="bg-zinc-950 border-none">
             <CardContent className="p-8 md:p-12 text-center">
-              <p className="text-xl md:text-2xl text-foreground italic mb-6">
+              <p className="text-xl md:text-2xl text-white italic mb-6">
                 Partnering with
                 <span className="font-bold text-orange-500 px-2">HH</span>
                 Back Office Services Pvt Ltd. helped us achieve 30% faster
                 financial reporting."
               </p>
-              <p className="text-muted-foreground font-medium">— Client, CFO</p>
+              <p className="text-white/60 font-medium">— Client, CFO</p>
             </CardContent>
           </Card>
         </div>
