@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, ExternalLink } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,7 +24,6 @@ const Contact = () => {
   const [status, setStatus] = useState<null | "success" | "error">(null);
   const { toast } = useToast();
 
-
   useEffect(() => {
     if (!heroRef.current) return;
 
@@ -38,7 +37,7 @@ const Contact = () => {
           duration: 1,
           stagger: 0.2,
           ease: "power3.out",
-        }
+        },
       );
 
       if (formRef.current) {
@@ -56,7 +55,7 @@ const Contact = () => {
               trigger: formRef.current,
               start: "top 70%",
             },
-          }
+          },
         );
       }
     }, heroRef);
@@ -108,15 +107,23 @@ const Contact = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+  type MapLocation = "kochi" | "coimbatore";
+  const [openMap, setOpenMap] = useState<MapLocation | null>(null);
 
-  const contactInfo = [
+  const contactInfo: {
+    icon: any;
+    title: string;
+    value: string;
+    link?: string;
+    mapKey?: MapLocation;
+  }[] = [
     {
       icon: Mail,
       title: "Email Us",
@@ -126,22 +133,24 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Call Us",
-      value: "0484-2917200",
+      value: "0484 2917200",
       link: "tel:+914842917200",
     },
     {
       icon: MapPin,
       title: "Kochi Office",
       value:
-        "Phase-2 Floor-2, Carnival Infopark, Kakkanad, Kochi - 682042, Kerala, India",
-      link: "#kochi",
+        "Phase-2, Floor-2, Carnival Infopark, Kakkanad, Kochi – 682042, Kerala, India",
+      mapKey: "kochi", 
+      link: "https://maps.app.goo.gl/bLALnsRoxgscx5A29",
     },
     {
       icon: MapPin,
       title: "Coimbatore Office",
       value:
-        "Dc 44 & 45, 4th Floor, Tidel Park, Aerodrome Po, Coimbatore - 641014, Tamilnadu, India",
-      link: "#coimbatore",
+        "DC 44 & 45, 4th Floor, Tidel Park, Aerodrome P.O, Coimbatore – 641014, Tamil Nadu, India",
+      mapKey: "coimbatore",
+      link: "https://maps.app.goo.gl/oxCRwMeRXVCMKeWQ7",
     },
   ];
 
@@ -209,32 +218,90 @@ const Contact = () => {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
             {/* Left: Contact Info */}
             <div className="flex flex-col space-y-10">
-
               <div className="space-y-8">
                 {contactInfo.map((info, index) => {
                   const Icon = info.icon;
+
                   return (
                     <motion.a
                       key={index}
-                      href={info.link}
                       initial={{ opacity: 0, x: -30 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className="flex items-start gap-4 p-6 bg-zinc-950 border border-white/10 rounded-xl hover:border-primary/50 transition-all duration-300 group"
+                      className={`flex items-start gap-4 p-6 bg-zinc-950 border border-white/10 rounded-xl transition-all duration-300 group hover:border-primary/50`}
+                      href={info.link}
+                      target={info.mapKey ? "_blank" : undefined}
                     >
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+                      
+                      {/* Left icon */}
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                         <Icon className="w-6 h-6 text-primary" />
                       </div>
-                      <div>
-                        <h3 className="text-white font-semibold mb-1">
+
+                      {/* Content */}
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between gap-3">
+                          {/* Email / Phone → clickable */}
+                          <h3 className="text-white font-semibold mb-1">
                           {info.title}
                         </h3>
-                        <p className="text-white/70">{info.value}</p>
+
+                          {/* Map icon */}
+                          {info.mapKey && (
+                            <button
+                              type="button"
+                              onClick={(event:React.MouseEvent) => {
+                                setOpenMap(info.mapKey)
+                                event.preventDefault();
+                                event.stopPropagation();
+                                console.log("Map button clicked");
+
+                              }}
+                              className="p-1 rounded-md text-white/50 hover:text-primary hover:bg-primary/10 transition-all duration-200"
+                              aria-label="Open map"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+
+                        <p className="text-white/70 text-sm mt-1">
+                          {info.value}
+                        </p>
                       </div>
                     </motion.a>
                   );
                 })}
+
+                {openMap && (
+                  <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                    <div className="relative w-[90%] max-w-4xl h-[70vh] bg-zinc-950 rounded-2xl overflow-hidden border border-white/10">
+                      <button
+                        onClick={() => setOpenMap(null)}
+                        className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center"
+                      >
+                        ✕
+                      </button>
+
+                      <iframe
+                        className="w-full h-full"
+                        allowFullScreen
+                        loading="lazy"
+                        src={
+                          openMap === "kochi"
+                            ? "https://www.google.com/maps?q=Carnival+Infopark+Kakkanad&output=embed"
+                            : "https://www.google.com/maps?q=Tidel+Park+Coimbatore&output=embed"
+                        }
+                        style={{
+                          border: 0,
+                          filter:
+                            "invert(90%) hue-rotate(180deg) brightness(95%) contrast(85%)",
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -326,24 +393,6 @@ const Contact = () => {
                 </div>
               </form>
             </div>
-          </div>
-
-          {/* Bottom: Full Width Map */}
-          <div className="relative w-full h-[420px] bg-zinc-950 border border-white/10 rounded-2xl overflow-hidden">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.4820892641896!2d76.34782607501686!3d10.017394990090048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d1b4f3d1e17%3A0x7c2e3d0f9c8b5a6d!2sCarnival%20Infopark!5e0!3m2!1sen!2sin!4v1704470400000!5m2!1sen!2sin"
-              className="w-full h-full"
-              style={{
-                border: 0,
-                filter:
-                  "invert(90%) hue-rotate(180deg) brightness(95%) contrast(85%)",
-              }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="HH Back Office Services - Carnival Infopark Location"
-            />
-            <div className="absolute inset-0 bg-black/20 pointer-events-none" />
           </div>
         </div>
       </section>
