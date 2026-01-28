@@ -138,11 +138,8 @@ const Navigation = () => {
                                   <div className="mt-3 space-y-2">
                                     {service.featureDetails.slice(0, 5).map((feature) => (
                                       <Link
-                                        key={feature.title}
-                                        to={`/services/${service.slug}/${feature.title
-                                          .toLowerCase()
-                                          .replace(/[^a-z0-9]+/g, "-")
-                                          .replace(/(^-|-$)+/g, "")}`}
+                                        key={feature.slug}
+                                        to={`/services/${service.slug}/${feature.slug}`}
                                         className="block rounded-xl px-2 py-1 text-xs text-white/70 hover:text-white hover:bg-white/5 transition"
                                       >
                                         {feature.title}

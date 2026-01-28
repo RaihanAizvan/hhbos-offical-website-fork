@@ -94,7 +94,7 @@ const ServiceDetail = () => {
   return (
     <div ref={rootRef} className="min-h-screen bg-black">
       {/* HERO */}
-      <section className="relative min-h-[75svh] overflow-hidden pt-24">
+      <section className="relative min-h-[75svh] overflow-hidden pt-24 flex items-center">
         <div className="absolute inset-0">
           <div
             className="absolute inset-0"
@@ -119,18 +119,10 @@ const ServiceDetail = () => {
           }}
         />
 
-        <div className="relative z-10 container-custom px-6">
-          <Link
-            to="/services"
-            className="detail-hero inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Back to Services
-          </Link>
-
-          <div className="detail-hero mt-8 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-start">
+        <div className="relative z-10 container-custom px-6 w-full">
+          <div className="detail-hero mt-8 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center text-center lg:text-left">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70 mx-auto lg:mx-0">
                 <Icon className="h-4 w-4 text-primary" />
                 {service.title}
               </div>
@@ -155,8 +147,8 @@ const ServiceDetail = () => {
               </div>
             </div>
 
-            <div className="detail-hero rounded-3xl border border-white/10 bg-black/60 p-6 backdrop-blur-xl shadow-[0_25px_80px_rgba(0,0,0,0.55)]">
-              <div className="flex items-center justify-between">
+            <div className="detail-hero rounded-3xl border border-white/10 bg-black/60 p-6 backdrop-blur-xl shadow-[0_25px_80px_rgba(0,0,0,0.55)] text-center lg:text-left">
+              <div className="flex items-center justify-center gap-2">
                 <span className="text-xs uppercase tracking-[0.25em] text-white/60">
                   Key Metrics
                 </span>
@@ -190,22 +182,23 @@ const ServiceDetail = () => {
       <section className="pb-20">
         <div className="container-custom px-6">
           <div className="detail-glass-grid grid gap-6 lg:grid-cols-3">
-            {service.features.map((feature) => (
-              <div
-                key={feature}
-                className="detail-glass rounded-2xl border border-white/10 bg-black/60 p-6 backdrop-blur-xl shadow-[0_20px_70px_rgba(0,0,0,0.45)]"
+            {service.featureDetails.map((feature) => (
+              <Link
+                key={feature.slug}
+                to={`/services/${service.slug}/${feature.slug}`}
+                className="detail-glass rounded-2xl border border-white/10 bg-black/60 p-6 backdrop-blur-xl shadow-[0_20px_70px_rgba(0,0,0,0.45)] transition hover:-translate-y-1 hover:border-primary/40"
               >
                 <div className="flex items-center gap-2 text-white/70 text-xs uppercase tracking-[0.25em]">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Capability
-                </div>  
+                </div>
                 <h3 className="mt-4 text-xl font-semibold text-white">
-                  {feature}
+                  {feature.title}
                 </h3>
                 <p className="mt-2 text-sm text-white/60">
-                  Process-led delivery with measurable outcomes.
+                  {feature.summary}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

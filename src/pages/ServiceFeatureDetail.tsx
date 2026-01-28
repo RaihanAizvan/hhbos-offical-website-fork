@@ -4,7 +4,6 @@ import { motion } from "motion/react";
 import { ArrowRight, ChevronLeft, Layers, Sparkles } from "lucide-react";
 import { services } from "@/data/services";
 import { slugify } from "@/lib/slug";
-
 const ServiceFeatureDetail = () => {
   const { slug, feature } = useParams();
 
@@ -55,14 +54,6 @@ const ServiceFeatureDetail = () => {
         />
 
         <div className="relative z-10 container-custom px-6 w-full">
-          <Link
-            to={`/services/${service.slug}`}
-            className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Back to {service.title}
-          </Link>
-
           <div className="mt-8 max-w-4xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70">
               <Layers className="h-4 w-4 text-primary" />

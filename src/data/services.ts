@@ -12,6 +12,7 @@ import serviceDatabase from "@/assets/service-database.jpg";
 
 export type FeatureDetail = {
   title: string;
+  slug: string;
   summary: string;
   bullets: string[];
   outcomes: string[];
@@ -34,12 +35,19 @@ export type Service = {
   featureDetails: FeatureDetail[];
 };
 
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+
 const makeFeatureDetails = (
   features: string[],
   context: string
 ): FeatureDetail[] =>
   features.map((feature) => ({
     title: feature,
+    slug: slugify(feature),
     summary: `A focused capability within ${context}, designed for reliability, speed, and measurable outcomes.`,
     bullets: [
       "Workflow mapping & automation",
