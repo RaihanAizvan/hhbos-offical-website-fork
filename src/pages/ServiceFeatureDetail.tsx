@@ -3,12 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowRight, ChevronLeft, Layers, Sparkles } from "lucide-react";
 import { services } from "@/data/services";
-
-const slugify = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)+/g, "");
+import { slugify } from "@/lib/slug";
 
 const ServiceFeatureDetail = () => {
   const { slug, feature } = useParams();
@@ -19,7 +14,7 @@ const ServiceFeatureDetail = () => {
   );
 
   const featureData =
-    service.featureDetails.find((item) => slugify(item.title) === feature) ??
+    service.featureDetails.find((item) => item.slug === feature) ??
     service.featureDetails[0];
 
   useLayoutEffect(() => {
@@ -34,7 +29,7 @@ const ServiceFeatureDetail = () => {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero */}
-      <section className="relative min-h-[70svh] overflow-hidden pt-24">
+      <section className="relative min-h-[50svh] overflow-hidden pt-24 flex items-center">
         <div className="absolute inset-0">
           <div
             className="absolute inset-0"
@@ -59,7 +54,7 @@ const ServiceFeatureDetail = () => {
           }}
         />
 
-        <div className="relative z-10 container-custom px-6">
+        <div className="relative z-10 container-custom px-6 w-full">
           <Link
             to={`/services/${service.slug}`}
             className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors"
@@ -129,7 +124,7 @@ const ServiceFeatureDetail = () => {
                 {related.map((item) => (
                   <Link
                     key={item.title}
-                    to={`/services/${service.slug}/${slugify(item.title)}`}
+                    to={`/services/${service.slug}/${item.slug}`}
                     className="block rounded-xl px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-white/5 transition"
                   >
                     {item.title}
