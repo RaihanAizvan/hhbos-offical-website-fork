@@ -52,11 +52,33 @@ const specialties = [
   "Dental",
 ];
 
-const tileBase =
-  "rounded-2xl border border-white/10 bg-black/60 px-4 py-5 text-sm text-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300";
+const platformIcons = [
+  "fi-rr-laptop-medical",
+  "fi-rr-hospital",
+  "fi-rr-stethoscope",
+  "fi-rr-clipboard-list",
+  "fi-rr-chart-line-up",
+  "fi-rr-database",
+  "fi-rr-shield-check",
+  "fi-rr-network",
+];
 
-const tileIconBase =
-  "inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-black/70 text-white/70";
+const specialtyIcons = [
+  "fi-rr-stethoscope",
+  "fi-rr-heart-rate",
+  "fi-rr-ambulance",
+  "fi-rr-urgent",
+  "fi-rr-foot",
+  "fi-rr-bone-break",
+  "fi-rr-baby",
+  "fi-rr-user-time",
+  "fi-rr-hospital-user",
+  "fi-rr-tooth",
+  "fi-rr-pill",
+];
+
+const tileBase =
+  "aspect-square rounded-2xl border border-white/10 bg-black/60 px-4 py-5 text-sm text-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 flex flex-col items-center justify-center text-center";
 
 const tileHover =
   "hover:-translate-y-1 hover:border-primary/50 hover:text-white hover:shadow-[0_18px_40px_rgba(0,0,0,0.5)]";
@@ -139,7 +161,7 @@ const Specialities = () => {
             subtitle="Operational familiarity across leading systems"
           />
           <div className={gridClasses}>
-            {pmsPlatforms.map((item) => (
+            {pmsPlatforms.map((item, index) => (
               <motion.div
                 key={item}
                 className={`${tileBase} ${tileHover}`}
@@ -148,9 +170,9 @@ const Specialities = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <div className={tileIconBase}>
-                  <FileText className="h-4 w-4" />
-                </div>
+                <i
+                  className={`fi ${platformIcons[index % platformIcons.length]} text-3xl text-primary`}
+                />
                 <div className="mt-3 font-medium">{item}</div>
               </motion.div>
             ))}
@@ -167,7 +189,7 @@ const Specialities = () => {
             subtitle="Domain expertise across clinical and billing services"
           />
           <div className={gridClasses}>
-            {specialties.map((item) => (
+            {specialties.map((item, index) => (
               <motion.div
                 key={item}
                 className={`${tileBase} ${tileHover}`}
@@ -176,9 +198,9 @@ const Specialities = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <div className={tileIconBase}>
-                  <BriefcaseMedical className="h-4 w-4" />
-                </div>
+                <i
+                  className={`fi ${specialtyIcons[index % specialtyIcons.length]} text-3xl text-primary`}
+                />
                 <div className="mt-3 font-medium">{item}</div>
               </motion.div>
             ))}
@@ -204,9 +226,7 @@ const Specialities = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <div className={tileIconBase}>
-                  <ShieldCheck className="h-4 w-4" />
-                </div>
+                <i className="fi fi-rr-badge-check text-3xl text-primary" />
                 <div className="mt-3 font-medium">{item}</div>
               </motion.div>
             ))}
