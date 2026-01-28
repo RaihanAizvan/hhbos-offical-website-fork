@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowRight, ChevronLeft, Layers, Sparkles } from "lucide-react";
 import { services } from "@/data/services";
-import { slugify } from "@/lib/slug";
 const ServiceFeatureDetail = () => {
   const { slug, feature } = useParams();
 

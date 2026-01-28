@@ -255,7 +255,7 @@ const Services = () => {
         />
 
         <div className="relative z-10 flex-1 flex flex-col">
-          <div className="container-custom px-6 lg:px-10 pt-28 pb-14 lg:pt-36 lg:pb-20 flex-1 flex items-center">
+          <div className="container-custom px-6 lg:px-10 pt-36 pb-20 lg:pt-40 lg:pb-24 flex-1 flex items-center justify-center text-center">
             <div className="max-w-5xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70">
                 <Building2 className="h-4 w-4 text-primary" />
