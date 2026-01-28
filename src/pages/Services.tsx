@@ -224,10 +224,10 @@ const Services = () => {
           <div className="absolute inset-0 bg-black/70" />
 
           <div
-            className="absolute inset-0 opacity-[0.08]"
+            className="absolute inset-0 opacity-[0.07]"
             style={{
               backgroundImage:
-                "linear-gradient(rgba(255,107,31,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.08) 1px, transparent 1px)",
+                "linear-gradient(rgba(255,107,31,1.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,1.08) 1px, transparent 1px)",
               backgroundSize: "48px 48px",
             }}
           />
@@ -240,7 +240,7 @@ const Services = () => {
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           style={{
             background:
-              "radial-gradient(circle at 30% 30%, rgba(255,107,31,0.15), rgba(0,0,0,0) 65%)",
+              "radial-gradient(circle at 30% 30%, rgba(255,107,31,1.15), rgba(0,0,0,0) 65%)",
           }}
         />
         <motion.div
@@ -250,7 +250,7 @@ const Services = () => {
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           style={{
             background:
-              "radial-gradient(circle at 60% 40%, rgba(255,107,31,0.21), rgba(0,0,0,0) 62%)",
+              "radial-gradient(circle at 60% 40%, rgba(255,107,31,1.21), rgba(0,0,0,0) 62%)",
           }}
         />
 

@@ -44,9 +44,8 @@ const ServiceDetail = () => {
 
       gsap.fromTo(
         ".detail-glass",
-        { opacity: 0, y: 30 },
+        { y: 24 },
         {
-          opacity: 1,
           y: 0,
           duration: 0.8,
           stagger: 0.12,
@@ -188,7 +187,7 @@ const ServiceDetail = () => {
       </section>
 
       {/* FEATURE STACK */}
-      <section className="py-20">
+      <section className="pb-20">
         <div className="container-custom px-6">
           <div className="detail-glass-grid grid gap-6 lg:grid-cols-3">
             {service.features.map((feature) => (
@@ -199,7 +198,7 @@ const ServiceDetail = () => {
                 <div className="flex items-center gap-2 text-white/70 text-xs uppercase tracking-[0.25em]">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Capability
-                </div>
+                </div>  
                 <h3 className="mt-4 text-xl font-semibold text-white">
                   {feature}
                 </h3>

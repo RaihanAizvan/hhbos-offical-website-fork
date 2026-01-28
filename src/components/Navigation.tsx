@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Globe, Search } from "lucide-react";
+import { services } from "@/data/services";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,24 +71,61 @@ const Navigation = () => {
             <div className="hidden lg:flex items-center space-x-10">
               {navLinks.map((link) => {
                 const active = isActive(link.path);
+                const isServices = link.path === "/services";
 
-                return (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`relative group text-sm font-medium transition-colors ${
-                      active ? "text-primary" : "text-white/80 hover:text-white"
-                    }`}
-                  >
-                    {link.name}
+                if (!isServices) {
+                  return (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className={`relative group text-sm font-medium transition-colors ${
+                        active ? "text-primary" : "text-white/80 hover:text-white"
+                      }`}
+                    >
+                      {link.name}
 
-                    {/* Animated underline */}
-                    <span
-                      className={`absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500
+                      <span
+                        className={`absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500
         transform origin-left transition-transform duration-300 ease-out
         ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
-                    />
-                  </Link>
+                      />
+                    </Link>
+                  );
+                }
+
+                return (
+                  <div key={link.path} className="relative group pb-3 -mb-3">
+                    <Link
+                      to={link.path}
+                      className={`relative text-sm font-medium transition-colors ${
+                        active ? "text-primary" : "text-white/80 hover:text-white"
+                      }`}
+                    >
+                      {link.name}
+                      <span
+                        className={`absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500
+        transform origin-left transition-transform duration-300 ease-out
+        ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                      />
+                    </Link>
+
+                    <div className="absolute left-0 top-full mt-0 w-64 rounded-2xl border border-white/10 bg-black/90 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.45)] opacity-0 pointer-events-none translate-y-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto" style={{ paddingTop: "0.5rem" }}>
+                      <div className="p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-white/50">Services</p>
+                        <div className="mt-3 space-y-2">
+                          {services.map((service) => (
+                            <Link
+                              key={service.slug}
+                              to={`/services/${service.slug}`}
+                              className="block rounded-xl px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-white/5 transition"
+                            >
+                              {service.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 );
               })}
             </div>

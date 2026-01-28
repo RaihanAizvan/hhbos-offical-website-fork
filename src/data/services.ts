@@ -24,13 +24,13 @@ export type Service = {
 export const services: Service[] = [
   {
     id: "rcm",
-    slug: "rcm",
+    slug: "rcm", // this is the route endpoint, incase you worry
     title: "Revenue Cycle Management (RCM)",
     tagline: "Accelerate cash flow with end-to-end RCM excellence",
     description:
       "End-to-end RCM solutions that optimize healthcare financial performance.",
     image: serviceHealthcare,
-    accent: "from-orange-900 via-orange-950 to-orange-950",
+    accent: "from-orange-500 via-orange-800 to-orange-600",
     icon: HeartPulse,
     features: [
       "Medical Coding & Charge Entry",
@@ -62,7 +62,7 @@ export const services: Service[] = [
     description:
       "Streamlined finance operations with bookkeeping, reporting, and compliance support.",
     image: serviceFinance,
-    accent: "from-orange-900 via-orange-950 to-orange-950",
+    accent: "from-orange-500 via-orange-800 to-orange-600",
     icon: DollarSign,
     features: [
       "Bookkeeping & General Ledger",
@@ -94,7 +94,7 @@ export const services: Service[] = [
     description:
       "Database setup, optimization, monitoring, and security for critical systems.",
     image: serviceDatabase,
-    accent: "from-orange-900 via-orange-950 to-orange-950",
+    accent: "from-orange-500 via-orange-800 to-orange-600",
     icon: CircuitBoard,
     features: [
       "Database Setup & Configuration (SQL, Oracle, MySQL)",
@@ -126,7 +126,7 @@ export const services: Service[] = [
     description:
       "Full-cycle app development services for web, mobile, and automation solutions.",
     image: serviceDatabase,
-    accent: "from-orange-900 via-orange-950 to-orange-950",
+    accent: "from-orange-500 via-orange-800 to-orange-600",
     icon: MonitorSmartphone,
     features: [
       "Product Discovery & UX",
@@ -151,3 +151,6 @@ export const services: Service[] = [
     ],
   },
 ];
+
+
+// add more services if you want
