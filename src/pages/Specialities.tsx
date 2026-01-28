@@ -113,7 +113,7 @@ const Specialities = () => {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero */}
-      <section className="relative min-h-[70svh] pt-28 pb-20 overflow-hidden">
+      <section className="relative min-h-[70svh] pt-28 pb-20 overflow-hidden flex items-center">
         <div className="absolute inset-0 z-0">
           <video
             autoPlay
