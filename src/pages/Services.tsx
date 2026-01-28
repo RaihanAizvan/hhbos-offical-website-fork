@@ -227,7 +227,7 @@ const Services = () => {
       {/* Hero Section */}
       <section
         ref={heroRef}
-        className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black mt-20"
+        className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black pt-20"
       >
         <div className="absolute inset-0">
           <video

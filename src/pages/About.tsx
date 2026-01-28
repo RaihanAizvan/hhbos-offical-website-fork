@@ -84,7 +84,7 @@ const About = () => {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black mt-20">
+      <section ref={heroRef} className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black pt-20">
         <div className="absolute inset-0">
           <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-30">
             <source src="/video/background.mp4" type="video/mp4" />
