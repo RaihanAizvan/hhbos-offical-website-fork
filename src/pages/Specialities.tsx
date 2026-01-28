@@ -113,20 +113,19 @@ const Specialities = () => {
   return (
     <div className="min-h-screen bg-black">
       {/* Hero */}
-      <section className="relative pt-28 pb-20 overflow-hidden">
-        <div className="absolute inset-0">
+      <section className="relative min-h-[70svh] pt-28 pb-20 overflow-hidden">
+        <div className="absolute inset-0 z-0">
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 h-full w-full object-cover opacity-25"
+            className="absolute inset-0 h-full w-full object-cover opacity-30"
           >
             <source src="/video/web%20bg.webm" type="video/webm" />
             <source src="/video/background.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-black/70" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-black/85 to-black" />
         </div>
         <div className="container-custom px-6 relative z-10 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.3em] text-white/60">
