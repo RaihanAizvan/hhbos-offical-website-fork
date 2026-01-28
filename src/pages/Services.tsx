@@ -100,7 +100,7 @@ const Services = () => {
         description:
           "End-to-end RCM solutions that optimize healthcare financial performance.",
         image: serviceHealthcare,
-        accent: "from-orange-500 via-amber-400 to-rose-500",
+        accent: "from-orange-900 via-orange-950 to-orange-950",
         icon: HeartPulse,
         features: [
           "Medical Coding & Charge Entry",
@@ -122,7 +122,7 @@ const Services = () => {
         description:
           "Streamlined finance operations with bookkeeping, reporting, and compliance support.",
         image: serviceFinance,
-        accent: "from-orange-500 via-yellow-300 to-emerald-400",
+        accent: "from-orange-800 via-orange-900 to-orange-950",
         icon: DollarSign,
         features: [
           "Bookkeeping & General Ledger",
@@ -144,7 +144,7 @@ const Services = () => {
         description:
           "Database setup, optimization, monitoring, and security for critical systems.",
         image: serviceDatabase,
-        accent: "from-orange-500 via-indigo-400 to-sky-400",
+        accent: "from-orange-800 via-orange-900 to-orange-950",
         icon: CircuitBoard,
         features: [
           "Database Setup & Configuration (SQL, Oracle, MySQL)",
@@ -321,7 +321,7 @@ const Services = () => {
             className="absolute inset-0 opacity-[0.08]"
             style={{
               backgroundImage:
-                "linear-gradient(rgba(255,107,31,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.22) 1px, transparent 1px)",
+                "linear-gradient(rgba(255,107,31,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.08) 1px, transparent 1px)",
               backgroundSize: "48px 48px",
             }}
           />
@@ -334,7 +334,7 @@ const Services = () => {
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           style={{
             background:
-              "radial-gradient(circle at 30% 30%, rgba(255,107,31,0.95), rgba(255,145,77,0.0) 60%)",
+              "radial-gradient(circle at 30% 30%, rgba(255,107,31,0.15), rgba(0,0,0,0) 65%)",
           }}
         />
         <motion.div
@@ -344,7 +344,7 @@ const Services = () => {
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           style={{
             background:
-              "radial-gradient(circle at 60% 40%, rgba(56,189,248,0.7), rgba(0,0,0,0) 62%)",
+              "radial-gradient(circle at 60% 40%, rgba(255,107,31,0.21), rgba(0,0,0,0) 62%)",
           }}
         />
 
@@ -361,10 +361,10 @@ const Services = () => {
                 <span className="block">
                   designed for
                   <span className="relative ml-3 inline-block">
-                    <span className="bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-primary to-orange-600 bg-clip-text text-transparent">
                       operational excellence
                     </span>
-                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500 opacity-70" />
+                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-gradient-to-r from-primary to-orange-700 opacity-60" />
                   </span>
                 </span>
               </h1>
