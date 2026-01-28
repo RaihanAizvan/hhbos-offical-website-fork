@@ -1,9 +1,21 @@
 import type { LucideIcon } from "lucide-react";
-import { CircuitBoard, DollarSign, HeartPulse, MonitorSmartphone } from "lucide-react";
+import {
+  CircuitBoard,
+  DollarSign,
+  HeartPulse,
+  MonitorSmartphone,
+} from "lucide-react";
 
 import serviceHealthcare from "@/assets/service-healthcare.jpg";
 import serviceFinance from "@/assets/service-finance.jpg";
 import serviceDatabase from "@/assets/service-database.jpg";
+
+export type FeatureDetail = {
+  title: string;
+  summary: string;
+  bullets: string[];
+  outcomes: string[];
+};
 
 export type Service = {
   id: string;
@@ -19,12 +31,33 @@ export type Service = {
   detailHeadline: string;
   detailSummary: string;
   detailPillars: string[];
+  featureDetails: FeatureDetail[];
 };
+
+const makeFeatureDetails = (
+  features: string[],
+  context: string
+): FeatureDetail[] =>
+  features.map((feature) => ({
+    title: feature,
+    summary: `A focused capability within ${context}, designed for reliability, speed, and measurable outcomes.`,
+    bullets: [
+      "Workflow mapping & automation",
+      "Quality assurance and compliance",
+      "SLA-driven delivery cadence",
+      "Performance reporting & insights",
+    ],
+    outcomes: [
+      "Higher accuracy",
+      "Faster turnaround",
+      "Lower operational risk",
+    ],
+  }));
 
 export const services: Service[] = [
   {
     id: "rcm",
-    slug: "rcm", // this is the route endpoint, incase you worry
+    slug: "rcm",
     title: "Revenue Cycle Management (RCM)",
     tagline: "Accelerate cash flow with end-to-end RCM excellence",
     description:
@@ -53,6 +86,15 @@ export const services: Service[] = [
       "Dedicated denial recovery",
       "Actionable AR visibility",
     ],
+    featureDetails: makeFeatureDetails(
+      [
+        "Medical Coding & Charge Entry",
+        "Claims Submission & Follow-up",
+        "Denial Management & Appeals",
+        "Payment Posting & Reconciliation",
+      ],
+      "our RCM stack"
+    ),
   },
   {
     id: "finance",
@@ -85,6 +127,15 @@ export const services: Service[] = [
       "Tax & compliance readiness",
       "Payroll precision",
     ],
+    featureDetails: makeFeatureDetails(
+      [
+        "Bookkeeping & General Ledger",
+        "Accounts Payable & Receivable",
+        "Payroll Processing",
+        "Financial Reporting & Analysis",
+      ],
+      "finance operations"
+    ),
   },
   {
     id: "database",
@@ -117,6 +168,15 @@ export const services: Service[] = [
       "Secure access controls",
       "Resilient backup strategy",
     ],
+    featureDetails: makeFeatureDetails(
+      [
+        "Database Setup & Configuration (SQL, Oracle, MySQL)",
+        "Performance Tuning & Monitoring",
+        "Backup & Disaster Recovery",
+        "Security & Access Controls",
+      ],
+      "database management"
+    ),
   },
   {
     id: "it-services",
@@ -149,8 +209,16 @@ export const services: Service[] = [
       "Automation & integration",
       "Ongoing optimization",
     ],
+    featureDetails: makeFeatureDetails(
+      [
+        "Product Discovery & UX",
+        "Web & Mobile App Development",
+        "API Integration & Automation",
+        "QA, Release & Support",
+      ],
+      "product engineering"
+    ),
   },
 ];
-
 
 // add more services if you want
