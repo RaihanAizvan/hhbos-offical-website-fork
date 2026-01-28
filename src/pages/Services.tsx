@@ -1,233 +1,309 @@
-import {
-  useLayoutEffect,
-  useEffect,
-  useRef,
-  RefAttributes,
-  ForwardRefExoticComponent,
-} from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Card, CardContent } from "@/components/ui/card";
 import {
-  HeartPulse,
+  ArrowRight,
+  Building2,
+  Check,
+  ChevronDown,
+  CircuitBoard,
   DollarSign,
-  Database,
-  CheckCircle,
-  TrendingUp,
-  Shield,
-  Users,
-  Globe,
-  Settings,
-  LucideProps,
-  CircleCheckBig,
+  Factory,
+  HeartPulse,
+  Home,
+  ShoppingBag,
+  Sparkles,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 import serviceHealthcare from "@/assets/service-healthcare.jpg";
 import serviceFinance from "@/assets/service-finance.jpg";
 import serviceDatabase from "@/assets/service-database.jpg";
-import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface Service {
-  icon: ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-  >;
+type Service = {
+  id: string;
   title: string;
+  tagline: string;
   description: string;
   image: string;
+  accent: string;
+  icon: LucideIcon;
   features: string[];
   benefits: string[];
-}
+};
+
+const GlassCard = ({
+  title,
+  items,
+  tone = "neutral",
+}: {
+  title: string;
+  items: string[];
+  tone?: "neutral" | "primary" | "success";
+}) => {
+  const toneStyles = {
+    neutral: "border-white/10 bg-white/5 text-white/85",
+    primary: "border-orange-500/30 bg-orange-500/10 text-white",
+    success: "border-emerald-500/30 bg-emerald-500/10 text-white",
+  } as const;
+
+  return (
+    <div
+      className={cn(
+        "rounded-2xl p-6 backdrop-blur-xl",
+        "shadow-[0_20px_80px_rgba(0,0,0,0.45)]",
+        "border",
+        toneStyles[tone]
+      )}
+    >
+      <div className="flex items-center justify-between">
+        <h3 className="text-xs uppercase tracking-[0.25em] text-white/70">
+          {title}
+        </h3>
+        <Sparkles className="h-4 w-4 text-white/60" />
+      </div>
+
+      <ul className="mt-4 space-y-2.5 text-[15px] leading-relaxed">
+        {items.map((item) => (
+          <li key={item} className="flex gap-3">
+            <Check className="mt-0.5 h-4 w-4 text-white/70" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 const Services = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef(null);
-  const benefitsRef = useRef(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [activeId, setActiveId] = useState<string>("rcm");
+  const [dockHoverIndex, setDockHoverIndex] = useState<number | null>(null);
+  const dockItemRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  useGSAP(
-    () => {
-      const cards = gsap.utils.toArray(".service-card") as HTMLElement[];
+  useLayoutEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
 
-      cards.forEach((card) => {
-        const image = card.querySelector(".service-image");
-        const headingChars = card.querySelectorAll(".char");
-        const features = card.querySelectorAll(".feature-item");
-        const benefitItems = card.querySelectorAll(".benefit-item");
+  const services = useMemo<Service[]>(
+    () => [
+      {
+        id: "rcm",
+        title: "Revenue Cycle Management (RCM)",
+        tagline: "Accelerate cash flow with end-to-end RCM excellence",
+        description:
+          "End-to-end RCM solutions that optimize healthcare financial performance.",
+        image: serviceHealthcare,
+        accent: "from-orange-900 via-orange-950 to-orange-950",
+        icon: HeartPulse,
+        features: [
+          "Medical Coding & Charge Entry",
+          "Claims Submission & Follow-up",
+          "Denial Management & Appeals",
+          "Payment Posting & Reconciliation",
+        ],
+        benefits: [
+          "Reduced claim rejection rates",
+          "Faster reimbursements",
+          "Improved cash flow visibility",
+          "Compliance-ready operations",
+        ],
+      },
+      {
+        id: "finance",
+        title: "Finance & Accounts Services",
+        tagline: "Accurate, compliant, and insight-driven finance ops",
+        description:
+          "Streamlined finance operations with bookkeeping, reporting, and compliance support.",
+        image: serviceFinance,
+        accent: "from-orange-800 via-orange-900 to-orange-950",
+        icon: DollarSign,
+        features: [
+          "Bookkeeping & General Ledger",
+          "Accounts Payable & Receivable",
+          "Payroll Processing",
+          "Financial Reporting & Analysis",
+        ],
+        benefits: [
+          "Audit-ready records",
+          "Lower compliance risk",
+          "Faster month-end close",
+          "Better financial visibility",
+        ],
+      },
+      {
+        id: "database",
+        title: "Database Administration & Management",
+        tagline: "Reliable, secure, and scalable database operations",
+        description:
+          "Database setup, optimization, monitoring, and security for critical systems.",
+        image: serviceDatabase,
+        accent: "from-orange-800 via-orange-900 to-orange-950",
+        icon: CircuitBoard,
+        features: [
+          "Database Setup & Configuration (SQL, Oracle, MySQL)",
+          "Performance Tuning & Monitoring",
+          "Backup & Disaster Recovery",
+          "Security & Access Controls",
+        ],
+        benefits: [
+          "Higher system uptime",
+          "Faster query performance",
+          "Stronger data protection",
+          "Scalable infrastructure",
+        ],
+      },
+    ],
+    []
+  );
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-service-panel]")
+    );
+
+    const snapSections = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-snap-section]")
+    );
+
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    let wheelLocked = false;
+
+    const getNearestIndex = () => {
+      const y = window.scrollY;
+      let bestIndex = 0;
+      let bestDist = Number.POSITIVE_INFINITY;
+
+      for (let i = 0; i < snapSections.length; i++) {
+        const top = snapSections[i].getBoundingClientRect().top + window.scrollY;
+        const dist = Math.abs(top - y);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestIndex = i;
+        }
+      }
+
+      return bestIndex;
+    };
+
+    const scrollToIndex = (idx: number) => {
+      const clamped = Math.max(0, Math.min(snapSections.length - 1, idx));
+      const el = snapSections[clamped];
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top, behavior: prefersReduced ? "auto" : "smooth" });
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (prefersReduced) return;
+      if (wheelLocked) return;
+      if (Math.abs(e.deltaY) < 18) return;
+
+      e.preventDefault();
+
+      const current = getNearestIndex();
+      const next = e.deltaY > 0 ? current + 1 : current - 1;
+      scrollToIndex(next);
+
+      wheelLocked = true;
+      window.setTimeout(() => {
+        wheelLocked = false;
+      }, 650);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort(
+            (a, b) =>
+              (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0)
+          )[0];
+
+        const id = visible?.target.getAttribute("data-service-id");
+        if (id) setActiveId(id);
+      },
+      { threshold: [0.35, 0.55, 0.75] }
+    );
+
+    panels.forEach((p) => io.observe(p));
+
+    const ctx = gsap.context(() => {
+      panels.forEach((panel) => {
+        const img = panel.querySelector<HTMLElement>("[data-panel-image]");
+        const content = panel.querySelectorAll<HTMLElement>(
+          "[data-panel-reveal]"
+        );
+
+        if (img) {
+          gsap.fromTo(
+            img,
+            { yPercent: -10, scale: 1.12 },
+            {
+              yPercent: 10,
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: panel,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
+            }
+          );
+        }
 
         gsap.fromTo(
-          benefitItems,
-          {
-            opacity: 0,
-            y: 16,
-            filter: "blur(6px)",
-          },
+          content,
+          { opacity: 0, y: 26 },
           {
             opacity: 1,
             y: 0,
-            filter: "blur(0px)",
-            stagger: {
-              each: 0.12,
-              ease: "power3.out",
-            },
-            duration: 0.4,
-            scrollTrigger: {
-              trigger: benefitItems[0],
-              start: "top 40%",
-              toggleActions: "play none none none",
-            },
-          },
-        );
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: card,
-            start: "top 75%",
-          },
-        });
-
-        // Image Mask Reveal
-        tl.fromTo(
-          image,
-          {
-            clipPath: "inset(100% 0 0 0)",
-            scale: 1.2,
-          },
-          {
-            clipPath: "inset(0% 0 0 0)",
-            scale: 1,
-            duration: 1.2,
-            ease: "expo.out",
-            willChange: "transform, clip-path",
-          },
-        );
-
-        // Heading Split Reveal
-        tl.from(
-          headingChars,
-          {
-            y: 10,
-            opacity: 0,
-            stagger: 0.03,
-            duration: 0.6,
-            ease: "expo.out",
-          },
-          "-=0.8",
-        );
-
-        // Feature List Stagger
-        tl.from(
-          features,
-          {
-            opacity: 0,
-            x: -10,
-            stagger: 0.2,
-            duration: 0.3,
+            duration: 0.9,
+            stagger: 0.12,
             ease: "power3.out",
-          },
-          "-=0.4",
+            scrollTrigger: {
+              trigger: panel,
+              start: "top 65%",
+            },
+          }
         );
       });
-    },
-    { scope: sectionRef },
-  );
+    }, root);
 
-  const services: Service[] = [
-    {
-      icon: HeartPulse,
-      title: "Revenue Cycle Management (RCM)",
-      description:
-        "End-to-end RCM solutions that optimize healthcare financial performance.",
-      image: serviceHealthcare,
-      features: [
-        "Patient Registration & Eligibility Verification",
-        "Medical Coding & Billing",
-        "Claims Submission & Follow-up",
-        "Payment Posting & Denial Management",
-        "AR Analysis & Reporting",
-      ],
-      benefits: [
-        "Faster reimbursements",
-        "Minimized denials",
-        "Enhanced revenue transparency",
-      ],
-    },
-    {
-      icon: DollarSign,
-      title: "Finance & Accounts Services",
-      description:
-        "Streamline your financial processes with our end-to-end accounting solutions.",
-      image: serviceFinance,
-      features: [
-        "Bookkeeping & General Ledger Maintenance",
-        "Accounts Payable & Receivable",
-        "Payroll Processing",
-        "Financial Planning & Analysis",
-        "Tax Compliance & Audit Support",
-        "Budgeting & Forecasting",
-      ],
-      benefits: [
-        "Reduced operational cost",
-        "Real-time financial insights",
-        "Compliance with accounting standards",
-      ],
-    },
-    {
-      icon: Database,
-      title: "Database Administration & Management",
-      description:
-        "Secure, scalable, and efficient data solutions for business continuity and analytics.",
-      image: serviceDatabase,
-      features: [
-        "Database Setup & Configuration (SQL, Oracle, MySQL)",
-        "Performance Tuning & Optimization",
-        "Backup & Recovery Management",
-        "Data Migration & Integration",
-        "Security & Access Control",
-        "24/7 Monitoring & Support",
-      ],
-      benefits: [
-        "Improved data reliability",
-        "Minimized downtime",
-        "Enhanced decision-making through analytics",
-      ],
-    },
-  ];
+    window.addEventListener("wheel", onWheel, { passive: false });
 
-  const benefits = [
-    {
-      icon: Users,
-      title: "Expert Professionals",
-      description: "Skilled accountants, RCM specialists, and DBAs",
-    },
-    {
-      icon: TrendingUp,
-      title: "Proven Results",
-      description: "Demonstrated ROI and efficiency gains",
-    },
-    {
-      icon: Shield,
-      title: "Data Security",
-      description: "ISO 27001-aligned data protection policies",
-    },
-    {
-      icon: Globe,
-      title: "Global Delivery Model",
-      description: "Seamless support for clients worldwide",
-    },
-    {
-      icon: Settings,
-      title: "Technology Driven",
-      description: "Latest software tools and automation",
-    },
-  ];
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      io.disconnect();
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, []);
+
+  const scrollToId = (id: string) => {
+    const el = document.getElementById(`service-${id}`);
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <section
-        ref={heroRef}
-        className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black mt-20"
+    <div ref={rootRef} className="min-h-screen bg-black">
+      {/* HERO: Services Atlas */}
+      <header
+        data-snap-section
+        className="relative overflow-hidden bg-black min-h-[100svh] flex flex-col"
       >
         <div className="absolute inset-0">
           <video
@@ -235,226 +311,426 @@ const Services = () => {
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            className="absolute inset-0 h-full w-full object-cover opacity-20"
           >
-            <source src="/video/background.mp4" type="video/mp4" />
+            <source src="/video/web%20bg.webm" type="video/webm" />
           </video>
-          <div className="absolute inset-0 bg-black/60" />
-          {/* Bottom fade gradient mask */}
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
-        </div>
+          <div className="absolute inset-0 bg-black/70" />
 
-        <div className="absolute inset-0 opacity-10">
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 opacity-[0.08]"
             style={{
               backgroundImage:
-                "linear-gradient(rgba(255,107,31,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.2) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
+                "linear-gradient(rgba(255,107,31,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.08) 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
             }}
           />
         </div>
 
-        <div className="relative z-10 container-custom text-center px-6">
-          <div className="space-y-6 max-w-4xl mx-auto">
-            <div className="services-hero-text flex items-center justify-center gap-4 mb-6">
-              <div className="h-px w-16 bg-primary" />
-              <span className="text-primary text-sm uppercase tracking-[0.3em]">
-                Our Services
-              </span>
-              <div className="h-px w-16 bg-primary" />
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-3xl opacity-30"
+          animate={{ y: [0, 18, 0], x: [0, -14, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background:
+              "radial-gradient(circle at 30% 30%, rgba(255,107,31,0.15), rgba(0,0,0,0) 65%)",
+          }}
+        />
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-40 right-[-120px] h-[620px] w-[620px] rounded-full blur-3xl opacity-25"
+          animate={{ y: [0, -22, 0], x: [0, -18, 0] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background:
+              "radial-gradient(circle at 60% 40%, rgba(255,107,31,0.21), rgba(0,0,0,0) 62%)",
+          }}
+        />
+
+        <div className="relative z-10 flex-1 flex flex-col">
+          <div className="container-custom px-6 lg:px-10 pt-28 pb-14 lg:pt-36 lg:pb-20 flex-1 flex items-center">
+            <div className="max-w-5xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70">
+                <Building2 className="h-4 w-4 text-primary" />
+                Services Atlas
+              </div>
+
+              <h1 className="mt-6 text-balance text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.02] text-white">
+                Core services,
+                <span className="block">
+                  designed for
+                  <span className="relative ml-3 inline-block">
+                    <span className="bg-gradient-to-r from-primary to-orange-600 bg-clip-text text-transparent">
+                      operational excellence
+                    </span>
+                    <span className="absolute -bottom-2 left-0 h-[2px] w-full bg-gradient-to-r from-primary to-orange-700 opacity-60" />
+                  </span>
+                </span>
+              </h1>
+
+              <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-white/70">
+                Explore HH Back Office Services offerings across RCM, Finance, and
+                Database operations — built to reduce complexity and increase
+                performance.
+              </p>
+
+              <div className="mt-10 flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={() => scrollToId(services[0].id)}
+                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
+                >
+                  Explore Services
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </button>
+
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-6 py-3 font-semibold text-white/90 backdrop-blur-xl transition-colors hover:bg-white/10"
+                >
+                  Talk to our team
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              <div className="mt-10 flex items-center gap-3 text-white/60">
+                <ChevronDown className="h-5 w-5" />
+                <span className="text-sm">
+                  Scroll to see immersive full-screen panels
+                </span>
+              </div>
             </div>
+          </div>
 
-            <h1 className="services-hero-text text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
-              Comprehensive{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
-                Outsourcing Solutions
-              </span>
-            </h1>
-
-            <p className="services-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              Expert services in RCM, Finance, and Database Administration
-              tailored to your business needs
-            </p>
+          <div className="mt-auto border-t border-white/10 bg-black/40 backdrop-blur-xl">
+            <div className="container-custom px-6 lg:px-10 py-6">
+              <div className="flex flex-wrap gap-2">
+                {services.map((service) => {
+                  const Icon = service.icon;
+                  const active = service.id === activeId;
+                  return (
+                    <button
+                      key={service.id}
+                      onClick={() => scrollToId(service.id)}
+                      className={cn(
+                        "group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm",
+                        "transition-colors",
+                        active
+                          ? "border-white/25 bg-white/10 text-white"
+                          : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          "h-4 w-4",
+                          active ? "text-primary" : "text-white/60"
+                        )}
+                      />
+                      {service.title}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* Main Services Section */}
-      <section ref={sectionRef} className="bg-[#050505] text-white px-6">
+      {/* Dock-style rail */}
+      <div className="pointer-events-none fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
         <div
-          className="max-w-7xl mx-auto"
-          style={{
-            paddingBlock: "clamp(4rem, 8vw, 12rem)",
+          className="pointer-events-auto"
+          onMouseLeave={() => setDockHoverIndex(null)}
+          onMouseMove={(e) => {
+            let bestIdx = 0;
+            let bestDist = Number.POSITIVE_INFINITY;
+            dockItemRefs.current.forEach((el, i) => {
+              if (!el) return;
+              const rect = el.getBoundingClientRect();
+              const centerY = rect.top + rect.height / 2;
+              const dist = Math.abs(e.clientY - centerY);
+              if (dist < bestDist) {
+                bestDist = dist;
+                bestIdx = i;
+              }
+            });
+            setDockHoverIndex(bestIdx);
           }}
         >
-          {services.map((service, index) => {
-            const isReverse = index % 2 !== 0;
+          <div className="flex flex-col gap-1">
+            {services.map((service, idx) => {
+              const active = service.id === activeId;
+              const Icon = service.icon;
 
-            return (
-              <div
-                key={index}
-                className="service-card grid lg:grid-cols-2 items-center gap-20 mb-[clamp(4rem,8vw,10rem)]"
-              >
-                {/* Image */}
-                <div className={`relative ${isReverse ? "lg:order-2" : ""}`}>
-                  <div className="service-image clip-hidden transform-gpu will-change-transform rounded-xl overflow-hidden bg-[#1A1A1A] border border-white/10">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
+              const d = dockHoverIndex === null ? 99 : Math.abs(idx - dockHoverIndex);
+              const iconScale =
+                dockHoverIndex === null
+                  ? 1
+                  : d === 0
+                    ? 1.5
+                    : d === 1
+                      ? 1.25
+                      : d === 2
+                        ? 1.12
+                        : d === 3
+                          ? 1.06
+                          : 1;
 
-                {/* Content */}
-                <div className={`space-y-6 ${isReverse ? "lg:order-1" : ""}`}>
-                  {/* Title */}
-                  <h3 className="text-4xl font-semibold tracking-tight leading-tight">
-                    {service.title.split("").map((char, i) => (
-                      <span key={i} className="char inline-block">
-                        {char === " " ? "\u00A0" : char}
-                      </span>
-                    ))}
-                  </h3>
+              const labelScale =
+                dockHoverIndex === null
+                  ? 0
+                  : d === 0
+                    ? 1
+                    : d === 1
+                      ? 0.82
+                      : d === 2
+                        ? 0.68
+                        : d === 3
+                          ? 0.6
+                          : 0.5;
 
-                  {/* Description */}
-                  <p className="benefit-item text-white/70 leading-relaxed max-w-md">
-                    {service.description}
-                  </p>
+              const labelOpacity =
+                dockHoverIndex === null
+                  ? 0
+                  : d === 0
+                    ? 1
+                    : d === 1
+                      ? 0.85
+                      : d === 2
+                        ? 0.7
+                        : d === 3
+                          ? 0.6
+                          : 0.45;
 
-                  {/* Features */}
-                  <ul className="space-y-3">
-                    {service.features.map((feature, i) => (
-                      <li
-                        key={i}
-                        className="feature-item flex items-start gap-3 text-white/80"
-                      >
-                        <span className="mt-2 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-slate-400 to-gray-200 flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Benefits */}
-                  <div
-                    ref={benefitsRef}
-                    className="pt-6 border-t border-white/10"
-                  >
-                    <h4 className="benefit-item  text-lg font-semibold text-primary mb-4">
-                      Benefits:
-                    </h4>
-
-                    <ul className="grid sm:grid-cols-2 gap-3">
-                      {service.benefits.map((benefit, i) => (
-                        <li
-                          key={i}
-                          className="benefit-item flex items-center gap-3 text-white/70"
-                        >
-                          <CircleCheckBig size={14} color="#fe7216" />
-                          <span>{benefit}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="section-padding bg-zinc-950 relative overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-[100px]" />
-
-        <div className="relative container-custom">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Why Choose{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
-                Our Services
-              </span>
-            </h2>
-            <p className="text-white/60 text-lg max-w-2xl mx-auto">
-              Experience the advantages of partnering with industry experts
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 xl:gap-8">
-            {benefits.map((benefit, index) => {
-              const Icon = benefit.icon;
               return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.08 }}
-                  className="group h-full"
+                <button
+                  key={service.id}
+                  ref={(el) => {
+                    dockItemRefs.current[idx] = el;
+                  }}
+                  type="button"
+                  onFocus={() => setDockHoverIndex(idx)}
+                  onClick={() => scrollToId(service.id)}
+                  className={cn(
+                    "group relative flex items-center justify-end",
+                    "h-12 w-12",
+                    "select-none"
+                  )}
+                  aria-label={service.title}
                 >
-                  <Card
-                    className="
-            h-full
-            bg-black/50
-            backdrop-blur-sm
-            border border-white/10
-            hover:border-primary/50
-            transition-all
-            duration-300
-          "
+                  <motion.div
+                    className={cn(
+                      "pointer-events-none absolute right-[56px]",
+                      "origin-right whitespace-nowrap",
+                      "text-white/90"
+                    )}
+                    animate={{
+                      opacity: labelOpacity,
+                      scale: labelScale,
+                      x: dockHoverIndex === null ? 6 : 0,
+                    }}
+                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
                   >
-                    <CardContent className="p-6 space-y-4 h-full flex flex-col">
-                      {/* Icon */}
-                      <div
-                        className="
-                w-14 h-14
-                rounded-full
-                bg-primary/10
-                flex items-center justify-center
-                group-hover:bg-primary/20
-                transition-colors
-                duration-300
-              "
-                      >
-                        <Icon className="w-7 h-7 text-primary" />
-                      </div>
+                    <div
+                      className={cn(
+                        "rounded-full px-3 py-1",
+                        "bg-black/45 backdrop-blur-xl",
+                        active ? "text-white" : "text-white/85"
+                      )}
+                    >
+                      <span className="text-sm font-semibold">{service.title}</span>
+                      <span className="ml-2 text-[11px] text-white/60">
+                        #{String(idx + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                  </motion.div>
 
-                      {/* Title */}
-                      <h3
-                        className="
-                text-lg
-                md:text-xl
-                font-semibold
-                text-white
-                group-hover:text-primary
-                transition-colors
-                duration-300
-              "
-                      >
-                        {benefit.title}
-                      </h3>
+                  <motion.div
+                    className={cn(
+                      "relative grid h-12 w-12 place-items-center rounded-2xl",
+                      active
+                        ? "bg-orange-500/15"
+                        : "bg-white/5 group-hover:bg-white/10",
+                      "backdrop-blur-xl"
+                    )}
+                    animate={{ scale: iconScale }}
+                    transition={{ type: "spring", stiffness: 360, damping: 28 }}
+                  >
+                    <Icon
+                      className={cn(
+                        "h-5 w-5",
+                        active ? "text-primary" : "text-white/75"
+                      )}
+                    />
 
-                      {/* Description */}
-                      <p
-                        className="
-                text-white/60
-                text-sm
-                leading-relaxed
-                flex-grow
-              "
-                      >
-                        {benefit.description}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                    <span
+                      className={cn(
+                        "absolute -left-1 top-1/2 h-2.5 w-1 -translate-y-1/2 rounded-full",
+                        active ? "bg-primary" : "bg-transparent"
+                      )}
+                    />
+                  </motion.div>
+                </button>
               );
             })}
           </div>
         </div>
-      </section>
+      </div>
+
+      <main className="bg-black">
+        {services.map((service, idx) => {
+          const Icon = service.icon;
+          const number = String(idx + 1).padStart(2, "0");
+
+          return (
+            <section
+              key={service.id}
+              id={`service-${service.id}`}
+              data-service-panel
+              data-service-id={service.id}
+              data-snap-section
+              className="relative isolate min-h-[110svh] overflow-hidden border-b border-white/10"
+            >
+              <div className="absolute inset-0">
+                <div
+                  data-panel-image
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${service.image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                />
+
+                <div className="absolute inset-0 bg-black/60" />
+
+                <div
+                  className={cn(
+                    "absolute inset-0 opacity-35",
+                    "bg-gradient-to-br",
+                    service.accent
+                  )}
+                />
+
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.75)_70%,rgba(0,0,0,0.95)_100%)]" />
+              </div>
+
+              <div className="relative z-10 container-custom px-6 lg:px-10 py-16 lg:py-24">
+                <div className="grid gap-10 lg:gap-14 lg:grid-cols-12 items-start">
+                  <div className="lg:col-span-5">
+                    <div data-panel-reveal className="flex items-center gap-3">
+                      <span className="text-white/40 text-sm tracking-[0.25em]">
+                        {number}
+                      </span>
+                      <span
+                        className={cn(
+                          "h-px flex-1 max-w-24",
+                          "bg-gradient-to-r",
+                          service.accent
+                        )}
+                      />
+                    </div>
+
+                    <div
+                      data-panel-reveal
+                      className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70"
+                    >
+                      <Icon className="h-4 w-4 text-white/80" />
+                      {service.title}
+                    </div>
+
+                    <h2
+                      data-panel-reveal
+                      className="mt-6 text-4xl md:text-5xl font-bold leading-[1.05] text-white"
+                    >
+                      <span
+                        className={cn(
+                          "bg-gradient-to-r bg-clip-text text-transparent",
+                          service.accent
+                        )}
+                      >
+                        {service.tagline}
+                      </span>
+                    </h2>
+
+                    <p
+                      data-panel-reveal
+                      className="mt-5 text-lg leading-relaxed text-white/75"
+                    >
+                      {service.description}
+                    </p>
+
+                    <div data-panel-reveal className="mt-8 flex flex-col sm:flex-row gap-3">
+                      <Link
+                        to="/contact"
+                        className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
+                      >
+                        Get a Consultation
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </Link>
+                    </div>
+
+                    <div data-panel-reveal className="mt-10">
+                      <div className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 backdrop-blur-xl">
+                        <span className="text-xs uppercase tracking-[0.25em] text-white/60">
+                          Designed for outcomes
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-7">
+                    <div className="grid gap-5 lg:gap-6 lg:grid-cols-2">
+                      <div data-panel-reveal className="lg:col-span-2">
+                        <GlassCard title="Key Features" items={service.features} />
+                      </div>
+
+                      <div data-panel-reveal>
+                        <GlassCard
+                          title="Business Benefits"
+                          items={service.benefits}
+                          tone="primary"
+                        />
+                      </div>
+
+                      <div data-panel-reveal>
+                        <GlassCard
+                          title="Performance Outcomes"
+                          items={service.benefits}
+                          tone="success"
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      data-panel-reveal
+                      className="mt-8 rounded-2xl border border-white/10 bg-black/35 px-6 py-5 backdrop-blur-xl"
+                    >
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                        <div className="text-sm font-semibold text-white">
+                          Built for accuracy, compliance, and scale.
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {["Compliance", "Accuracy", "Automation", "Reporting"].map(
+                            (t) => (
+                              <span
+                                key={t}
+                                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70"
+                              >
+                                {t}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          );
+        })}
+      </main>
     </div>
   );
 };

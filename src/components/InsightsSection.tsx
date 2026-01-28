@@ -43,7 +43,7 @@ const InsightsSection = () => {
     },
     {
       id: 4,
-      category: "Industries We Serve",
+      category: "Services Overview",
       title: "Specialized Support",
       subtitle: "Across key industries",
       description:
