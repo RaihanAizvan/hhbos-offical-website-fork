@@ -96,8 +96,8 @@ const SectionHeader = ({
   title: string;
   subtitle: string;
 }) => (
-  <div className="flex items-center gap-4 mb-8">
-    <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-black/60 text-primary">
+  <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8 text-center sm:text-left">
+    <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-black/60 text-primary mx-auto sm:mx-0">
       <Icon className="h-6 w-6" />
     </span>
     <div>
@@ -123,33 +123,34 @@ const Specialities = () => {
             className="absolute inset-0 h-full w-full object-cover opacity-30"
           >
             <source src="/video/web%20bg.webm" type="video/webm" />
-            <source src="/video/background.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-black/70" />
         </div>
-        <div className="container-custom px-6 relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.3em] text-white/60">
-            <Layers className="h-4 w-4 text-primary" />
-            Specialities
-          </div>
-          <h1 className="mt-6 text-4xl md:text-6xl font-bold text-white">
-            A structured directory of our platform and specialty expertise
-          </h1>
-          <p className="mt-4 text-white/60 text-lg max-w-2xl mx-auto">
-            Clean, consistent, and ready for scale—organized exactly like a service
-            directory.
-          </p>
+        <div className="container-custom px-6 relative z-10 overflow-hidden text-center">
+          <div className="mx-auto w-full max-w-full">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-white/60 mx-auto">
+              <Layers className="h-4 w-4 text-primary" />
+              Specialities
+            </div>
+            <h1 className="mt-4 text-3xl sm:text-4xl md:text-6xl font-bold text-white leading-tight">
+              Specialities
+            </h1>
+            <p className="mt-4 text-white/60 text-base sm:text-lg max-w-2xl mx-auto">
+              Clean, consistent, and ready for scale—organized exactly like a service
+              directory.
+            </p>
 
-          <div className="mt-10 overflow-hidden">
-            <div className="flex w-max gap-4 animate-marquee">
-              {[...logoIcons, ...logoIcons].map((icon, idx) => (
-                <div
-                  key={`${icon}-${idx}`}
-                  className="h-16 w-16 rounded-2xl border border-white/10 bg-black/60 flex items-center justify-center shrink-0 text-primary"
-                >
-                  <i className={`fi ${icon} text-2xl`} />
-                </div>
-              ))}
+            <div className="mt-10 overflow-hidden">
+              <div className="flex w-max gap-4 animate-marquee">
+                {[...logoIcons, ...logoIcons].map((icon, idx) => (
+                  <div
+                    key={`${icon}-${idx}`}
+                    className="h-16 w-16 rounded-2xl border border-white/10 bg-black/60 flex items-center justify-center shrink-0 text-primary"
+                  >
+                    <i className={`fi ${icon} text-2xl`} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
