@@ -1,4 +1,6 @@
 import { motion } from "motion/react";
+import { useTheme } from "next-themes";
+import { getHeroVideoSrc } from "@/lib/theme";
 import {
   BriefcaseMedical,
   ClipboardList,
@@ -78,11 +80,17 @@ const logoIcons = [
   "fi-rr-briefcase",
 ];
 
-const tileBase =
-  "aspect-square rounded-2xl border border-white/10 bg-black/60 px-4 py-5 text-sm text-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 flex flex-col items-center justify-center text-center";
+const tileBase = (isLight: boolean) =>
+  `aspect-square rounded-2xl border px-4 py-5 text-sm shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 flex flex-col items-center justify-center text-center ${
+    isLight
+      ? "border-slate-200 bg-white text-slate-600 shadow-[0_12px_24px_rgba(15,23,42,0.12)]"
+      : "border-white/10 bg-black/60 text-white/80"
+  }`;
 
-const tileHover =
-  "hover:-translate-y-1 hover:border-primary/50 hover:text-white hover:shadow-[0_18px_40px_rgba(0,0,0,0.5)]";
+const tileHover = (isLight: boolean) =>
+  `hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_18px_40px_rgba(0,0,0,0.5)] ${
+    isLight ? "hover:text-slate-900" : "hover:text-white"
+  }`;
 
 const gridClasses =
   "grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6";
@@ -91,51 +99,90 @@ const SectionHeader = ({
   icon: Icon,
   title,
   subtitle,
+  isLight,
 }: {
   icon: typeof BriefcaseMedical;
   title: string;
   subtitle: string;
+  isLight: boolean;
 }) => (
   <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8 text-center sm:text-left">
-    <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-black/60 text-primary mx-auto sm:mx-0">
+    <span
+      className={`inline-flex h-12 w-12 items-center justify-center rounded-xl border mx-auto sm:mx-0 ${
+        isLight
+          ? "border-slate-200 bg-white text-primary"
+          : "border-white/10 bg-black/60 text-primary"
+      }`}
+    >
       <Icon className="h-6 w-6" />
     </span>
     <div>
-      <h2 className="text-2xl md:text-3xl font-semibold text-white">
+      <h2 className={`text-2xl md:text-3xl font-semibold ${isLight ? "text-slate-900" : "text-white"}`}>
         {title}
       </h2>
-      <p className="text-white/60 text-sm md:text-base mt-1">{subtitle}</p>
+      <p className={`${isLight ? "text-slate-500" : "text-white/60"} text-sm md:text-base mt-1`}>
+        {subtitle}
+      </p>
     </div>
   </div>
 );
 
 const Specialities = () => {
+  const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === "light";
+  const heroVideo = getHeroVideoSrc(resolvedTheme);
+
   return (
-    <div className="min-h-screen bg-black">
+    <div className={`min-h-screen ${isLight ? "bg-background" : "bg-black"}`}>
       {/* Hero */}
-      <section className="relative min-h-[70svh] pt-28 pb-20 overflow-hidden flex items-center">
+      <section
+        className={`relative min-h-[70svh] pt-28 pb-20 overflow-hidden flex items-center ${
+          isLight ? "bg-background" : "bg-black"
+        }`}
+      >
         <div className="absolute inset-0 z-0">
           <video
+            key={heroVideo}
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 h-full w-full object-cover opacity-30"
+            className={`absolute inset-0 h-full w-full object-cover ${
+              isLight ? "opacity-35" : "opacity-30"
+            }`}
           >
-            <source src="/video/web%20bg.webm" type="video/webm" />
+            <source src={heroVideo} type={isLight ? "video/mp4" : "video/webm"} />
           </video>
-          <div className="absolute inset-0 bg-black/70" />
+          <div
+            className={`absolute inset-0 ${
+              isLight ? "bg-white/50" : "bg-black/70"
+            }`}
+          />
         </div>
         <div className="container-custom px-6 relative z-10 overflow-hidden text-center">
           <div className="mx-auto w-full max-w-full">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-white/60 mx-auto">
+            <div
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[10px] uppercase tracking-[0.2em] mx-auto ${
+                isLight
+                  ? "border-slate-200 bg-white text-slate-500"
+                  : "border-white/10 bg-white/5 text-white/60"
+              }`}
+            >
               <Layers className="h-4 w-4 text-primary" />
               Specialities
             </div>
-            <h1 className="mt-4 text-3xl sm:text-4xl md:text-6xl font-bold text-white leading-tight">
+            <h1
+              className={`mt-4 text-3xl sm:text-4xl md:text-6xl font-bold leading-tight ${
+                isLight ? "text-slate-900" : "text-white"
+              }`}
+            >
               Specialities
             </h1>
-            <p className="mt-4 text-white/60 text-base sm:text-lg max-w-2xl mx-auto">
+            <p
+              className={`mt-4 text-base sm:text-lg max-w-2xl mx-auto ${
+                isLight ? "text-slate-500" : "text-white/60"
+              }`}
+            >
               Clean, consistent, and ready for scale—organized exactly like a service
               directory.
             </p>
@@ -145,7 +192,11 @@ const Specialities = () => {
                 {[...logoIcons, ...logoIcons].map((icon, idx) => (
                   <div
                     key={`${icon}-${idx}`}
-                    className="h-16 w-16 rounded-2xl border border-white/10 bg-black/60 flex items-center justify-center shrink-0 text-primary"
+                    className={`h-16 w-16 rounded-2xl border flex items-center justify-center shrink-0 text-primary ${
+                      isLight
+                        ? "border-slate-200 bg-white"
+                        : "border-white/10 bg-black/60"
+                    }`}
                   >
                     <i className={`fi ${icon} text-2xl`} />
                   </div>
@@ -163,12 +214,13 @@ const Specialities = () => {
             icon={TabletSmartphone}
             title="PMS / EHR Platforms"
             subtitle="Operational familiarity across leading systems"
+            isLight={isLight}
           />
           <div className={gridClasses}>
             {pmsPlatforms.map((item, index) => (
               <motion.div
                 key={item}
-                className={`${tileBase} ${tileHover}`}
+                className={`${tileBase(isLight)} ${tileHover(isLight)}`}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
@@ -185,18 +237,19 @@ const Specialities = () => {
       </section>
 
       {/* Specialties */}
-      <section className="py-16 bg-zinc-950">
+      <section className={`py-16 ${isLight ? "bg-white" : "bg-zinc-950"}`}>
         <div className="container-custom px-6">
           <SectionHeader
             icon={Stethoscope}
             title="Specialties"
             subtitle="Domain expertise across clinical and billing services"
+            isLight={isLight}
           />
           <div className={gridClasses}>
             {specialties.map((item) => (
               <motion.div
                 key={item.name}
-                className={`${tileBase} ${tileHover}`}
+                className={`${tileBase(isLight)} ${tileHover(isLight)}`}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
@@ -217,12 +270,13 @@ const Specialities = () => {
             icon={ShieldCheck}
             title="Credentialing Application"
             subtitle="Specialized compliance tools"
+            isLight={isLight}
           />
           <div className={gridClasses}>
             {credentialing.map((item) => (
               <motion.div
                 key={item}
-                className={`${tileBase} ${tileHover}`}
+                className={`${tileBase(isLight)} ${tileHover(isLight)}`}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
