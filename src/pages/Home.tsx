@@ -177,13 +177,13 @@ const Home = () => {
       <PortalCTA />
 
       {/* Why Choose Us Section */}
-      <section className="section-padding bg-zinc-950">
+      <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Why Choose HH Back Office Services
             </h2>
-            <p className="text-lg text-white/70">
+            <p className="text-lg text-muted-foreground">
               Your trusted partner for business excellence
             </p>
           </div>
@@ -219,7 +219,7 @@ const Home = () => {
       <InsightsSection />
 
       {/* Testimonial Section */}
-      <section className="section-padding bg-zinc-950">
+      <section className="section-padding bg-background">
         <div className="container-custom">
           <Card className="bg-card border-none">
             <CardContent className="p-8 md:p-12 text-center">

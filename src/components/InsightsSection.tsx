@@ -127,22 +127,22 @@ const InsightsSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-32 bg-black overflow-x-hidden"
+      className="relative py-32 bg-background overflow-x-hidden"
     >
       <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
         {/* Header */}
         <div className="mb-20 header-content">
           <div className="flex items-center gap-4 mb-6 opacity-0">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            <span className="text-white/40 text-sm uppercase tracking-[0.3em]">Overview</span>
+            <span className="text-muted-foreground text-sm uppercase tracking-[0.3em]">Overview</span>
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           </div>
           
-          <h2 className="text-5xl md:text-7xl font-bold text-white text-center mb-6 tracking-tight opacity-0">
+          <h2 className="text-5xl md:text-7xl font-bold text-foreground text-center mb-6 tracking-tight opacity-0">
             What We Do
           </h2>
           
-          <p className="text-white/50 text-center text-lg max-w-2xl mx-auto opacity-0">
+          <p className="text-muted-foreground text-center text-lg max-w-2xl mx-auto opacity-0">
             A quick overview of our services, industries, and delivery approach
           </p>
         </div>
@@ -160,7 +160,7 @@ const InsightsSection = () => {
               onMouseLeave={() => setHoveredCard(null)}
             >
               <Link to="/contact" className="block h-full">
-                <div className="relative h-full bg-zinc-950 border border-white/5 rounded-3xl p-6 md:p-8 overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-zinc-900">
+                <div className="relative h-full bg-card border border-border rounded-3xl p-6 md:p-8 overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-muted">
                   {/* Animated background gradient */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary via-transparent to-transparent" />
@@ -178,8 +178,8 @@ const InsightsSection = () => {
                       <span className="text-primary/60 text-xs uppercase tracking-widest font-medium">
                         {insight.category}
                       </span>
-                      <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:border-primary group-hover:rotate-45">
-                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className="w-8 h-8 rounded-full border border-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:border-primary group-hover:rotate-45">
+                        <svg className="w-4 h-4 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                       </div>
@@ -187,16 +187,16 @@ const InsightsSection = () => {
 
                     {/* Main content */}
                     <div className="space-y-3 mb-6">
-                      <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight group-hover:text-primary transition-colors duration-300">
+                      <h3 className="text-2xl md:text-3xl font-bold text-foreground leading-tight group-hover:text-primary transition-colors duration-300">
                         {insight.title}
                       </h3>
-                      <p className="text-white/60 text-sm">
+                      <p className="text-muted-foreground text-sm">
                         {insight.subtitle}
                       </p>
                     </div>
 
                     {/* Description */}
-                    <p className="text-white/40 text-sm leading-relaxed mb-4">
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                       {insight.description}
                     </p>
 
@@ -205,7 +205,7 @@ const InsightsSection = () => {
                       {insight.tags.map((tag, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-1 bg-white/5 rounded-md text-white/60 text-xs border border-white/5"
+                          className="px-2 py-1 bg-muted rounded-md text-muted-foreground text-xs border border-border"
                         >
                           {tag}
                         </span>
