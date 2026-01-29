@@ -6,6 +6,8 @@ import { services } from "@/data/services";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -124,15 +126,15 @@ const Navigation = () => {
                                   "block px-2 py-1 text-sm transition " +
                                   (hoveredService === service.slug
                                     ? "text-primary"
-                                    : "text-white hover:text-primary")
+                                    : "text-foreground/80 hover:text-primary")
                                 }
                               >
                                 {service.title}
                               </Link>
 
                               {hoveredService === service.slug && (
-                                <div className="absolute left-full top-0 ml-4 w-[280px] rounded-2xl border border-white/10 bg-black/95 p-4 shadow-[0_25px_60px_rgba(0,0,0,0.6)]">
-                                  <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+                                <div className="absolute left-full top-0 ml-4 w-[280px] rounded-2xl border border-border bg-popover/95 p-4 shadow-[0_25px_60px_rgba(0,0,0,0.35)]">
+                                  <p className="text-xs uppercase tracking-[0.2em] text-foreground/60">
                                     Features
                                   </p>
                                   <div className="mt-3 space-y-2">
@@ -140,7 +142,7 @@ const Navigation = () => {
                                       <Link
                                         key={feature.slug}
                                         to={`/services/${service.slug}/${feature.slug}`}
-                                        className="block rounded-xl px-2 py-1 text-xs text-white/70 hover:text-white hover:bg-white/5 transition"
+                                        className="block rounded-xl px-2 py-1 text-xs text-foreground/70 hover:text-foreground hover:bg-muted transition"
                                       >
                                         {feature.title}
                                       </Link>
@@ -203,7 +205,7 @@ const Navigation = () => {
           </div>
 
           {isOpen && (
-            <div className="lg:hidden py-6 border-t border-white/10 mt-4">
+            <div className="lg:hidden py-6 border-t border-border mt-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
