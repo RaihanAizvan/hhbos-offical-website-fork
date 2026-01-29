@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Globe, Moon, Search, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { services } from "@/data/services";
+import { cn } from "@/lib/utils";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,8 +11,9 @@ const Navigation = () => {
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+  const isLight = resolvedTheme === "light";
 
   const lastScrollY = useRef(0);
   const location = useLocation();
@@ -115,7 +117,12 @@ const Navigation = () => {
                     </Link>
 
                     <div
-                      className="absolute left-0 top-full mt-0 w-[340px] rounded-3xl border border-white/10 bg-black/95 backdrop-blur-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] opacity-0 pointer-events-none translate-y-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto"
+                      className={cn(
+                        "absolute left-0 top-full mt-0 w-[340px] rounded-3xl border backdrop-blur-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] opacity-0 pointer-events-none translate-y-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto",
+                        isLight
+                          ? "border-slate-200 bg-white/95 shadow-[0_20px_60px_rgba(15,23,42,0.15)]"
+                          : "border-white/10 bg-black/95"
+                      )}
                       style={{ paddingTop: "0.5rem" }}
                       onMouseLeave={() => {
                         setHoveredService(null);
@@ -123,7 +130,12 @@ const Navigation = () => {
                       }}
                     >
                       <div className="p-5">
-                        <p className="text-xs uppercase tracking-[0.2em] text-white">
+                        <p
+                          className={cn(
+                            "text-xs uppercase tracking-[0.2em]",
+                            isLight ? "text-slate-500" : "text-white"
+                          )}
+                        >
                           Services
                         </p>
                         <div className="mt-3 space-y-2">
@@ -135,19 +147,33 @@ const Navigation = () => {
                                   setHoveredService(service.slug);
                                   setHoveredIndex(index);
                                 }}
-                                className={
-                                  "block px-2 py-1 text-sm transition " +
-                                  (hoveredService === service.slug
+                                className={cn(
+                                  "block px-2 py-1 text-sm transition",
+                                  hoveredService === service.slug
                                     ? "text-primary"
-                                    : "text-foreground/80 hover:text-primary")
-                                }
+                                    : isLight
+                                      ? "text-slate-700 hover:text-primary"
+                                      : "text-foreground/80 hover:text-primary"
+                                )}
                               >
                                 {service.title}
                               </Link>
 
                               {hoveredService === service.slug && (
-                                <div className="absolute left-full top-0 ml-4 w-[280px] rounded-2xl border border-border bg-popover/95 p-4 shadow-[0_25px_60px_rgba(0,0,0,0.35)]">
-                                  <p className="text-xs uppercase tracking-[0.2em] text-foreground/60">
+                                <div
+                                  className={cn(
+                                    "absolute left-full top-0 ml-4 w-[280px] rounded-2xl border p-4 shadow-[0_25px_60px_rgba(0,0,0,0.35)]",
+                                    isLight
+                                      ? "border-slate-200 bg-white"
+                                      : "border-border bg-popover/95"
+                                  )}
+                                >
+                                  <p
+                                    className={cn(
+                                      "text-xs uppercase tracking-[0.2em]",
+                                      isLight ? "text-slate-400" : "text-foreground/60"
+                                    )}
+                                  >
                                     Features
                                   </p>
                                   <div className="mt-3 space-y-2">
@@ -155,7 +181,12 @@ const Navigation = () => {
                                       <Link
                                         key={feature.slug}
                                         to={`/services/${service.slug}/${feature.slug}`}
-                                        className="block rounded-xl px-2 py-1 text-xs text-foreground/70 hover:text-foreground hover:bg-muted transition"
+                                        className={cn(
+                                          "block rounded-xl px-2 py-1 text-xs transition",
+                                          isLight
+                                            ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                                            : "text-foreground/70 hover:text-foreground hover:bg-muted"
+                                        )}
                                       >
                                         {feature.title}
                                       </Link>
