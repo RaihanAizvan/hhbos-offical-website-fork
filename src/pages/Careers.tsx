@@ -1,4 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
+import { useTheme } from "next-themes";
+import { getHeroVideoSrc } from "@/lib/theme";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronRight } from "lucide-react";
@@ -77,6 +79,9 @@ const careerHighlights = [
 
 const Careers = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === "light";
+  const heroVideo = getHeroVideoSrc(resolvedTheme);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -154,47 +159,68 @@ const Careers = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className={`min-h-screen ${isLight ? "bg-background" : "bg-black"}`}>
       {/* Hero */}
       <section
         ref={heroRef}
-        className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-black pt-20"
+        className={`relative min-h-[70svh] flex items-center justify-center overflow-hidden pt-20 ${
+          isLight ? "bg-background" : "bg-black"
+        }`}
       >
         <div className="absolute inset-0">
           <video
+            key={heroVideo}
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            className={`absolute inset-0 w-full h-full object-cover ${
+              isLight ? "opacity-35" : "opacity-30"
+            }`}
           >
-            <source src="/video/web%20bg.webm" type="video/webm" />
+            <source src={heroVideo} type={isLight ? "video/mp4" : "video/webm"} />
           </video>
-          <div className="absolute inset-0 bg-black/70" />
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
-        </div>
-
-        <div className="absolute inset-0 opacity-10">
+          <div className={`absolute inset-0 ${isLight ? "bg-white/35" : "bg-black/70"}`} />
           <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,107,31,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.18) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-            }}
+            className={`absolute bottom-0 left-0 right-0 h-40 pointer-events-none ${
+              isLight
+                ? "bg-gradient-to-t from-white via-white/80 to-transparent"
+                : "bg-gradient-to-t from-black via-black/70 to-transparent"
+            }`}
           />
         </div>
 
+        {!isLight && (
+          <div className="absolute inset-0 opacity-10">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,107,31,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.18) 1px, transparent 1px)",
+                backgroundSize: "40px 40px",
+              }}
+            />
+          </div>
+        )}
+
         <div className="relative text-center max-w-5xl px-6">
           <div className="career-hero-label flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-16 bg-primary" />
-            <span className="text-primary text-sm uppercase tracking-[0.3em]">
+            <div className={`h-px w-16 ${isLight ? "bg-orange-400" : "bg-primary"}`} />
+            <span
+              className={`text-sm uppercase tracking-[0.3em] ${
+                isLight ? "text-orange-500" : "text-primary"
+              }`}
+            >
               Careers at HH
             </span>
-            <div className="h-px w-16 bg-primary" />
+            <div className={`h-px w-16 ${isLight ? "bg-orange-400" : "bg-primary"}`} />
           </div>
 
-          <h1 className="career-hero-title text-6xl md:text-8xl font-bold tracking-tight mb-8">
+          <h1
+            className={`career-hero-title text-6xl md:text-8xl font-bold tracking-tight mb-8 ${
+              isLight ? "text-slate-900" : "text-white"
+            }`}
+          >
             Build a career in
             <br />
             <span className="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">
@@ -202,17 +228,31 @@ const Careers = () => {
             </span>
           </h1>
 
-          <p className="career-hero-sub text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p
+            className={`career-hero-sub text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed ${
+              isLight ? "text-slate-600" : "text-gray-400"
+            }`}
+          >
             Join a team that values precision, growth, and meaningful impact.
             We work with global clients to deliver world-class operations.
           </p>
 
           <div className="career-hero-btn flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="px-8 py-3 bg-primary text-white font-bold rounded-full transition-colors flex items-center gap-2 group">
+            <button
+              className={`px-8 py-3 font-bold rounded-full transition-colors flex items-center gap-2 group ${
+                isLight ? "bg-orange-500 text-white" : "bg-primary text-white"
+              }`}
+            >
               View Open Positions
               <ChevronRight className="group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="px-8 py-3 border border-white/20 text-white rounded-full hover:border-primary/60 transition-colors">
+            <button
+              className={`px-8 py-3 border rounded-full transition-colors ${
+                isLight
+                  ? "border-slate-200 text-slate-700 hover:border-orange-300"
+                  : "border-white/20 text-white hover:border-primary/60"
+              }`}
+            >
               Our Culture
             </button>
           </div>
@@ -221,12 +261,20 @@ const Careers = () => {
             {careerHighlights.map((item) => (
               <div
                 key={item.label}
-                className="rounded-2xl border border-white/10 bg-black/50 px-5 py-4"
+                className={`rounded-2xl border px-5 py-4 ${
+                  isLight
+                    ? "border-slate-200 bg-white"
+                    : "border-white/10 bg-black/50"
+                }`}
               >
-                <div className="text-2xl font-semibold text-white">
+                <div className={`text-2xl font-semibold ${isLight ? "text-slate-900" : "text-white"}`}>
                   {item.value}
                 </div>
-                <div className="text-xs text-white/60 uppercase tracking-widest mt-1">
+                <div
+                  className={`text-xs uppercase tracking-widest mt-1 ${
+                    isLight ? "text-slate-500" : "text-white/60"
+                  }`}
+                >
                   {item.label}
                 </div>
               </div>
@@ -236,13 +284,13 @@ const Careers = () => {
       </section>
 
       {/* Culture Pillars */}
-      <section className="py-24 bg-zinc-950">
+      <section className={`py-24 ${isLight ? "bg-slate-50" : "bg-zinc-950"}`}>
         <div className="container-custom px-6">
           <div className="text-center mb-14">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${isLight ? "text-slate-900" : "text-white"}`}>
               Our Culture Pillars
             </h2>
-            <p className="text-white/60 max-w-2xl mx-auto">
+            <p className={`${isLight ? "text-slate-600" : "text-white/60"} max-w-2xl mx-auto`}>
               The values that shape how we work and grow together.
             </p>
           </div>
@@ -251,12 +299,16 @@ const Careers = () => {
             {culturePillars.map((pillar) => (
               <div
                 key={pillar.title}
-                className="culture-card rounded-2xl border border-white/10 bg-black/50 p-6 hover:border-primary/50 transition-colors"
+                className={`culture-card rounded-2xl border p-6 transition-colors ${
+                  isLight
+                    ? "border-slate-200 bg-white hover:border-orange-200"
+                    : "border-white/10 bg-black/50 hover:border-primary/50"
+                }`}
               >
-                <h3 className="text-xl font-semibold text-white mb-3">
+                <h3 className={`text-xl font-semibold mb-3 ${isLight ? "text-slate-900" : "text-white"}`}>
                   {pillar.title}
                 </h3>
-                <p className="text-white/60 text-sm leading-relaxed">
+                <p className={`${isLight ? "text-slate-600" : "text-white/60"} text-sm leading-relaxed`}>
                   {pillar.description}
                 </p>
               </div>
@@ -266,13 +318,15 @@ const Careers = () => {
       </section>
 
       {/* Life at HH */}
-      <section className="py-24 bg-black">
+      <section className={`py-24 ${isLight ? "bg-background" : "bg-black"}`}>
         <div className="container-custom px-6">
           <div className="mb-16">
-            <h2 className="text-4xl font-bold mb-2 text-white">
+            <h2 className={`text-4xl font-bold mb-2 ${isLight ? "text-slate-900" : "text-white"}`}>
               Life at <span className="text-orange-500">HH</span> Back Office
             </h2>
-            <p className="text-gray-400">Where collaboration meets innovation.</p>
+            <p className={isLight ? "text-slate-600" : "text-gray-400"}>
+              Where collaboration meets innovation.
+            </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-[620px]">
             <GalleryImage
@@ -293,19 +347,33 @@ const Careers = () => {
       <WhyWorkWithUs />
 
       {/* Open roles */}
-      <section className="py-28 max-w-6xl mx-auto px-6">
+      <section className={`py-28 max-w-6xl mx-auto px-6 ${isLight ? "text-slate-900" : "text-white"}`}>
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
           <div>
-            <h2 className="text-4xl font-bold mb-4 text-white">Open Roles</h2>
-            <p className="text-gray-400">
+            <h2 className={`text-4xl font-bold mb-4 ${isLight ? "text-slate-900" : "text-white"}`}>
+              Open Roles
+            </h2>
+            <p className={isLight ? "text-slate-600" : "text-gray-400"}>
               Find your place in our global mission.
             </p>
           </div>
           <div className="flex gap-4">
-            <span className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-white">
+            <span
+              className={`px-4 py-2 rounded-full border text-sm ${
+                isLight
+                  ? "border-slate-200 bg-white text-slate-700"
+                  : "border-white/10 bg-white/5 text-white"
+              }`}
+            >
               All Roles
             </span>
-            <span className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-500">
+            <span
+              className={`px-4 py-2 rounded-full border text-sm ${
+                isLight
+                  ? "border-slate-200 bg-white text-slate-400"
+                  : "border-white/10 bg-white/5 text-gray-500"
+              }`}
+            >
               Engineering
             </span>
           </div>
