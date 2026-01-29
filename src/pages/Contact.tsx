@@ -1,4 +1,6 @@
 import { useLayoutEffect, useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
+import { getHeroVideoSrc } from "@/lib/theme";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -22,6 +24,9 @@ const Contact = () => {
   });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<null | "success" | "error">(null);
+  const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === "light";
+  const heroVideo = getHeroVideoSrc(resolvedTheme);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -155,56 +160,81 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className={`min-h-screen ${isLight ? "bg-background" : "bg-black"}`}>
       {/* Hero Section */}
       <section
         ref={heroRef}
-        className="relative min-h-[60svh] flex items-center justify-center overflow-hidden bg-black"
+        className={`relative min-h-[60svh] flex items-center justify-center overflow-hidden ${
+          isLight ? "bg-background" : "bg-black"
+        }`}
       >
         <div className="absolute inset-0">
           <video
+            key={heroVideo}
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            className={`absolute inset-0 w-full h-full object-cover ${
+              isLight ? "opacity-35" : "opacity-30"
+            }`}
           >
-            <source src="/video/web%20bg.webm" type="video/webm" />
+            <source src={heroVideo} type={isLight ? "video/mp4" : "video/webm"} />
           </video>
-          <div className="absolute inset-0 bg-black/60" />
+          <div className={`absolute inset-0 ${isLight ? "bg-white/35" : "bg-black/60"}`} />
           {/* Bottom fade gradient mask */}
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
-        </div>
-
-        <div className="absolute inset-0 opacity-10">
           <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,107,31,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.2) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-            }}
+            className={`absolute bottom-0 left-0 right-0 h-40 pointer-events-none ${
+              isLight
+                ? "bg-gradient-to-t from-white via-white/80 to-transparent"
+                : "bg-gradient-to-t from-black via-black/70 to-transparent"
+            }`}
           />
         </div>
+
+        {!isLight && (
+          <div className="absolute inset-0 opacity-10">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,107,31,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,31,0.2) 1px, transparent 1px)",
+                backgroundSize: "40px 40px",
+              }}
+            />
+          </div>
+        )}
 
         <div className="relative z-10 container-custom text-center px-6">
           <div className="space-y-6 max-w-4xl mx-auto">
             <div className="contact-hero-text flex items-center justify-center gap-4 mb-6">
-              <div className="h-px w-16 bg-primary" />
-              <span className="text-primary text-sm uppercase tracking-[0.3em]">
+              <div className={`h-px w-16 ${isLight ? "bg-orange-400" : "bg-primary"}`} />
+              <span
+                className={`text-sm uppercase tracking-[0.3em] ${
+                  isLight ? "text-orange-500" : "text-primary"
+                }`}
+              >
                 Get In Touch
               </span>
-              <div className="h-px w-16 bg-primary" />
+              <div className={`h-px w-16 ${isLight ? "bg-orange-400" : "bg-primary"}`} />
             </div>
 
-            <h1 className="contact-hero-text text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+            <h1
+              className={`contact-hero-text text-5xl md:text-6xl lg:text-7xl font-bold leading-tight ${
+                isLight ? "text-slate-900" : "text-white"
+              }`}
+            >
               Get in{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">
                 Touch
               </span>
             </h1>
 
-            <p className="contact-hero-text text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+            <p
+              className={`contact-hero-text text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed ${
+                isLight ? "text-slate-600" : "text-white/70"
+              }`}
+            >
               We'd love to discuss how we can help your business grow.
             </p>
           </div>
@@ -212,7 +242,7 @@ const Contact = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="section-padding bg-black">
+      <section className={`section-padding ${isLight ? "bg-background" : "bg-black"}`}>
         <div className="container-custom space-y-20">
           {/* Top: Contact Info + Form */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
@@ -229,21 +259,31 @@ const Contact = () => {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className={`flex items-start gap-4 p-6 bg-zinc-950 border border-white/10 rounded-xl transition-all duration-300 group hover:border-primary/50`}
+                      className={`flex items-start gap-4 p-6 border rounded-xl transition-all duration-300 group ${
+                        isLight
+                          ? "bg-white border-slate-200 hover:border-orange-200"
+                          : "bg-zinc-950 border-white/10 hover:border-primary/50"
+                      }`}
                       href={info.link}
                       target={info.mapKey ? "_blank" : undefined}
                     >
                       
                       {/* Left icon */}
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                        <Icon className="w-6 h-6 text-primary" />
+                      <div
+                        className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                          isLight
+                            ? "bg-orange-100 group-hover:bg-orange-200"
+                            : "bg-primary/10 group-hover:bg-primary/20"
+                        }`}
+                      >
+                        <Icon className={`w-6 h-6 ${isLight ? "text-orange-500" : "text-primary"}`} />
                       </div>
 
                       {/* Content */}
                       <div className="flex-1">
                         <div className="flex items-center justify-between gap-3">
                           {/* Email / Phone → clickable */}
-                          <h3 className="text-white font-semibold mb-1">
+                          <h3 className={`font-semibold mb-1 ${isLight ? "text-slate-900" : "text-white"}`}>
                           {info.title}
                         </h3>
 
@@ -258,7 +298,11 @@ const Contact = () => {
                                 console.log("Map button clicked");
 
                               }}
-                              className="p-1 rounded-md text-white/50 hover:text-primary hover:bg-primary/10 transition-all duration-200"
+                              className={`p-1 rounded-md transition-all duration-200 ${
+                                isLight
+                                  ? "text-slate-400 hover:text-orange-500 hover:bg-orange-100"
+                                  : "text-white/50 hover:text-primary hover:bg-primary/10"
+                              }`}
                               aria-label="Open map"
                             >
                               <ExternalLink className="w-4 h-4" />
@@ -266,7 +310,7 @@ const Contact = () => {
                           )}
                         </div>
 
-                        <p className="text-white/70 text-sm mt-1">
+                        <p className={`text-sm mt-1 ${isLight ? "text-slate-600" : "text-white/70"}`}>
                           {info.value}
                         </p>
                       </div>
@@ -275,11 +319,23 @@ const Contact = () => {
                 })}
 
                 {openMap && (
-                  <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
-                    <div className="relative w-[90%] max-w-4xl h-[70vh] bg-zinc-950 rounded-2xl overflow-hidden border border-white/10">
+                  <div
+                    className={`fixed inset-0 z-[999] flex items-center justify-center backdrop-blur-sm ${
+                      isLight ? "bg-black/40" : "bg-black/70"
+                    }`}
+                  >
+                    <div
+                      className={`relative w-[90%] max-w-4xl h-[70vh] rounded-2xl overflow-hidden border ${
+                        isLight ? "bg-white border-slate-200" : "bg-zinc-950 border-white/10"
+                      }`}
+                    >
                       <button
                         onClick={() => setOpenMap(null)}
-                        className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center"
+                        className={`absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center ${
+                          isLight
+                            ? "bg-white/90 text-slate-700 hover:bg-white"
+                            : "bg-black/60 hover:bg-black text-white"
+                        }`}
                       >
                         ✕
                       </button>
@@ -295,8 +351,9 @@ const Contact = () => {
                         }
                         style={{
                           border: 0,
-                          filter:
-                            "invert(90%) hue-rotate(180deg) brightness(95%) contrast(85%)",
+                          filter: isLight
+                            ? "none"
+                            : "invert(90%) hue-rotate(180deg) brightness(95%) contrast(85%)",
                         }}
                       />
                     </div>
@@ -310,11 +367,19 @@ const Contact = () => {
               <form
                 ref={formRef}
                 onSubmit={handleSubmit}
-                className="flex flex-col h-full bg-zinc-950 border border-white/10 rounded-2xl p-8"
+                className={`flex flex-col h-full border rounded-2xl p-8 ${
+                  isLight
+                    ? "bg-white border-slate-200"
+                    : "bg-zinc-950 border-white/10"
+                }`}
               >
                 <div className="flex flex-col space-y-5 flex-1">
                   <div className="form-field">
-                    <label className="block text-white mb-2 text-sm font-medium">
+                    <label
+                      className={`block mb-2 text-sm font-medium ${
+                        isLight ? "text-slate-700" : "text-white"
+                      }`}
+                    >
                       Your Name *
                     </label>
                     <Input
@@ -322,13 +387,21 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="bg-black border-white/10 text-white focus:border-primary/50"
+                      className={`border focus:border-primary/50 ${
+                        isLight
+                          ? "bg-white border-slate-200 text-slate-900"
+                          : "bg-black border-white/10 text-white"
+                      }`}
                       placeholder="Your Name"
                     />
                   </div>
 
                   <div className="form-field">
-                    <label className="block text-white mb-2 text-sm font-medium">
+                    <label
+                      className={`block mb-2 text-sm font-medium ${
+                        isLight ? "text-slate-700" : "text-white"
+                      }`}
+                    >
                       Email Address *
                     </label>
                     <Input
@@ -337,13 +410,21 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="bg-black border-white/10 text-white focus:border-primary/50"
+                      className={`border focus:border-primary/50 ${
+                        isLight
+                          ? "bg-white border-slate-200 text-slate-900"
+                          : "bg-black border-white/10 text-white"
+                      }`}
                       placeholder="Your Email Address"
                     />
                   </div>
 
                   <div className="form-field">
-                    <label className="block text-white mb-2 text-sm font-medium">
+                    <label
+                      className={`block mb-2 text-sm font-medium ${
+                        isLight ? "text-slate-700" : "text-white"
+                      }`}
+                    >
                       Phone Number (Please include country code) *
                     </label>
                     <Input
@@ -354,13 +435,21 @@ const Contact = () => {
                       required
                       inputMode="tel"
                       pattern="^\+?[0-9]{7,15}$"
-                      className="bg-black border-white/10 text-white focus:border-primary/50"
+                      className={`border focus:border-primary/50 ${
+                        isLight
+                          ? "bg-white border-slate-200 text-slate-900"
+                          : "bg-black border-white/10 text-white"
+                      }`}
                       placeholder="e.g. +91 xxxxx xxxxxx"
                     />
                   </div>
 
                   <div className="form-field">
-                    <label className="block text-white mb-2 text-sm font-medium">
+                    <label
+                      className={`block mb-2 text-sm font-medium ${
+                        isLight ? "text-slate-700" : "text-white"
+                      }`}
+                    >
                       Message *
                     </label>
                     <Textarea
@@ -369,7 +458,11 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       rows={5}
-                      className="bg-black border-white/10 text-white focus:border-primary/50 resize-none"
+                      className={`border focus:border-primary/50 resize-none ${
+                        isLight
+                          ? "bg-white border-slate-200 text-slate-900"
+                          : "bg-black border-white/10 text-white"
+                      }`}
                       placeholder="Tell us about your project..."
                     />
                   </div>
@@ -379,7 +472,11 @@ const Contact = () => {
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/30 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className={`w-full font-bold py-6 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed ${
+                      isLight
+                        ? "bg-orange-500 hover:bg-orange-500/90 text-white hover:shadow-orange-200/70"
+                        : "bg-primary hover:bg-primary/90 text-white hover:shadow-primary/30"
+                    }`}
                   >
                     {loading ? (
                       "Sending..."
@@ -398,20 +495,36 @@ const Contact = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="section-padding bg-zinc-950 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]" />
+      <section
+        className={`section-padding relative overflow-hidden ${
+          isLight ? "bg-slate-50" : "bg-zinc-950"
+        }`}
+      >
+        <div
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[120px] ${
+            isLight ? "bg-orange-200/50" : "bg-primary/5"
+          }`}
+        />
 
         <div className="relative container-custom text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2
+            className={`text-3xl md:text-4xl font-bold mb-4 ${
+              isLight ? "text-slate-900" : "text-white"
+            }`}
+          >
             Ready to Get Started?
           </h2>
-          <p className="text-white/60 text-lg max-w-2xl mx-auto mb-8">
+          <p className={`text-lg max-w-2xl mx-auto mb-8 ${isLight ? "text-slate-600" : "text-white/60"}`}>
             Schedule a Free Consultation to discuss how we can help your
             business grow.
           </p>
           <Button
             asChild
-            className="bg-primary hover:bg-primary/90 text-white font-bold px-8 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
+            className={`font-bold px-8 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg ${
+              isLight
+                ? "bg-orange-500 hover:bg-orange-500/90 text-white hover:shadow-orange-200/70"
+                : "bg-primary hover:bg-primary/90 text-white hover:shadow-primary/30"
+            }`}
           >
             <a href="mailto:admin@hhbos.com">Schedule a Free Consultation</a>
           </Button>
