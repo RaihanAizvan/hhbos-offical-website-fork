@@ -203,7 +203,7 @@ const Careers = () => {
           </div>
         )}
 
-        <div className="relative text-center max-w-5xl px-6">
+        <div className="relative text-center max-w-5xl px-6 py-10">
           <div className="career-hero-label flex items-center justify-center gap-4 mb-6">
             <div className={`h-px w-16 ${isLight ? "bg-orange-400" : "bg-primary"}`} />
             <span
