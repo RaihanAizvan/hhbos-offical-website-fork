@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Globe, Search } from "lucide-react";
+import { Globe, Moon, Search, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 import { services } from "@/data/services";
 
 const Navigation = () => {
@@ -8,6 +9,9 @@ const Navigation = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
 
   const lastScrollY = useRef(0);
   const location = useLocation();
@@ -27,22 +31,14 @@ const Navigation = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Always show navbar at top
       if (currentScrollY < 10) {
         setIsVisible(true);
         lastScrollY.current = currentScrollY;
         return;
       }
 
-      // Scroll down → hide
-      if (currentScrollY > lastScrollY.current + 5) {
-        setIsVisible(false);
-      }
-
-      // Scroll up → show
-      if (currentScrollY < lastScrollY.current - 5) {
-        setIsVisible(true);
-      }
+      if (currentScrollY > lastScrollY.current + 5) setIsVisible(false);
+      if (currentScrollY < lastScrollY.current - 5) setIsVisible(true);
 
       lastScrollY.current = currentScrollY;
     };
@@ -53,8 +49,9 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 border-b border-white/10 backdrop-blur-md glass transition-transform duration-300 ease-out ${isVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
+      className={`fixed top-0 left-0 w-full z-50 border-b border-border backdrop-blur-md bg-background/70 transition-transform duration-300 ease-out ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
     >
       <div className="px-6 lg:px-12 py-4">
         <div className="max-w-[1600px] mx-auto">
@@ -68,7 +65,7 @@ const Navigation = () => {
               />
             </Link>
 
-            {/* Desktop Navigation */}
+            {/* Desktop links */}
             <div className="hidden lg:flex items-center space-x-10">
               {navLinks.map((link) => {
                 const active = isActive(link.path);
@@ -79,15 +76,19 @@ const Navigation = () => {
                     <Link
                       key={link.path}
                       to={link.path}
-                      className={`relative group text-sm font-medium transition-colors ${active ? "text-primary" : "text-white/80 hover:text-white"
-                        }`}
+                      className={`relative group text-sm font-medium transition-colors ${
+                        active
+                          ? "text-primary"
+                          : "text-foreground/70 hover:text-foreground"
+                      }`}
                     >
                       {link.name}
-
                       <span
-                        className={`absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500
-        transform origin-left transition-transform duration-300 ease-out
-        ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                        className={`absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500 transform origin-left transition-transform duration-300 ease-out ${
+                          active
+                            ? "scale-x-100"
+                            : "scale-x-0 group-hover:scale-x-100"
+                        }`}
                       />
                     </Link>
                   );
@@ -97,20 +98,34 @@ const Navigation = () => {
                   <div key={link.path} className="relative group pb-3 -mb-3">
                     <Link
                       to={link.path}
-                      className={`relative text-sm font-medium transition-colors ${active ? "text-primary" : "text-white/80 hover:text-white"
-                        }`}
+                      className={`relative text-sm font-medium transition-colors ${
+                        active
+                          ? "text-primary"
+                          : "text-foreground/70 hover:text-foreground"
+                      }`}
                     >
                       {link.name}
                       <span
-                        className={`absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500
-        transform origin-left transition-transform duration-300 ease-out
-        ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                        className={`absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-primary to-orange-500 transform origin-left transition-transform duration-300 ease-out ${
+                          active
+                            ? "scale-x-100"
+                            : "scale-x-0 group-hover:scale-x-100"
+                        }`}
                       />
                     </Link>
 
-                    <div className="absolute left-0 top-full mt-0 w-[340px] rounded-xl border border-white/10 bg-black/95 backdrop-blur-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] opacity-0 pointer-events-none translate-y-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto" style={{ paddingTop: "0.5rem" }} onMouseLeave={() => { setHoveredService(null); setHoveredIndex(null); }}>
+                    <div
+                      className="absolute left-0 top-full mt-0 w-[340px] rounded-3xl border border-white/10 bg-black/95 backdrop-blur-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] opacity-0 pointer-events-none translate-y-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto"
+                      style={{ paddingTop: "0.5rem" }}
+                      onMouseLeave={() => {
+                        setHoveredService(null);
+                        setHoveredIndex(null);
+                      }}
+                    >
                       <div className="p-5">
-                        <p className="text-xs uppercase tracking-[0.2em] text-white">Services</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-white">
+                          Services
+                        </p>
                         <div className="mt-3 space-y-2">
                           {services.map((service, index) => (
                             <div key={service.slug} className="relative">
@@ -159,49 +174,45 @@ const Navigation = () => {
             </div>
 
             {/* Right side */}
-            <div className="hidden lg:flex items-center gap-6">
+            <div className="hidden lg:flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => setTheme(isDark ? "light" : "dark")}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border bg-background/60 text-foreground/70 backdrop-blur hover:text-foreground transition-colors"
+                aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+              >
+                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
               <Link
                 to="/contact"
-                className="px-5 py-2.5 text-sm font-semibold rounded-xl
-               bg-gradient-to-r from-primary to-orange-500
-               text-white shadow-lg
-               hover:opacity-90 transition"
+                className="px-5 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-primary to-orange-500 text-white shadow-lg hover:opacity-90 transition"
               >
                 Request a Consultation
               </Link>
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              className="lg:hidden text-white"
-              onClick={() => setIsOpen((prev) => !prev)}
-              aria-label="Toggle menu"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            <div className="flex items-center gap-2 lg:hidden">
+              <button
+                type="button"
+                onClick={() => setTheme(isDark ? "light" : "dark")}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border bg-background/60 text-foreground/80 backdrop-blur"
+                aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
               >
-                {isOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
+                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
+
+              <button
+                className="text-foreground"
+                onClick={() => setIsOpen((prev) => !prev)}
+                aria-label="Toggle menu"
+              >
+                {isOpen ? "✕" : "☰"}
+              </button>
+            </div>
           </div>
 
+          {/* Mobile Navigation */}
           {isOpen && (
             <div className="lg:hidden py-6 border-t border-border mt-4">
               {navLinks.map((link) => (
@@ -209,22 +220,20 @@ const Navigation = () => {
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block py-3 text-base transition-colors ${isActive(link.path)
-                      ? "text-white"
-                      : "text-white/80 hover:text-white"
-                    }`}
+                  className={`block py-3 text-base transition-colors ${
+                    isActive(link.path)
+                      ? "text-foreground"
+                      : "text-foreground/70 hover:text-foreground"
+                  }`}
                 >
                   {link.name}
                 </Link>
               ))}
 
-              {/* Mobile View  */}
               <Link
                 to="/contact"
                 onClick={() => setIsOpen(false)}
-                className="mt-4 block text-center px-5 py-3 rounded-xl
-                 bg-gradient-to-r from-primary to-orange-500
-                 text-white font-semibold"
+                className="mt-4 block text-center px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-orange-500 text-white font-semibold"
               >
                 Request a Consultation
               </Link>
