@@ -48,7 +48,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-black text-white overflow-hidden">
+    <footer className="relative bg-background text-foreground overflow-hidden">
       {/* Top gradient line */}
       <div className="h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
 
@@ -97,11 +97,11 @@ const Footer = () => {
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="inline-flex items-baseline gap-2">
               <span className="text-2xl font-bold text-orange-500">HH</span>
-              <span className="text-xl text-white/60">
+              <span className="text-xl text-muted-foreground">
                 Back Office Services Pvt Ltd
               </span>
             </Link>
-            <p className="text-sm text-white/60 leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Empowering Businesses with Precision, Efficiency, and Data
               Intelligence.
             </p>
@@ -113,14 +113,14 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.name}
-                  className="group w-9 h-9 rounded-md border border-white/10 bg-white/5 
+                  className="group w-9 h-9 rounded-md border border-border bg-card/50 
                  hover:bg-orange-400 transition-all duration-300 ease-in-out
                  inline-flex items-center justify-center"
                 >
                   <svg
-                    className="w-4 h-4 text-white 
+                    className="w-4 h-4 text-foreground 
                    transition-all duration-300 ease-out
-                   group-hover:text-black
+                   group-hover:text-white
                    group-hover:scale-125"
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -134,35 +134,35 @@ const Footer = () => {
 
           {/* Contact */}
           <div className="lg:col-span-4 space-y-4">
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
               Contact
             </h3>
 
             <div className="space-y-2 text-sm">
               <a
                 href="mailto:info@hhbos.com"
-                className="text-white/70 hover:text-white transition-colors block"
+                className="text-muted-foreground hover:text-foreground transition-colors block"
               >
                 info@hhbos.com
               </a>
               <a
                 href="tel:+914842917200"
-                className="text-white/70 hover:text-white transition-colors block"
+                className="text-muted-foreground hover:text-foreground transition-colors block"
               >
                 0484-2917200
               </a>
             </div>
 
-            <div className="space-y-3 text-xs text-white/60">
+            <div className="space-y-3 text-xs text-muted-foreground">
               <div>
-                <div className="font-semibold text-white/80">Kochi Office</div>
+                <div className="font-semibold text-foreground">Kochi Office</div>
                 <p className="leading-relaxed">
                   Phase-2 Floor-2, Carnival Infopark, Kakkanad, Kochi - 682042,
                   Kerala, India
                 </p>
               </div>
               <div>
-                <div className="font-semibold text-white/80">
+                <div className="font-semibold text-foreground">
                   Coimbatore Office
                 </div>
                 <p className="leading-relaxed">
@@ -177,7 +177,7 @@ const Footer = () => {
           <div className="lg:col-span-4">
             <div className="grid grid-cols-2 gap-8">
               <div>
-                <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
                   Company
                 </h3>
                 <ul className="space-y-2">
@@ -185,7 +185,7 @@ const Footer = () => {
                     <li key={link.label}>
                       <Link
                         to={link.path}
-                        className="text-sm text-white/60 hover:text-white transition-colors"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -195,7 +195,7 @@ const Footer = () => {
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
                   Services
                 </h3>
                 <ul className="space-y-2">
@@ -203,7 +203,7 @@ const Footer = () => {
                     <li key={link.label}>
                       <Link
                         to={link.path}
-                        className="text-sm text-white/60 hover:text-white transition-colors"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -214,7 +214,7 @@ const Footer = () => {
 
               {/* Resources */}
               {/* <div>
-                <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
                   Resources
                 </h3>
                 <ul className="space-y-2">
@@ -222,7 +222,7 @@ const Footer = () => {
                     <li key={link.label}>
                       <Link
                         to={link.path}
-                        className="text-sm text-white/60 hover:text-white transition-colors"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -233,7 +233,7 @@ const Footer = () => {
 
               {/* Legal */}
               {/* <div>
-                <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
                   Legal
                 </h3>
                 <ul className="space-y-2">
@@ -241,7 +241,7 @@ const Footer = () => {
                     <li key={link.label}>
                       <Link
                         to={link.path}
-                        className="text-sm text-white/60 hover:text-white transition-colors"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -255,9 +255,9 @@ const Footer = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/10">
+      <div className="border-t border-border">
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/40">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>
               © {currentYear} HH Back Office Services Pvt Ltd. All rights
               reserved.

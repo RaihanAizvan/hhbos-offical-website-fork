@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import { useTheme } from "next-themes";
+import { getHeroVideoSrc } from "@/lib/theme";
 import { motion } from "motion/react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { TrendingUp, Users, Settings, Globe, Lock } from "lucide-react";
@@ -20,13 +21,17 @@ import { WhyChooseUs } from "@/components/WhyChooseUs";
 
 const FeatureCard = ({ title }: { title: string }) => {
   return (
-    <div className="min-w-[240px] rounded-xl border border-white/10 bg-black/50 px-6 py-5 text-center">
-      <h3 className="text-white text-xl font-semibold">{title}</h3>
+    <div className="min-w-[240px] rounded-xl border border-border bg-card/70 px-6 py-5 text-center">
+      <h3 className="text-foreground text-xl font-semibold">{title}</h3>
     </div>
   );
 };
 
 const Home = () => {
+  const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === "light";
+  const heroVideo = getHeroVideoSrc(resolvedTheme);
+
   const services = [
     {
       category: "FINANCE",
@@ -105,13 +110,14 @@ const Home = () => {
       {/* Global Video Background - Parallax Effect */}
       <div className="absolute inset-0 -z-50 w-screen h-[100svh] overflow-hidden">
         <video
+          key={heroVideo}
           autoPlay
           loop
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover object-bottom"
         >
-          <source src="/video/web%20bg.webm" type="video/webm" />
+          <source src={heroVideo} type={isLight ? "video/mp4" : "video/webm"} />
         </video>
       </div>
 
@@ -148,13 +154,13 @@ const Home = () => {
 
       {/* Services We Offer */}
 
-      <section className="section-padding bg-black">
+      <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Services We Offer
             </h2>
-            <p className="text-lg text-white/70">
+            <p className="text-lg text-muted-foreground">
               Focused expertise across RCM, Finance, and Database operations
             </p>
           </div>
@@ -171,13 +177,13 @@ const Home = () => {
       <PortalCTA />
 
       {/* Why Choose Us Section */}
-      <section className="section-padding bg-zinc-950">
+      <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Why Choose HH Back Office Services
             </h2>
-            <p className="text-lg text-white/70">
+            <p className="text-lg text-muted-foreground">
               Your trusted partner for business excellence
             </p>
           </div>
@@ -197,9 +203,9 @@ const Home = () => {
                 <motion.div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
                   <item.icon className="h-8 w-8 text-primary" />
                 </motion.div>
-                <p className="font-semibold text-white">{item.text}</p>
+                <p className="font-semibold text-foreground">{item.text}</p>
                 {item.subtext && (
-                  <p className="text-sm text-white/60">
+                  <p className="text-sm text-muted-foreground">
                     {item.subtext}
                   </p>
                 )}
@@ -213,17 +219,17 @@ const Home = () => {
       <InsightsSection />
 
       {/* Testimonial Section */}
-      <section className="section-padding bg-zinc-950">
+      <section className="section-padding bg-background">
         <div className="container-custom">
-          <Card className="bg-zinc-950 border-none">
+          <Card className="bg-card border-none">
             <CardContent className="p-8 md:p-12 text-center">
-              <p className="text-xl md:text-2xl text-white italic mb-6">
+              <p className="text-xl md:text-2xl text-foreground italic mb-6">
                 Partnering with
                 <span className="font-bold text-orange-500 px-2">HH</span>
                 Back Office Services Pvt Ltd. helped us achieve 30% faster
                 financial reporting."
               </p>
-              <p className="text-white/60 font-medium">— Client, CFO</p>
+              <p className="text-muted-foreground font-medium">— Client, CFO</p>
             </CardContent>
           </Card>
         </div>
