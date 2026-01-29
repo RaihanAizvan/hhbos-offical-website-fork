@@ -256,8 +256,8 @@ const Services = () => {
 
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="container-custom px-6 lg:px-10 pt-36 pb-20 lg:pt-40 lg:pb-24 flex-1 flex items-center justify-center text-center">
-            <div className="max-w-5xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70">
+            <div className="max-w-5xl mx-auto">
+              <div className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs tracking-[0.25em] uppercase text-white/70 mx-auto">
                 <Building2 className="h-4 w-4 text-primary" />
                 Services Atlas
               </div>
@@ -275,13 +275,13 @@ const Services = () => {
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-white/70">
+              <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed text-white/70">
                 Explore HH Back Office Services offerings across RCM, Finance, and
                 Database operations — built to reduce complexity and increase
                 performance.
               </p>
 
-              <div className="mt-10 flex flex-col sm:flex-row gap-4">
+              <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => scrollToId(services[0].id)}
                   className="group inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-white shadow-lg shadow-orange-500/20 transition-transform hover:scale-[1.02]"
@@ -299,7 +299,7 @@ const Services = () => {
                 </Link>
               </div>
 
-              <div className="mt-10 flex items-center gap-3 text-white/60">
+              <div className="mt-10 flex items-center justify-center gap-3 text-white/60">
                 <ChevronDown className="h-5 w-5" />
                 <span className="text-sm">
                   Scroll to see immersive full-screen panels
