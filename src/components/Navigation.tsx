@@ -6,8 +6,6 @@ import { services } from "@/data/services";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
