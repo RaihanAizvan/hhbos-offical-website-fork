@@ -168,7 +168,7 @@ const Specialities = () => {
                         : "border-white/10 bg-black/60"
                     }`}
                   >
-                    <i className={`fi ${icon} text-2xl`} />
+                    <i className={`fi ${icon} text-3xl`} />
                   </div>
                 ))}
               </div>
@@ -196,7 +196,7 @@ const Specialities = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <i className={`fi ${item.icon} text-3xl text-primary`} />
+                <i className={`fi ${item.icon} text-5xl text-primary`} />
                 <div className="mt-3 font-medium">{item.name}</div>
               </motion.div>
             ))}
