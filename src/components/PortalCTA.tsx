@@ -55,6 +55,7 @@ const PortalCTA = () => {
   };
 
   return (
+    // edit theme to match with toggle
     <section 
       ref={sectionRef}
       onMouseMove={handleMouseMove}
