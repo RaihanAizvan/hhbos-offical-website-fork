@@ -203,7 +203,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       >
         {isLight ? (
           <div className="flex h-full flex-col">
-            <div className="relative h-[45%] w-full">
+            <div className="relative w-full h-44 md:h-48">
               <img
                 ref={imageRef}
                 src={imageUrl}
@@ -213,7 +213,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                 style={{ filter: "grayscale(0.15) saturate(1) contrast(1.05)" }}
               />
             </div>
-            <div className="flex flex-1 flex-col justify-between p-7 md:p-8">
+            <div className="flex flex-1 flex-col p-7 md:p-8">
               <div className="flex items-center justify-between">
                 <span
                   data-line
@@ -229,19 +229,19 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                 </span>
               </div>
 
-              <div>
+              <div className="flex-1">
                 <h3
                   data-line
-                  className="mt-4 text-3xl md:text-4xl font-semibold leading-tight text-slate-900"
+                  className="mt-4 text-3xl md:text-4xl font-semibold leading-tight text-slate-900 min-h-[5.5rem]"
                 >
                   {title}
                 </h3>
 
                 <p
                   data-line
-                  className="mt-3 text-sm leading-relaxed max-w-[62ch] text-slate-600"
+                  className="mt-3 text-sm leading-relaxed max-w-[62ch] text-slate-600 min-h-[4.5rem]"
                 >
-                  {description}
+                  {description?.trim()}
                 </p>
               </div>
 
