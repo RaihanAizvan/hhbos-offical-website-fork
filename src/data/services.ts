@@ -191,10 +191,11 @@ export const services: Service[] = [
     ],
     featureDetails: makeFeatureDetails(
       [
-        "Bookkeeping & General Ledger",
-        "Accounts Payable & Receivable",
-        "Payroll Processing",
-        "Financial Reporting & Analysis",
+        "Invoice Processing",
+        "Vendor Review",
+        "Vendor Setup",
+        "Cheque Runs",
+        "Vendor Communications",
       ],
       "finance operations",
     ),
