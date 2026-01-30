@@ -127,7 +127,7 @@ const SectionHeader = ({
   </div>
 );
 
-const Specialities = () => {
+const Specialties = () => {
   const { resolvedTheme } = useTheme();
   const isLight = resolvedTheme === "light";
   const heroVideo = getHeroVideoSrc(resolvedTheme);
@@ -293,4 +293,4 @@ const Specialities = () => {
   );
 };
 
-export default Specialities;
+export default Specialties;
