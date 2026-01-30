@@ -141,10 +141,10 @@ const Footer = () => {
 
             <div className="space-y-2 text-sm">
               <a
-                href="mailto:info@hhbos.com"
+                href="mailto:admin@hhbos.com"
                 className="text-muted-foreground hover:text-foreground transition-colors block"
               >
-                info@hhbos.com
+                admin@hhbos.com
               </a>
               <a
                 href="tel:+914842917200"
