@@ -7,38 +7,8 @@ import {
   FileText,
   Hospital,
   Layers,
-  ShieldCheck,
   Stethoscope,
-  TabletSmartphone,
 } from "lucide-react";
-
-const pmsPlatforms = [
-  "e-Clinical Works",
-  "Athena",
-  "Centricity",
-  "Collaborate MD",
-  "Kareo",
-  "Nextgen",
-  "Advanced MD",
-  "Epic",
-  "AllScripts",
-  "Bright Tree",
-  "Go Rev",
-  "Allofactor",
-  "Office Ally",
-  "Onstaff",
-  "Rapid Practice Management",
-  "Thera Bills",
-  "Intergen",
-  "Matrix",
-  "Smart Advisor",
-  "THR",
-  "Dr’s View",
-  "Sevocity",
-  "Mod Med",
-];
-
-const credentialing = ["Modio (Credentialing)"];
 
 const specialties = [
   { name: "General Medicine", icon: "fi-rr-stethoscope" },
@@ -198,40 +168,11 @@ const Specialties = () => {
                         : "border-white/10 bg-black/60"
                     }`}
                   >
-                    <i className={`fi ${icon} text-2xl`} />
+                    <i className={`fi ${icon} text-3xl`} />
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PMS / EHR Platforms */}
-      <section className="py-16">
-        <div className="container-custom px-6">
-          <SectionHeader
-            icon={TabletSmartphone}
-            title="PMS / EHR Platforms"
-            subtitle="Operational familiarity across leading systems"
-            isLight={isLight}
-          />
-          <div className={gridClasses}>
-            {pmsPlatforms.map((item, index) => (
-              <motion.div
-                key={item}
-                className={`${tileBase(isLight)} ${tileHover(isLight)}`}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              >
-                <i
-                  className={`fi ${platformIcons[index % platformIcons.length]} text-3xl text-primary`}
-                />
-                <div className="mt-3 font-medium">{item}</div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
@@ -255,7 +196,7 @@ const Specialties = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <i className={`fi ${item.icon} text-3xl text-primary`} />
+                <i className={`fi ${item.icon} text-5xl text-primary`} />
                 <div className="mt-3 font-medium">{item.name}</div>
               </motion.div>
             ))}
@@ -263,32 +204,6 @@ const Specialties = () => {
         </div>
       </section>
 
-      {/* Credentialing */}
-      <section className="py-16">
-        <div className="container-custom px-6">
-          <SectionHeader
-            icon={ShieldCheck}
-            title="Credentialing Application"
-            subtitle="Specialized compliance tools"
-            isLight={isLight}
-          />
-          <div className={gridClasses}>
-            {credentialing.map((item) => (
-              <motion.div
-                key={item}
-                className={`${tileBase(isLight)} ${tileHover(isLight)}`}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              >
-                <i className="fi fi-rr-badge-check text-3xl text-primary" />
-                <div className="mt-3 font-medium">{item}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
