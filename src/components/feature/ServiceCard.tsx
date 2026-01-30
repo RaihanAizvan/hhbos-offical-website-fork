@@ -9,6 +9,7 @@ interface ServiceCardProps {
   title: string;
   description: string;
   imageUrl: string;
+  slug: string;
 }
 
 /**
@@ -24,6 +25,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   title,
   description,
   imageUrl,
+  slug
 }) => {
   const { resolvedTheme } = useTheme();
   const isLight = resolvedTheme === "light";
@@ -315,7 +317,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
               <h3
                 data-line
-                className="mt-4 text-3xl md:text-4xl font-semibold leading-tight text-white"
+                className="mt-4 text-3xl md:text-2xl font-semibold leading-tight text-white"
               >
                 {title}
               </h3>
@@ -329,7 +331,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
               <div className="mt-7 flex items-center justify-between">
                 <Link
-                  to="/services"
+                  to={`/services/${slug}`}
                   data-cta
                   className="group/link inline-flex items-center gap-2 text-sm font-bold text-white"
                 >
@@ -339,10 +341,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                   </span>
                   <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover/link:translate-x-1" />
                 </Link>
-
-                <span data-line className="hidden md:block text-white/40 text-xs">
-                  Calm execution. Clear outcomes.
-                </span>
               </div>
             </div>
           </>
