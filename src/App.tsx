@@ -10,7 +10,7 @@ import About from "@/pages/About";
 import Services from "@/pages/Services";
 import ServiceDetail from "@/pages/ServiceDetail";
 import ServiceFeatureDetail from "@/pages/ServiceFeatureDetail";
-import Specialities from "@/pages/Specialities";
+import Specialties from "@/pages/Specialties";
 import Contact from "@/pages/Contact";
 import Careers from "@/pages/Careers";
 import NotFound from "@/pages/NotFound";
@@ -38,7 +38,7 @@ const App = () => (
               <Route path="/services" element={<Services />} />
               <Route path="/services/:slug/:feature" element={<ServiceFeatureDetail />} />
               <Route path="/services/:slug" element={<ServiceDetail />} />
-              <Route path="/specialities" element={<Specialities />} />
+              <Route path="/specialties" element={<Specialties />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
