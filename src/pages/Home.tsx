@@ -152,16 +152,15 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Services We Offer */}
-
+      {/* Industries Logo Loop */}
       <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Services We Offer
+             Industries We Serve
             </h2>
             <p className="text-lg text-muted-foreground">
-              Focused expertise across RCM, Finance, and Database operations
+             Delivering tailored solutions across diverse industries with deep domain understanding
             </p>
           </div>
         </div>
