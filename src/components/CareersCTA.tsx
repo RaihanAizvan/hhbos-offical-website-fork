@@ -33,14 +33,14 @@ export const CareersCTA: React.FC = () => {
           We’re always looking for exceptional talent. Send your resume to{" "}
           <br className="hidden md:block" />
           <a
-            href="mailto:hr@company.com"
+            href="mailto:hr@hhbos.com"
             className="text-orange-500 font-bold hover:underline decoration-2 underline-offset-8"
           >
-            hr@company.com
+            hr@hhbos.com
           </a>
         </p>
         <a
-          href="mailto:hr@company.com"
+          href="mailto:hr@hhbos.com"
           className={`inline-block font-bold py-4 px-10 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 ${
             isLight ? "bg-orange-500 text-white" : "bg-white text-black"
           }`}
