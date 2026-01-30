@@ -9,6 +9,7 @@ import {
   ArrowRight,
   CheckCircle2,
   ChevronLeft,
+  MonitorSmartphone,
   Sparkles,
   Zap,
 } from "lucide-react";
@@ -94,6 +95,17 @@ const ServiceDetail = () => {
     "Process mapping",
     "Implementation & QA",
     "Launch + optimization",
+  ];
+
+  const platformIcons = [
+    "fi-rr-laptop-medical",
+    "fi-rr-hospital",
+    "fi-rr-stethoscope",
+    "fi-rr-clipboard-list",
+    "fi-rr-chart-line-up",
+    "fi-rr-database",
+    "fi-rr-shield-check",
+    "fi-rr-network",
   ];
 
   return (
@@ -305,6 +317,65 @@ const ServiceDetail = () => {
               </Link>
             ))}
           </div>
+
+          {service.id === "rcm" && service.ehrPlatforms?.length ? (
+            <div className="mt-12">
+              <div className="flex items-center gap-3">
+                <div
+                  className={cn(
+                    "flex h-10 w-10 items-center justify-center rounded-full",
+                    isLight
+                      ? "bg-orange-100 text-orange-500"
+                      : "bg-primary/15 text-primary"
+                  )}
+                >
+                  <MonitorSmartphone className="h-5 w-5" />
+                </div>
+                <h3
+                  className={cn(
+                    "text-2xl md:text-3xl font-semibold",
+                    isLight ? "text-slate-900" : "text-white"
+                  )}
+                >
+                  PMS/EHR Platforms
+                </h3>
+                <span
+                  className={cn(
+                    "h-px flex-1",
+                    isLight ? "bg-slate-200" : "bg-white/10"
+                  )}
+                />
+              </div>
+              <p className={cn("mt-3 text-sm", isLight ? "text-slate-600" : "text-white/60")}>
+                Experience across leading systems for end-to-end RCM coverage.
+              </p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+                {service.ehrPlatforms.map((platform, index) => (
+                  <div
+                    key={platform}
+                    className={cn(
+                      "aspect-square rounded-2xl border p-4 text-sm flex flex-col items-center justify-center text-center",
+                      isLight
+                        ? "border-slate-200 bg-white text-slate-700"
+                        : "border-white/10 bg-black/50 text-white/70"
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "flex h-10 w-10 items-center justify-center rounded-xl border mb-3",
+                        isLight
+                          ? "border-slate-200 bg-orange-50 text-orange-500"
+                          : "border-white/10 bg-black/60 text-primary"
+                      )}
+                    >
+                      <i className={`fi ${platformIcons[index % platformIcons.length]} text-4xl`} />
+                    </div>
+                    <div className="font-medium">{platform}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       </section>
 

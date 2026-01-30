@@ -33,6 +33,7 @@ export type Service = {
   detailSummary: string;
   detailPillars: string[];
   featureDetails: FeatureDetail[];
+  ehrPlatforms?: string[];
 };
 
 const slugify = (value: string) =>
@@ -88,6 +89,8 @@ export const services: Service[] = [
       "Faster reimbursements",
       "Improved cash flow visibility",
       "Compliance-ready operations",
+      "EHR/PMS platform coverage",
+      "Credentialing application support",
     ],
     detailHeadline: "RCM operations engineered for speed and accuracy",
     detailSummary:
@@ -108,9 +111,36 @@ export const services: Service[] = [
         "Reconciliation",
         "Credential",
         "Medical Coding",
+        "PMS / EHR Platform Coverage",
+        "Credentialing Application",
       ],
       "our RCM stack",
     ),
+    ehrPlatforms: [
+      "e-Clinical Works",
+      "Athena",
+      "Centricity",
+      "Collaborate MD",
+      "Kareo",
+      "Nextgen",
+      "Advanced MD",
+      "Epic",
+      "AllScripts",
+      "Bright Tree",
+      "Go Rev",
+      "Allofactor",
+      "Office Ally",
+      "Onstaff",
+      "Rapid Practice Management",
+      "Thera Bills",
+      "Intergen",
+      "Matrix",
+      "Smart Advisor",
+      "THR",
+      "Dr’s View",
+      "Sevocity",
+      "Mod Med",
+    ],
   },
   {
     id: "it-services",
@@ -187,10 +217,11 @@ export const services: Service[] = [
     ],
     featureDetails: makeFeatureDetails(
       [
-        "Bookkeeping & General Ledger",
-        "Accounts Payable & Receivable",
-        "Payroll Processing",
-        "Financial Reporting & Analysis",
+        "Invoice Processing",
+        "Vendor Review",
+        "Vendor Setup",
+        "Cheque Runs",
+        "Vendor Communications",
       ],
       "finance operations",
     ),
