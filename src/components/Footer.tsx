@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  // const currentYear = new Date().getFullYear();
+  const currentYear = 2020;
 
   const footerLinks = {
     company: [
@@ -13,7 +14,7 @@ const Footer = () => {
     services: [
       { label: "Revenue Cycle Management", path: "/services" },
       { label: "Finance & Accounts", path: "/services" },
-      { label: "Database Administration", path: "/services" },
+      { label: "Data Analytics", path: "/services" },
     ],
     resources: [
       { label: "Knowledge Hub", path: "/contact" },
@@ -140,10 +141,10 @@ const Footer = () => {
 
             <div className="space-y-2 text-sm">
               <a
-                href="mailto:info@hhbos.com"
+                href="mailto:admin@hhbos.com"
                 className="text-muted-foreground hover:text-foreground transition-colors block"
               >
-                info@hhbos.com
+                admin@hhbos.com
               </a>
               <a
                 href="tel:+914842917200"

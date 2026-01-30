@@ -34,7 +34,7 @@ const InsightsSection = () => {
     {
       id: 3,
       category: "Database Management",
-      title: "Database Administration",
+      title: "Data Analytics",
       subtitle: "Secure, scalable data solutions",
       description:
         "Setup & configuration (SQL, Oracle, MySQL), tuning & optimization, backup & recovery, migration & integration, and access control.",

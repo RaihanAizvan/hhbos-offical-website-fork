@@ -47,7 +47,7 @@ const StickyVideoHero = () => {
           {/* Subtext */}
           <p className="mt-4 text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed text-center px-4">
             We provide end-to-end Finance & Accounts, Revenue Cycle Management,
-            and Database Administration solutions that streamline your
+            and Data Analytics solutions that streamline your
             operations and drive measurable growth.
           </p>
 

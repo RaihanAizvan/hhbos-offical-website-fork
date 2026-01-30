@@ -10,7 +10,7 @@ Marketing website for **HH Back Office Services Pvt Ltd**, showcasing back-offic
 - `/services` — Detailed service offerings
   - Revenue Cycle Management (RCM)
   - Finance & Accounts outsourcing
-  - Database administration & management
+  - Data Analytics & management
 - `/industries` — Industry-focused solutions (e.g., Healthcare, Finance & Banking, etc.)
 - `/contact` — Contact details + inquiry form (submits to a mail API)
 

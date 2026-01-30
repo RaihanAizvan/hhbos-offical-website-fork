@@ -80,7 +80,7 @@ const About = () => {
   ];
 
   const whyChooseUs = [
-    "Expert professionals across Finance, RCM, and Database Administration",
+    "Expert professionals across Finance, RCM, and Data Analytics",
     "Technology-driven workflows and automation",
     "ISO 27001-aligned data protection policies",
     "Proven results through efficiency-focused delivery",
@@ -166,7 +166,7 @@ const About = () => {
                 isLight ? "text-slate-600" : "text-white/70"
               }`}
             >
-             HH Back Office Services Pvt Ltd provides expert outsourcing in RCM, Finance & Accounts, and Database Administration.
+             HH Back Office Services Pvt Ltd provides expert outsourcing in RCM, Finance & Accounts, and Data Analytics.
             </p>
           </div>
         </div>

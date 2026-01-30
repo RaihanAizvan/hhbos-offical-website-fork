@@ -198,7 +198,7 @@ export const services: Service[] = [
   {
     id: "database",
     slug: "database-management",
-    title: "Data Analytics & Administration",
+    title: "Data Analytics & Management",
     tagline: "Reliable, secure, and scalable database operations",
     description:
       "Database setup, optimization, monitoring, and security for critical systems.",
