@@ -49,7 +49,7 @@ const Home = () => {
     },
     {
       category: "TECHNOLOGY",
-      title: "Database Administration",
+      title: "Data Analytics",
       description:
         "Ensure secure data handling with 24/7 monitoring and disaster recovery support Scalable and performance-optimized solutions.",
       imageUrl: serviceDatabase,

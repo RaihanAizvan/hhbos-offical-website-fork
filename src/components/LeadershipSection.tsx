@@ -11,7 +11,7 @@ const leaders = [
     name: "Leadership Team",
     role: "Operations & Delivery",
     image: founderImage,
-    bio: "Experienced professionals guiding service delivery across RCM, Finance & Accounts, and Database Administration.",
+    bio: "Experienced professionals guiding service delivery across RCM, Finance & Accounts, and Data Analytics.",
     details:
       "Hands-on expertise in process management, compliance, and client success ensuring reliable outcomes.",
   },
@@ -25,7 +25,7 @@ const leaders = [
   },
   {
     name: "Technology Leadership",
-    role: "Database Administration",
+    role: "Data Analytics",
     image: databaseImage,
     bio: "Secure, scalable, and well-governed data environments.",
     details:

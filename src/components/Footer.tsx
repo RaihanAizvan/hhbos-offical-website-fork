@@ -14,7 +14,7 @@ const Footer = () => {
     services: [
       { label: "Revenue Cycle Management", path: "/services" },
       { label: "Finance & Accounts", path: "/services" },
-      { label: "Database Administration", path: "/services" },
+      { label: "Data Analytics", path: "/services" },
     ],
     resources: [
       { label: "Knowledge Hub", path: "/contact" },
