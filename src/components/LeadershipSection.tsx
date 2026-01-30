@@ -4,6 +4,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import founderImage from "@/assets/team-founder.jpg";
 import rcmImage from "@/assets/team-rcm.jpg";
 import databaseImage from "@/assets/team-database.jpg";
+import { useTheme } from "next-themes";
 
 const leaders = [
   {
@@ -35,6 +36,8 @@ const leaders = [
 gsap.registerPlugin(ScrollTrigger);
 
 const LeadershipSection = () => {
+  const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === "light";
   const containerRef = useRef<HTMLElement | null>(null);
   const cardsRef = useRef<HTMLDivElement | null>(null);
 
@@ -161,11 +164,11 @@ const LeadershipSection = () => {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen bg-black overflow-hidden"
+      className="relative h-screen bg-background overflow-hidden"
     >
       {/* Center hint text (gets covered by first card as user scrolls) */}
       <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
-        <div className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] uppercase text-white/35 text-center">
+        <div className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[0.14em] uppercase text-muted-foreground text-center">
           Our Leadership
         </div>
       </div>
@@ -181,27 +184,29 @@ const LeadershipSection = () => {
               key={index}
               className="leader-card absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-[900px] h-[440px] sm:h-[340px] lg:h-[380px]"
             >
-              <div className="group relative h-full rounded-3xl overflow-hidden border border-white/10 bg-black shadow-[0_24px_80px_rgba(0,0,0,0.65)]">
+              <div className="group relative h-full rounded-3xl overflow-hidden border border-border bg-card shadow-[0_24px_80px_rgba(0,0,0,0.65)]">
                 <div className="flex flex-col sm:flex-row h-full">
                   {/* Image */}
-                  <div className="w-full sm:w-2/5 h-[180px] sm:h-full relative overflow-hidden bg-black sm:flex-none">
+                  <div className="w-full sm:w-2/5 h-[180px] sm:h-full relative overflow-hidden bg-card sm:flex-none">
                     <img
                       src={leader.image}
                       alt={leader.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/60 to-black" />
+                    {!isLight && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/60 to-black" />
+                    )}
                   </div>
 
                   {/* Content */}
-                  <div className="relative w-full sm:w-3/5 bg-black p-6 sm:p-8 flex flex-col justify-center sm:before:content-[''] sm:before:absolute sm:before:top-0 sm:before:left-[-8px] sm:before:w-[16px] sm:before:h-full sm:before:bg-black sm:before:pointer-events-none">
-                    <h3 className="text-3xl font-semibold text-white mb-2">
+                  <div className="relative w-full sm:w-3/5 bg-card p-6 sm:p-8 flex flex-col justify-center sm:before:content-[''] sm:before:absolute sm:before:top-0 sm:before:left-[-8px] sm:before:w-[16px] sm:before:h-full sm:before:bg-card sm:before:pointer-events-none">
+                    <h3 className="text-3xl font-semibold text-foreground mb-2">
                       {leader.name}
                     </h3>
                     <p className="text-primary font-medium mb-3">
                       {leader.role}
                     </p>
-                    <p className="text-white/70 text-sm leading-relaxed">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       {leader.bio}
                     </p>
                     <div className="mt-4 h-1 w-16 bg-primary" />
