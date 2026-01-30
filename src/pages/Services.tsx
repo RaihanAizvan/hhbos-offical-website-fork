@@ -771,7 +771,7 @@ const Services = () => {
                     <div className="grid gap-5 lg:gap-6 lg:grid-cols-2">
                       <div data-panel-reveal className="lg:col-span-2">
                         <GlassCard
-                          title="Key Features"
+                          title="Key Process"
                           items={service.features}
                           isLight={isLight}
                         />
@@ -796,36 +796,7 @@ const Services = () => {
                       </div>
                     </div>
 
-                    <div
-                      data-panel-reveal
-                      className={cn(
-                        "mt-8 rounded-2xl border px-6 py-5",
-                        isLight
-                          ? "border-slate-200 bg-white"
-                          : "border-white/10 bg-black/35 backdrop-blur-xl"
-                      )}
-                    >
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                        
-                        <div className="flex flex-wrap gap-2">
-                          {["Compliance", "Accuracy", "Automation", "Reporting"].map(
-                            (t) => (
-                              <span
-                                key={t}
-                                className={cn(
-                                  "rounded-full border px-3 py-1 text-xs",
-                                  isLight
-                                    ? "border-slate-200 bg-slate-50 text-slate-600"
-                                    : "border-white/10 bg-white/5 text-white/70"
-                                )}
-                              >
-                                {t}
-                              </span>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
