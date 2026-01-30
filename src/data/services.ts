@@ -43,7 +43,7 @@ const slugify = (value: string) =>
 
 const makeFeatureDetails = (
   features: string[],
-  context: string
+  context: string,
 ): FeatureDetail[] =>
   features.map((feature) => ({
     title: feature,
@@ -74,10 +74,14 @@ export const services: Service[] = [
     accent: "from-orange-500 via-orange-800 to-orange-600",
     icon: HeartPulse,
     features: [
-      "Medical Coding & Charge Entry",
-      "Claims Submission & Follow-up",
-      "Denial Management & Appeals",
-      "Payment Posting & Reconciliation",
+      "Medical Billing",
+      "Charge Entry",
+      "Payment Pottery",
+      "Patient Calling",
+      "AR Domicil Management",
+      "Reconciliation",
+      "Credential",
+      "Medical Coding",
     ],
     benefits: [
       "Reduced claim rejection rates",
@@ -96,100 +100,22 @@ export const services: Service[] = [
     ],
     featureDetails: makeFeatureDetails(
       [
-        "Medical Coding & Charge Entry",
-        "Claims Submission & Follow-up",
-        "Denial Management & Appeals",
-        "Payment Posting & Reconciliation",
+        "Medical Billing",
+        "Charge Entry",
+        "Payment Pottery",
+        "Patient Calling",
+        "AR Domicil Management",
+        "Reconciliation",
+        "Credential",
+        "Medical Coding",
       ],
-      "our RCM stack"
-    ),
-  },
-  {
-    id: "finance",
-    slug: "finance-accounts",
-    title: "Finance & Accounts Services",
-    tagline: "Accurate, compliant, and insight-driven finance ops",
-    description:
-      "Streamlined finance operations with bookkeeping, reporting, and compliance support.",
-    image: serviceFinance,
-    accent: "from-orange-500 via-orange-800 to-orange-600",
-    icon: DollarSign,
-    features: [
-      "Bookkeeping & General Ledger",
-      "Accounts Payable & Receivable",
-      "Payroll Processing",
-      "Financial Reporting & Analysis",
-    ],
-    benefits: [
-      "Audit-ready records",
-      "Lower compliance risk",
-      "Faster month-end close",
-      "Better financial visibility",
-    ],
-    detailHeadline: "Finance operations with clarity at every close",
-    detailSummary:
-      "We deliver dependable accounting and reporting that keeps leadership informed and audit-ready at all times.",
-    detailPillars: [
-      "Accurate reconciliations",
-      "Real-time reporting",
-      "Tax & compliance readiness",
-      "Payroll precision",
-    ],
-    featureDetails: makeFeatureDetails(
-      [
-        "Bookkeeping & General Ledger",
-        "Accounts Payable & Receivable",
-        "Payroll Processing",
-        "Financial Reporting & Analysis",
-      ],
-      "finance operations"
-    ),
-  },
-  {
-    id: "database",
-    slug: "database-management",
-    title: "Data Analytics & Management",
-    tagline: "Reliable, secure, and scalable database operations",
-    description:
-      "Database setup, optimization, monitoring, and security for critical systems.",
-    image: serviceDatabase,
-    accent: "from-orange-500 via-orange-800 to-orange-600",
-    icon: CircuitBoard,
-    features: [
-      "Database Setup & Configuration (SQL, Oracle, MySQL)",
-      "Performance Tuning & Monitoring",
-      "Backup & Disaster Recovery",
-      "Security & Access Controls",
-    ],
-    benefits: [
-      "Higher system uptime",
-      "Faster query performance",
-      "Stronger data protection",
-      "Scalable infrastructure",
-    ],
-    detailHeadline: "Data platforms built for uptime and performance",
-    detailSummary:
-      "We keep mission-critical databases optimized, secure, and always available—backed by disciplined monitoring.",
-    detailPillars: [
-      "Performance tuning",
-      "Proactive monitoring",
-      "Secure access controls",
-      "Resilient backup strategy",
-    ],
-    featureDetails: makeFeatureDetails(
-      [
-        "Database Setup & Configuration (SQL, Oracle, MySQL)",
-        "Performance Tuning & Monitoring",
-        "Backup & Disaster Recovery",
-        "Security & Access Controls",
-      ],
-      "database management"
+      "our RCM stack",
     ),
   },
   {
     id: "it-services",
     slug: "it-services",
-    title: "IT Product & App Development",
+    title: "IT Solutions & Services",
     tagline: "Design, build, and scale digital products with confidence",
     description:
       "Full-cycle app development services for web, mobile, and automation solutions.",
@@ -224,9 +150,95 @@ export const services: Service[] = [
         "API Integration & Automation",
         "QA, Release & Support",
       ],
-      "product engineering"
+      "product engineering",
     ),
   },
+  {
+    id: "finance",
+    slug: "finance-accounts",
+    title: "Finance & Accounts Services (F&A)",
+    tagline: "Accurate, compliant, and insight-driven finance ops",
+    description:
+      "Streamlined finance operations with bookkeeping, reporting, and compliance support.",
+    image: serviceFinance,
+    accent: "from-orange-500 via-orange-800 to-orange-600",
+    icon: DollarSign,
+    features: [
+     "Invoice Processing",
+     "Vendor Review",
+     "Vendor Setup",
+     "Cheque Runs",
+     "Vendor Communications",
+    ],
+    benefits: [
+      "Audit-ready records",
+      "Lower compliance risk",
+      "Faster month-end close",
+      "Better financial visibility",
+    ],
+    detailHeadline: "Finance operations with clarity at every close",
+    detailSummary:
+      "We deliver dependable accounting and reporting that keeps leadership informed and audit-ready at all times.",
+    detailPillars: [
+      "Accurate reconciliations",
+      "Real-time reporting",
+      "Tax & compliance readiness",
+      "Payroll precision",
+    ],
+    featureDetails: makeFeatureDetails(
+      [
+        "Bookkeeping & General Ledger",
+        "Accounts Payable & Receivable",
+        "Payroll Processing",
+        "Financial Reporting & Analysis",
+      ],
+      "finance operations",
+    ),
+  },
+  {
+    id: "database",
+    slug: "database-management",
+    title: "Data Analytics & Management",
+    tagline: "Reliable, secure, and scalable database operations",
+    description:
+      "Database setup, optimization, monitoring, and security for critical systems.",
+    image: serviceDatabase,
+    accent: "from-orange-500 via-orange-800 to-orange-600",
+    icon: CircuitBoard,
+    features: [
+      "Data Engineering",
+      "Data Interpretation",
+      "ETC Pipeline",
+      "Data Transformation & Clearing",
+      "PBT Development",
+      "Data Analysis and Reports",
+      "Automation",
+    ],
+    benefits: [
+      "Higher system uptime",
+      "Faster query performance",
+      "Stronger data protection",
+      "Scalable infrastructure",
+    ],
+    detailHeadline: "Data platforms built for uptime and performance",
+    detailSummary:
+      "We keep mission-critical databases optimized, secure, and always available—backed by disciplined monitoring.",
+    detailPillars: [
+      "Performance tuning",
+      "Proactive monitoring",
+      "Secure access controls",
+      "Resilient backup strategy",
+    ],
+    featureDetails: makeFeatureDetails(
+      [
+        "Database Setup & Configuration (SQL, Oracle, MySQL)",
+        "Performance Tuning & Monitoring",
+        "Backup & Disaster Recovery",
+        "Security & Access Controls",
+      ],
+      "database management",
+    ),
+  }
 ];
 
 // add more services if you want

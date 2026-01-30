@@ -34,32 +34,36 @@ const Home = () => {
 
   const services = [
     {
-      category: "FINANCE",
-      title: "Finance & Accounts",
-      description:
-        " Maintain compliance, streamline finance, and reduce operational overhead with expert bookkeeping and financial management.",
-      imageUrl: serviceFinance,
-    },
-    {
-      category: "HEALTHCARE",
-      title: "Revenue Cycle Management",
-      description:
-        "Supporting healthcare providers with revenue-optimized billing life cycles. End-to-end RCM operations for maximum efficiency.",
-      imageUrl: serviceRcm,
-    },
-    {
-      category: "TECHNOLOGY",
-      title: "Data Analytics",
-      description:
-        "Ensure secure data handling with 24/7 monitoring and disaster recovery support Scalable and performance-optimized solutions.",
-      imageUrl: serviceDatabase,
-    },
-    {
       category: "IT SOLUTIONS",
       title: "IT Department Services",
       description:
         "End-to-end IT support including infrastructure management, application support, cybersecurity, and cloud solutions to keep your business running smoothly.",
       imageUrl: serviceIT,
+     slug: "it-services",
+    },
+    {
+      category: "HEALTHCARE",
+      title: "Revenue Cycle Management (RCM)",
+      description:
+        "Supporting healthcare providers with revenue-optimized billing life cycles. End-to-end RCM operations for maximum efficiency.",
+      imageUrl: serviceRcm,
+      slug: "rcm",
+    },
+    {
+      category: "FINANCE",
+      title: "Finance & Accounts (F&A)",
+      description:
+        " Maintain compliance, streamline finance, and reduce operational overhead with expert bookkeeping and financial management.",
+      imageUrl: serviceFinance,
+       slug: "finance-accounts",
+    },
+    {
+      category: "DATABASE",
+      title: "Database Analytics & Administration",
+      description:
+        "Ensure secure data handling with 24/7 monitoring and disaster recovery support Scalable and performance-optimized solutions.",
+      imageUrl: serviceDatabase,
+       slug: "database-management",
     },
   ];
 
@@ -137,7 +141,7 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-6">
-            {services.map(({ category, title, imageUrl, description }) => {
+            {services.map(({ category, title, imageUrl, description, slug }) => {
               return (
                 <ServiceCard
                   key={category}
@@ -145,6 +149,7 @@ const Home = () => {
                   title={title}
                   description={description}
                   imageUrl={imageUrl}
+                  slug={slug}
                 />
               );
             })}
@@ -152,16 +157,16 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Services We Offer */}
-
+      {/* Industries Logo Loop */}
       <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Services We Offer
+              Industries We Serve
             </h2>
             <p className="text-lg text-muted-foreground">
-              Focused expertise across RCM, Finance, and Database operations
+              Delivering tailored solutions across diverse industries with deep
+              domain understanding
             </p>
           </div>
         </div>
