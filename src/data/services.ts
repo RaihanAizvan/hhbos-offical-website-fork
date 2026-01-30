@@ -88,6 +88,8 @@ export const services: Service[] = [
       "Faster reimbursements",
       "Improved cash flow visibility",
       "Compliance-ready operations",
+      "EHR/PMS platform coverage",
+      "Credentialing application support",
     ],
     detailHeadline: "RCM operations engineered for speed and accuracy",
     detailSummary:
@@ -108,6 +110,8 @@ export const services: Service[] = [
         "Reconciliation",
         "Credential",
         "Medical Coding",
+        "PMS / EHR Platform Coverage",
+        "Credentialing Application",
       ],
       "our RCM stack",
     ),
