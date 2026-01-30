@@ -16,6 +16,7 @@ import Careers from "@/pages/Careers";
 import NotFound from "@/pages/NotFound";
 import ScrollToTop from "@/components/ScrollToTop";
 import SmoothScroll from "@/components/SmoothScroll";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
             </Routes>
           </main>
           <Footer />
+          <ScrollToTopButton />
         </div>
       </BrowserRouter>
     </TooltipProvider>
