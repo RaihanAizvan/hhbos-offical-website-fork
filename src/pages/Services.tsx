@@ -806,14 +806,7 @@ const Services = () => {
                       )}
                     >
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                        <div
-                          className={cn(
-                            "text-sm font-semibold",
-                            isLight ? "text-slate-900" : "text-white"
-                          )}
-                        >
-                          Built for accuracy, compliance, and scale.
-                        </div>
+                        
                         <div className="flex flex-wrap gap-2">
                           {["Compliance", "Accuracy", "Automation", "Reporting"].map(
                             (t) => (
