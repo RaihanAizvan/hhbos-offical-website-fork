@@ -33,6 +33,7 @@ export type Service = {
   detailSummary: string;
   detailPillars: string[];
   featureDetails: FeatureDetail[];
+  ehrPlatforms?: string[];
 };
 
 const slugify = (value: string) =>
@@ -115,6 +116,31 @@ export const services: Service[] = [
       ],
       "our RCM stack",
     ),
+    ehrPlatforms: [
+      "e-Clinical Works",
+      "Athena",
+      "Centricity",
+      "Collaborate MD",
+      "Kareo",
+      "Nextgen",
+      "Advanced MD",
+      "Epic",
+      "AllScripts",
+      "Bright Tree",
+      "Go Rev",
+      "Allofactor",
+      "Office Ally",
+      "Onstaff",
+      "Rapid Practice Management",
+      "Thera Bills",
+      "Intergen",
+      "Matrix",
+      "Smart Advisor",
+      "THR",
+      "Dr’s View",
+      "Sevocity",
+      "Mod Med",
+    ],
   },
   {
     id: "it-services",
