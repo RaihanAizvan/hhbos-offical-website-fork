@@ -177,7 +177,7 @@ const Navigation = () => {
                                     Features
                                   </p>
                                   <div className="mt-3 space-y-2">
-                                    {service.featureDetails.slice(0, 5).map((feature) => (
+                                    {service.featureDetails.slice(0, 7).map((feature) => (
                                       <Link
                                         key={feature.slug}
                                         to={`/services/${service.slug}/${feature.slug}`}
