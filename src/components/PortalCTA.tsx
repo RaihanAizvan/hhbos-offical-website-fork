@@ -58,7 +58,7 @@ const PortalCTA = () => {
     <section 
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="relative py-32 bg-black overflow-hidden"
+      className="relative py-32 bg-background overflow-hidden"
     >
       {/* Animated grid background */}
       <div className="absolute inset-0 opacity-10">
@@ -126,11 +126,11 @@ const PortalCTA = () => {
 
           {/* Content */}
           <div className="text-center max-w-3xl space-y-6">
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
               Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-orange-500 to-primary bg-[length:200%] animate-gradient">Transform</span>?
             </h2>
             
-            <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Enter a new dimension of operational excellence. Let's discuss how we can revolutionize your business processes.
             </p>
 
@@ -138,7 +138,7 @@ const PortalCTA = () => {
             <div className="pt-8">
               <Link
                 to="/contact"
-                className="group relative inline-flex items-center gap-3 px-10 py-5 bg-black border-2 border-primary/50 rounded-full text-white font-bold text-lg overflow-hidden transition-all duration-500 hover:border-primary hover:shadow-2xl hover:shadow-primary/30"
+                className="group relative inline-flex items-center gap-3 px-10 py-5 bg-primary border-2 border-primary/50 rounded-full text-white font-bold text-lg overflow-hidden transition-all duration-500 hover:border-primary hover:shadow-2xl hover:shadow-primary/30"
               >
                 {/* Button background effect */}
                 <span className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
